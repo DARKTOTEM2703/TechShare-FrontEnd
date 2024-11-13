@@ -8,16 +8,8 @@ import BorderTextField from '@/components/Inputs/BorderTextField'
 import { useAuth } from '@/app/hooks/useAuth'
 import { getToken } from '@/services/storageService'
 
-export default function Categories() {
+export default function Categories({ token, categories, refreshCategories }: { token: any, categories: any, refreshCategories: any }) {
 
-  type Category = {
-    categoryId: number;
-    name: string;
-    description?: string;
-    imageUrl?: string;
-  };
-
-  const [data, setData] = useState<Category[]>([])
   const [searchTerm, setSearchTerm] = useState('')
   const [isCreateModalVisible, setCreateModalVisible] = useState(false)
   const [isEditModalVisible, setEditModalVisible] = useState(false)
@@ -37,7 +29,7 @@ export default function Categories() {
   const hideDeleteModal = () => setDeleteModalVisible(false)
 
   const editButtonClicked = (id: number) => {
-    const selectedCategory = data.find((category) => category.categoryId === id)
+    const selectedCategory = categories.find((category: any) => category.categoryId === id)
     if (selectedCategory) {
       setClickedCategoryId(id)
       setFormData({ name: selectedCategory.name, description: selectedCategory.description, image: null })
@@ -50,35 +42,13 @@ export default function Categories() {
     showDeleteModal()
   }
 
-  useAuth()
-  const token = getToken()
-
-  useEffect(() => {
-    fetchCategories(token)
-  }, [])
-
-  const fetchCategories = (token: any) => {
-    fetch("http://localhost:8080/categories/all", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((response) => {
-        console.log(response)
-        return response.json()
-      })
-      .then((data) => setData(data))
-  }
-
   const handleCategoryCreation = (e: any) => {
     e.preventDefault()
     const formDataObj = new FormData()
     formDataObj.append('name', formData.name)
     if (formData.description) formDataObj.append('description', formData.description)
     if (formData.image) formDataObj.append('image', formData.image)
-
+    console.log(formDataObj)
     fetch("http://localhost:8080/categories/create", {
       method: "POST",
       headers: {
@@ -91,7 +61,7 @@ export default function Categories() {
         return response.json()
       })
       .then((data) => {
-        fetchCategories(token)
+        refreshCategories()
         hideCreateModal()
       })
       .catch((error) => console.error("Error:", error))
@@ -116,7 +86,7 @@ export default function Categories() {
         return response.json()
       })
       .then((data) => {
-        fetchCategories(token)
+        refreshCategories()
         hideEditModal()
       })
       .catch((error) => console.error("Error:", error))
@@ -133,7 +103,7 @@ export default function Categories() {
       .then((response) => {
         console.log(response)
         if (response.status === 204) {
-          fetchCategories(token)
+          refreshCategories()
           hideDeleteModal()
         }
       })
@@ -150,7 +120,7 @@ export default function Categories() {
         onSearchChange={handleSearchChange}
       />
       <CrudBody
-        data={data}
+        data={categories}
         searchTerm={searchTerm}
         onDelete={deleteButtonClicked}
         onEdit={editButtonClicked}

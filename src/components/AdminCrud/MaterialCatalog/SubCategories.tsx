@@ -8,13 +8,13 @@ import BorderTextField from '@/components/Inputs/BorderTextField'
 import { useAuth } from '@/app/hooks/useAuth'
 import { getToken } from '@/services/storageService'
 
-export default function SubCategories() {
+export default function SubCategories({ token, categories }: { token: any, categories: any }) {
 
     type SubCategory = {
         subCategoriesId: number;
         name: string;
         imagePath?: string;
-        categoryId: number;
+        idCategory: number;
         categoryName: string;
     };
 
@@ -24,7 +24,7 @@ export default function SubCategories() {
     const [isEditModalVisible, setEditModalVisible] = useState(false)
     const [isDeleteModalVisible, setDeleteModalVisible] = useState(false)
     const [clickedSubCategoryId, setClickedSubCategoryId] = useState<number | null>(null)
-    const [formData, setFormData] = useState<{ name: string; image?: File | null; categoryId: number }>({ name: '', image: null, categoryId: 0 })
+    const [formData, setFormData] = useState<{ name: string; image?: File | null; idCategory: number }>({ name: '', image: null, idCategory: 0 })
 
     const handleSearchChange = (value: string) => setSearchTerm(value)
 
@@ -41,7 +41,7 @@ export default function SubCategories() {
         const selectedSubCategory = data.find((subCategory) => subCategory.subCategoriesId === id)
         if (selectedSubCategory) {
             setClickedSubCategoryId(id)
-            setFormData({ name: selectedSubCategory.name, image: null, categoryId: selectedSubCategory.categoryId })
+            setFormData({ name: selectedSubCategory.name, image: null, idCategory: selectedSubCategory.idCategory })
             showEditModal()
         }
     }
@@ -51,14 +51,11 @@ export default function SubCategories() {
         showDeleteModal()
     }
 
-    useAuth()
-    const token = getToken()
-
     useEffect(() => {
-        fetchSubCategories(token)
+        fetchSubCategories()
     }, [])
 
-    const fetchSubCategories = (token: any) => {
+    const fetchSubCategories = () => {
         fetch("http://localhost:8080/subcategories/all", {
             method: "GET",
             headers: {
@@ -66,43 +63,45 @@ export default function SubCategories() {
                 Authorization: `Bearer ${token}`,
             },
         })
-            .then((response) => {
-                console.log(response)
-                return response.json()
-            })
+            .then((response) => response.json())
             .then((data) => setData(data))
+            .catch(error => console.error('Fetch error:', error));
     }
 
     const handleSubCategoryCreation = (e: any) => {
-        e.preventDefault()
-        const formDataObj = new FormData()
-        formDataObj.append('name', formData.name)
-        formDataObj.append('categoryId', formData.categoryId.toString())
-        if (formData.image) formDataObj.append('image', formData.image)
+        e.preventDefault();
+
+        const formDataObj = new FormData();
+        formDataObj.append('name', formData.name);
+        formDataObj.append('idCategory', formData.idCategory.toString());
+        if (formData.image) formDataObj.append('image', formData.image);
+        console.log(formDataObj)
+        console.log(formData)
 
         fetch("http://localhost:8080/subcategories/create", {
             method: "POST",
             headers: {
                 Authorization: `Bearer ${token}`,
             },
-            body: formDataObj,
+            body: JSON.stringify({
+                name: formData.name,
+                idCategory: formData.idCategory
+            })
         })
-            .then((response) => {
-                console.log(response)
-                return response.json()
-            })
+            .then((response) => console.log(response.text()))
             .then((data) => {
-                fetchSubCategories(token)
-                hideCreateModal()
+                fetchSubCategories();
+                hideCreateModal();
             })
-            .catch((error) => console.error("Error:", error))
+            .catch((error) => console.error("Error:", error));
     }
+
 
     const handleSubCategoryUpdate = (e: any) => {
         e.preventDefault()
         const formDataObj = new FormData()
         formDataObj.append('name', formData.name)
-        formDataObj.append('categoryId', formData.categoryId.toString())
+        formDataObj.append('categoryId', formData.idCategory.toString())
         if (formData.image) formDataObj.append('image', formData.image)
 
         fetch(`http://localhost:8080/subcategories/update/${clickedSubCategoryId}`, {
@@ -117,7 +116,7 @@ export default function SubCategories() {
                 return response.json()
             })
             .then((data) => {
-                fetchSubCategories(token)
+                fetchSubCategories()
                 hideEditModal()
             })
             .catch((error) => console.error("Error:", error))
@@ -134,7 +133,7 @@ export default function SubCategories() {
             .then((response) => {
                 console.log(response)
                 if (response.status === 204) {
-                    fetchSubCategories(token)
+                    fetchSubCategories()
                     hideDeleteModal()
                 }
             })
@@ -172,8 +171,8 @@ export default function SubCategories() {
                         <BorderTextField
                             name='categoryId'
                             placeholder='Category ID'
-                            onChange={(e) => setFormData({ ...formData, categoryId: parseInt(e.target.value) })}
-                            value={formData.categoryId.toString()}
+                            onChange={(e) => setFormData({ ...formData, idCategory: parseInt(e.target.value) })}
+                            value={formData.idCategory.toString()}
                         />
                         <input
                             type="file"
@@ -198,8 +197,8 @@ export default function SubCategories() {
                         <BorderTextField
                             name='categoryId'
                             placeholder='Category ID'
-                            onChange={(e) => setFormData({ ...formData, categoryId: parseInt(e.target.value) })}
-                            value={formData.categoryId.toString()}
+                            onChange={(e) => setFormData({ ...formData, idCategory: parseInt(e.target.value) })}
+                            value={formData.idCategory.toString()}
                         />
                         <input
                             type="file"
