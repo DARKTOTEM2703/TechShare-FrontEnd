@@ -5,26 +5,15 @@ import { useFetchData } from '@/services/useFetchData'
 import { useState, useEffect } from 'react'
 import ModalBase from '@/components/Modal/ModalBase'
 import BorderTextField from '@/components/Inputs/BorderTextField'
-import { useAuth } from '@/app/hooks/useAuth'
-import { getToken } from '@/services/storageService'
 
-export default function SubCategories({ token, categories }: { token: any, categories: any }) {
+export default function SubCategories({ token, categories, subCategories, refreshSubCategories }: { token: any, categories: any, subCategories: any, refreshSubCategories: any }) {
 
-    type SubCategory = {
-        subCategoriesId: number;
-        name: string;
-        imagePath?: string;
-        idCategory: number;
-        categoryName: string;
-    };
-
-    const [data, setData] = useState<SubCategory[]>([])
     const [searchTerm, setSearchTerm] = useState('')
     const [isCreateModalVisible, setCreateModalVisible] = useState(false)
     const [isEditModalVisible, setEditModalVisible] = useState(false)
     const [isDeleteModalVisible, setDeleteModalVisible] = useState(false)
     const [clickedSubCategoryId, setClickedSubCategoryId] = useState<number | null>(null)
-    const [formData, setFormData] = useState<{ name: string; image?: File | null; idCategory: number }>({ name: '', image: null, idCategory: 0 })
+    const [formData, setFormData] = useState<{ name: string; image?: File | null; idCategoria: number }>({ name: '', image: null, idCategoria: 0 })
 
     const handleSearchChange = (value: string) => setSearchTerm(value)
 
@@ -38,10 +27,10 @@ export default function SubCategories({ token, categories }: { token: any, categ
     const hideDeleteModal = () => setDeleteModalVisible(false)
 
     const editButtonClicked = (id: number) => {
-        const selectedSubCategory = data.find((subCategory) => subCategory.subCategoriesId === id)
+        const selectedSubCategory = subCategories.find((subCategory: any) => subCategory.subCategoriesId === id)
         if (selectedSubCategory) {
             setClickedSubCategoryId(id)
-            setFormData({ name: selectedSubCategory.name, image: null, idCategory: selectedSubCategory.idCategory })
+            setFormData({ name: selectedSubCategory.name, image: null, idCategoria: selectedSubCategory.idCategory })
             showEditModal()
         }
     }
@@ -51,58 +40,40 @@ export default function SubCategories({ token, categories }: { token: any, categ
         showDeleteModal()
     }
 
-    useEffect(() => {
-        fetchSubCategories()
-    }, [])
-
-    const fetchSubCategories = () => {
-        fetch("http://localhost:8080/subcategories/all", {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-            },
-        })
-            .then((response) => response.json())
-            .then((data) => setData(data))
-            .catch(error => console.error('Fetch error:', error));
-    }
-
     const handleSubCategoryCreation = (e: any) => {
         e.preventDefault();
 
         const formDataObj = new FormData();
         formDataObj.append('name', formData.name);
-        formDataObj.append('idCategory', formData.idCategory.toString());
+        formDataObj.append('idCategory', formData.idCategoria.toString());
         if (formData.image) formDataObj.append('image', formData.image);
-        console.log(formDataObj)
-        console.log(formData)
 
         fetch("http://localhost:8080/subcategories/create", {
             method: "POST",
             headers: {
                 Authorization: `Bearer ${token}`,
             },
-            body: JSON.stringify({
-                name: formData.name,
-                idCategory: formData.idCategory
-            })
+            body: formDataObj,
         })
-            .then((response) => console.log(response.text()))
+            .then((response) => {
+                console.log(response);
+                return response.json();
+            })
             .then((data) => {
-                fetchSubCategories();
-                hideCreateModal();
+                refreshSubCategories()
+                hideCreateModal()
             })
             .catch((error) => console.error("Error:", error));
     }
-
 
     const handleSubCategoryUpdate = (e: any) => {
         e.preventDefault()
         const formDataObj = new FormData()
         formDataObj.append('name', formData.name)
-        formDataObj.append('categoryId', formData.idCategory.toString())
+        formDataObj.append('idCategoria', formData.idCategoria.toString())
         if (formData.image) formDataObj.append('image', formData.image)
+
+        console.log(formDataObj)
 
         fetch(`http://localhost:8080/subcategories/update/${clickedSubCategoryId}`, {
             method: "PUT",
@@ -115,8 +86,8 @@ export default function SubCategories({ token, categories }: { token: any, categ
                 console.log(response)
                 return response.json()
             })
-            .then((data) => {
-                fetchSubCategories()
+            .then(() => {
+                refreshSubCategories()
                 hideEditModal()
             })
             .catch((error) => console.error("Error:", error))
@@ -133,7 +104,7 @@ export default function SubCategories({ token, categories }: { token: any, categ
             .then((response) => {
                 console.log(response)
                 if (response.status === 204) {
-                    fetchSubCategories()
+                    refreshSubCategories()
                     hideDeleteModal()
                 }
             })
@@ -150,7 +121,7 @@ export default function SubCategories({ token, categories }: { token: any, categ
                 onSearchChange={handleSearchChange}
             />
             <CrudBody
-                data={data}
+                data={subCategories}
                 searchTerm={searchTerm}
                 onDelete={deleteButtonClicked}
                 onEdit={editButtonClicked}
@@ -171,8 +142,8 @@ export default function SubCategories({ token, categories }: { token: any, categ
                         <BorderTextField
                             name='categoryId'
                             placeholder='Category ID'
-                            onChange={(e) => setFormData({ ...formData, idCategory: parseInt(e.target.value) })}
-                            value={formData.idCategory.toString()}
+                            onChange={(e) => setFormData({ ...formData, idCategoria: parseInt(e.target.value) })}
+                            value={formData.idCategoria.toString()}
                         />
                         <input
                             type="file"
@@ -197,8 +168,8 @@ export default function SubCategories({ token, categories }: { token: any, categ
                         <BorderTextField
                             name='categoryId'
                             placeholder='Category ID'
-                            onChange={(e) => setFormData({ ...formData, idCategory: parseInt(e.target.value) })}
-                            value={formData.idCategory.toString()}
+                            onChange={(e) => setFormData({ ...formData, idCategoria: parseInt(e.target.value) })}
+                            value={formData.idCategoria}
                         />
                         <input
                             type="file"
