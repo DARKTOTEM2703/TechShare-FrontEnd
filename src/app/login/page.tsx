@@ -5,7 +5,7 @@ import TextField from '@/components/Inputs/TextField';
 import PasswordField from '@/components/Inputs/PasswordField';
 import '@/styles/form.css';
 import '@/styles/buttons.css';
-import { useForm } from '@/app/hooks/useForm';
+import { useForm } from '@/hooks/useForm';
 import {
     getToken,
     clearStorage,

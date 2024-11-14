@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Categories from '@/components/AdminCrud/MaterialCatalog/Categories';
 import SubCategories from '@/components/AdminCrud/MaterialCatalog/SubCategories';
-import { useAuth } from '@/app/hooks/useAuth';
+import { useAuth } from '@/hooks/useAuth';
 import { getToken } from '@/services/storageService';
 
 export default function Catalog() {
@@ -36,8 +36,15 @@ export default function Catalog() {
         Authorization: `Bearer ${token}`,
       },
     })
-      .then((response) => response.json())
-      .then((data) => setCategories(data))
+      .then((response) => {
+        if (response.status === 204) {
+          return []; // Si no hay contenido, devuelve un array vacío para limpiar el estado.
+        }
+        return response.json(); // Procesa JSON si hay contenido.
+      })
+      .then((data) => {
+        setCategories(data); // Actualiza el estado con los datos recibidos o con el array vacío.
+      })
       .catch(error => console.error('Error:', error));
   };
 
@@ -49,8 +56,15 @@ export default function Catalog() {
         Authorization: `Bearer ${token}`,
       },
     })
-      .then((response) => response.json())
-      .then((data) => setSubCategories(data))
+      .then((response) => {
+        if (response.status === 204) {
+          return []; // Si no hay contenido, devuelve un array vacío para limpiar el estado.
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setSubCategories(data);
+      })
       .catch(error => console.error('Error:', error));
   };
 
@@ -71,7 +85,8 @@ export default function Catalog() {
       <div>
         <Categories
           token={token}
-          categories={categories} refreshCategories={fetchCategories} />
+          categories={categories}
+          refreshCategories={fetchCategories} />
       </div>
     </div>
   );

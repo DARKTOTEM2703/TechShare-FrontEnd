@@ -3,7 +3,7 @@ import CrudHeader from '@/components/AdminCrud/CrudHeader'
 import CrudBody from '@/components/AdminCrud/CrudBodyViewOnly'
 import { useFetchData } from '@/services/useFetchData'
 import { useState } from 'react'
-import { useAuth } from '@/app/hooks/useAuth'
+import { useAuth } from '@/hooks/useAuth'
 import { getToken } from '@/services/storageService'
 import { useEffect } from 'react';
 

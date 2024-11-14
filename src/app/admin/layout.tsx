@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { useForm } from "@/app/hooks/useForm"
+import { useForm } from "@/hooks/useForm"
 import SideNav from "@/components/SideNav/SideNav";
 import { inter } from "@/services/fonts"
-import { useAuth } from "@/app/hooks/useAuth"
+import { useAuth } from "@/hooks/useAuth"
 
 export const metadata: Metadata = {
   title: "Admin Page",

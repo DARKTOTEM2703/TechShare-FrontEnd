@@ -5,7 +5,7 @@ import { useFetchData } from '@/services/useFetchData'
 import { useState, useEffect } from 'react'
 import ModalBase from '@/components/Modal/ModalBase' // Importamos el ModalBase
 import BorderTextField from '@/components/Inputs/BorderTextField' // Importamos el BorderTextField
-import { useAuth } from '@/app/hooks/useAuth'
+import { useAuth } from '@/hooks/useAuth'
 import { getToken } from '@/services/storageService'
 import { get } from 'http'
 

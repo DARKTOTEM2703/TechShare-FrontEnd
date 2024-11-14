@@ -7,7 +7,7 @@ import PasswordField from "@/components/Inputs/PasswordField";
 import '@/styles/containers.css'
 import '@/styles/form.css'
 import '@/styles/buttons.css'
-import { useForm } from "@/app/hooks/useForm";
+import { useForm } from "@/hooks/useForm";
 
 export default function Register() {
 
