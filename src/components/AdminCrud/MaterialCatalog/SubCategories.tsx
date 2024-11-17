@@ -43,22 +43,16 @@ export default function SubCategories({ token, categories, subCategories, refres
 
     const handleSubCategoryCreation = (e: any) => {
         e.preventDefault();
-        const formDataObj = new FormData();
-        formDataObj.append('name', formData.name);
-        formDataObj.append('idCategory', formData.idCategoria.toString());
-        if (formData.image) formDataObj.append('image', formData.image);
-        handleCreate(endpoints.subcategories.create, formDataObj);
+        const payload = { name: formData.name, idCategory: formData.idCategoria, image: formData.image };
+        handleCreate(endpoints.subcategories.create, payload);
         hideCreateModal();
     };
 
     const handleSubCategoryUpdate = (e: any) => {
         e.preventDefault();
-        const formDataObj = new FormData();
-        formDataObj.append('name', formData.name);
-        formDataObj.append('idCategory', formData.idCategoria.toString());
-        if (formData.image) formDataObj.append('image', formData.image);
+        const payload = { name: formData.name, idCategory: formData.idCategoria, image: formData.image };
         if (clickedItemId !== null) {
-            handleUpdate(endpoints.subcategories.update(clickedItemId), formDataObj);
+            handleUpdate(endpoints.subcategories.update(clickedItemId), payload);
         }
         hideEditModal();
     };
