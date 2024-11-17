@@ -12,7 +12,7 @@ export default function SubCategories({ token, categories, subCategories, refres
     const [isCreateModalVisible, setCreateModalVisible] = useState(false);
     const [isEditModalVisible, setEditModalVisible] = useState(false);
     const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
-    const [formData, setFormData] = useState<{ name: string; image?: File | null; idCategoria: number }>({ name: '', image: null, idCategoria: 0 });
+    const [formData, setFormData] = useState<{ name: string; image?: File | null; idCategory: number }>({ name: '', image: null, idCategory: 0 });
 
     const { setClickedItemId, handleCreate, handleUpdate, handleDelete, clickedItemId } = useCrudOperations(token, refreshSubCategories);
 
@@ -31,7 +31,7 @@ export default function SubCategories({ token, categories, subCategories, refres
         const selectedSubCategory = subCategories.find((subCategory: any) => subCategory.subCategoriesId === id);
         if (selectedSubCategory) {
             setClickedItemId(id);
-            setFormData({ name: selectedSubCategory.name, image: null, idCategoria: selectedSubCategory.idCategory });
+            setFormData({ name: selectedSubCategory.name, image: null, idCategory: selectedSubCategory.idCategory });
             showEditModal();
         }
     };
@@ -43,16 +43,26 @@ export default function SubCategories({ token, categories, subCategories, refres
 
     const handleSubCategoryCreation = (e: any) => {
         e.preventDefault();
-        const payload = { name: formData.name, idCategory: formData.idCategoria, image: formData.image };
-        handleCreate(endpoints.subcategories.create, payload);
+        const formDataToSend = new FormData();
+        formDataToSend.append('name', formData.name);
+        formDataToSend.append('idCategory', formData.idCategory.toString());
+        if (formData.image) {
+            formDataToSend.append('image', formData.image);
+        }
+        handleCreate(endpoints.subcategories.create, formDataToSend);
         hideCreateModal();
     };
 
     const handleSubCategoryUpdate = (e: any) => {
         e.preventDefault();
-        const payload = { name: formData.name, idCategory: formData.idCategoria, image: formData.image };
+        const formDataToSend = new FormData();
+        formDataToSend.append('name', formData.name);
+        formDataToSend.append('idCategory', formData.idCategory.toString());
+        if (formData.image) {
+            formDataToSend.append('image', formData.image);
+        }
         if (clickedItemId !== null) {
-            handleUpdate(endpoints.subcategories.update(clickedItemId), payload);
+            handleUpdate(endpoints.subcategories.update(clickedItemId), formDataToSend);
         }
         hideEditModal();
     };
@@ -75,7 +85,7 @@ export default function SubCategories({ token, categories, subCategories, refres
                     <div className="modal-content">
                         <ModalBase onClose={hideCreateModal} header="Create New SubCategory" onSubmit={handleSubCategoryCreation}>
                             <BorderTextField name="name" placeholder="SubCategory Name" onChange={(e) => setFormData({ ...formData, name: e.target.value })} value={formData.name} />
-                            <BorderTextField name="categoryId" placeholder="Category ID" onChange={(e) => setFormData({ ...formData, idCategoria: parseInt(e.target.value) })} value={formData.idCategoria.toString()} />
+                            <BorderTextField name="categoryId" placeholder="Category ID" onChange={(e) => setFormData({ ...formData, idCategory: parseInt(e.target.value) })} value={formData.idCategory.toString()} />
                             <input type="file" onChange={(e) => setFormData({ ...formData, image: e.target.files ? e.target.files[0] : null })} />
                         </ModalBase>
                     </div>
@@ -87,7 +97,7 @@ export default function SubCategories({ token, categories, subCategories, refres
                     <div className="modal-content">
                         <ModalBase onClose={hideEditModal} header="Edit SubCategory" onSubmit={handleSubCategoryUpdate}>
                             <BorderTextField name="name" placeholder="SubCategory Name" onChange={(e) => setFormData({ ...formData, name: e.target.value })} value={formData.name} />
-                            <BorderTextField name="categoryId" placeholder="Category ID" onChange={(e) => setFormData({ ...formData, idCategoria: parseInt(e.target.value) })} value={formData.idCategoria.toString()} />
+                            <BorderTextField name="categoryId" placeholder="Category ID" onChange={(e) => setFormData({ ...formData, idCategory: parseInt(e.target.value) })} value={formData.idCategory.toString()} />
                             <input type="file" onChange={(e) => setFormData({ ...formData, image: e.target.files ? e.target.files[0] : null })} />
                         </ModalBase>
                     </div>

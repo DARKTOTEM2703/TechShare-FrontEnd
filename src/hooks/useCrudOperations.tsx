@@ -3,61 +3,56 @@ import { useState } from 'react';
 export const useCrudOperations = (token: string, refreshData: () => void) => {
     const [clickedItemId, setClickedItemId] = useState<number | null>(null);
 
+    const fetchWithDynamicHeaders = (
+        url: string,
+        method: string,
+        data: any
+    ) => {
+        const headers: HeadersInit = { Authorization: `Bearer ${token}` };
+
+        // Si no es FormData, añadimos Content-Type: application/json
+        const body = data instanceof FormData ? data : JSON.stringify(data);
+        if (!(data instanceof FormData)) {
+            headers["Content-Type"] = "application/json";
+        }
+
+        return fetch(url, {
+            method,
+            headers,
+            body,
+        });
+    };
+
     const handleCreate = (url: string, data: any) => {
-        fetch(url, {
-            method: 'POST',
-            headers: { 
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}` 
-            },
-            body: JSON.stringify(data),
-        })
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error('Error en la solicitud');
-            }
-            return response.json();
-        })
-        .then((data) => {
-            console.log(data);
-            refreshData();
-        })
-        .catch((error) => console.error("Error:", error));
+        fetchWithDynamicHeaders(url, "POST", data)
+            .then((response) => response.json())
+            .then((data) => {
+                console.log("Created:", data);
+                refreshData();
+            })
+            .catch((error) => console.error("Error:", error));
     };
 
     const handleUpdate = (url: string, data: any) => {
-        fetch(url, {
-            method: 'PUT',
-            headers: { 
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}` 
-            },
-            body: JSON.stringify(data),
-        })
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error('Error en la solicitud');
-            }
-            return response.json();
-        })
-        .then(() => {
-            refreshData();
-        })
-        .catch((error) => console.error("Error:", error));
+        fetchWithDynamicHeaders(url, "PUT", data)
+            .then((response) => response.json())
+            .then(() => {
+                console.log("Updated successfully.");
+                refreshData();
+            })
+            .catch((error) => console.error("Error:", error));
     };
 
     const handleDelete = (url: string) => {
         fetch(url, {
-            method: 'DELETE',
+            method: "DELETE",
             headers: { Authorization: `Bearer ${token}` },
         })
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error('Error en la solicitud');
-            }
-            refreshData();
-        })
-        .catch((error) => console.error("Error:", error));
+            .then(() => {
+                console.log("Deleted successfully.");
+                refreshData();
+            })
+            .catch((error) => console.error("Error:", error));
     };
 
     return {

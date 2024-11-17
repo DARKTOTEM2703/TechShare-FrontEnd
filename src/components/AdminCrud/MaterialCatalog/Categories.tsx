@@ -36,16 +36,24 @@ export default function Categories({ token, categories, refreshCategories }: { t
 
   const handleCreateCategory = (e: React.FormEvent) => {
     e.preventDefault();
-    const payload = { name: formData.name, image: formData.image }
-    handleCreate(endpoints.categories.create, payload)
+    const formDataToSend = new FormData();
+    formDataToSend.append('name', formData.name);
+    if (formData.image) {
+      formDataToSend.append('image', formData.image);
+    }
+    handleCreate(endpoints.categories.create, formDataToSend)
     hideCreateModal()
   }
 
   const handleEditCategory = (e: React.FormEvent) => {
     e.preventDefault()
-    const payload = { name: formData.name, image: formData.image }
+    const formDataToSend = new FormData();
+    formDataToSend.append('name', formData.name);
+    if (formData.image) {
+      formDataToSend.append('image', formData.image);
+    }
     if (clickedItemId !== null) {
-      handleUpdate(endpoints.categories.update(clickedItemId), payload)
+      handleUpdate(endpoints.categories.update(clickedItemId), formDataToSend)
     }
     hideEditModal()
   }
