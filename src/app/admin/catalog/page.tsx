@@ -10,7 +10,6 @@ export default function Catalog() {
   type Category = {
     categoryId: number;
     name: string;
-    description?: string;
     imageUrl?: string;
   };
 

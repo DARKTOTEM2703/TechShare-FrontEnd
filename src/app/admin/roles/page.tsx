@@ -7,7 +7,7 @@ import ModalBase from '@/components/Modal/ModalBase' // Importamos el ModalBase
 import BorderTextField from '@/components/Inputs/BorderTextField' // Importamos el BorderTextField
 import { useAuth } from '@/hooks/useAuth'
 import { getToken } from '@/services/storageService'
-import { get } from 'http'
+import { useCrudOperations } from '@/hooks/useCrudOperations'
 
 export default function roles() {
 
@@ -16,61 +16,10 @@ export default function roles() {
     name: string;
   };
 
-  const [data, setData] = useState<Role[]>([])
-  const [searchTerm, setSearchTerm] = useState('')
-
-  const [isCreateModalVisible, setCreateModalVisible] = useState(false)
-  const [isEditModalVisible, setEditModalVisible] = useState(false)
-  const [isDeleteModalVisible, setDeleteModalVisible] = useState(false)
-
-  const [clickedRoleId, setClickedRoleId] = useState<number | null>(null)
-  const [formData, setFormData] = useState<{ roleName: string }>({ roleName: '' })
-
-  const handleSearchChange = (value: string) => setSearchTerm(value)
-
-  const showCreateModal = () => setCreateModalVisible(true)
-  const hideCreateModal = () => setCreateModalVisible(false)
-
-  const showEditModal = () => setEditModalVisible(true)
-  const hideEditModal = () => setEditModalVisible(false)
-
-  const showDeleteModal = () => setDeleteModalVisible(true)
-  const hideDeleteModal = () => setDeleteModalVisible(false)
-
-  const editButtonClicked = (id: number) => {
-    // Encuentra el rol que coincida con el roleId seleccionado
-    const selectedRole = data.find((role) => role.roleId === id);
-
-    // Si el rol existe, actualiza formData con name y muestra el modal de edición
-    if (selectedRole) {
-      setClickedRoleId(id);
-      console.log("Selected role:", selectedRole); // Confirma que el rol seleccionado es correcto
-      setFormData({ roleName: selectedRole.name }); // Usa "name" para cargar en formData
-      showEditModal();
-    }
-  }
-
-  const deleteButtonClicked = (id: number) => {
-    // Encuentra el rol que coincida con el roleId seleccionado
-    const selectedRole = data.find((role) => role.roleId === id);
-
-    // Si el rol existe, actualiza formData con name y muestra el modal de edición
-    if (selectedRole) {
-      setClickedRoleId(id);
-      console.log("Selected role:", selectedRole); // Confirma que el rol seleccionado es correcto
-      setFormData({ roleName: selectedRole.name }); // Usa "name" para cargar en formData
-      showDeleteModal();
-    }
-  }
-
   useAuth()
-  const token = getToken()
+  const token = getToken() || ''
 
-  useEffect(() => {
-    fetchRoles(token)
-  }, [])
-
-  const fetchRoles = (token: any) => {
+  const fetchRoles = () => {
     fetch("http://localhost:8080/admin/role/all", {
       method: "GET",
       headers: {
@@ -82,67 +31,62 @@ export default function roles() {
       .then((data) => setData(data))
   }
 
-  const handleRoleCreation = (e: any) => {
-    e.preventDefault();
-    setFormData({ roleName: '' });
-    fetch("http://localhost:8080/admin/role/create", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        name: formData.roleName,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data)
-        fetchRoles(token)
-        hideCreateModal()
-      })
-      .catch((error) => console.error("Error:", error))
+  useEffect(() => {
+    fetchRoles()
+  }, [])
+
+  const { setClickedItemId, handleCreate, handleUpdate, handleDelete, clickedItemId } = useCrudOperations(token, fetchRoles);
+  const [data, setData] = useState<Role[]>([])
+  const [searchTerm, setSearchTerm] = useState('')
+  const [formData, setFormData] = useState<{ roleName: string }>({ roleName: '' })
+  const [isCreateModalVisible, setCreateModalVisible] = useState(false)
+  const [isEditModalVisible, setEditModalVisible] = useState(false)
+  const [isDeleteModalVisible, setDeleteModalVisible] = useState(false)
+
+  const handleSearchChange = (value: string) => setSearchTerm(value)
+
+  const showCreateModal = () => setCreateModalVisible(true)
+  const hideCreateModal = () => setCreateModalVisible(false)
+
+  const showEditModal = (id: number) => {
+    const selectedRole = data.find((role) => role.roleId === id)
+    if (selectedRole) {
+      setClickedItemId(id)
+      setFormData({ roleName: selectedRole.name })
+      setEditModalVisible(true)
+    }
   }
 
-  const handleRoleDeletion = (e: any) => {
+  const hideEditModal = () => setEditModalVisible(false)
+
+  const showDeleteModal = (id: number) => {
+    setClickedItemId(id)
+    setDeleteModalVisible(true)
+  }
+
+  const hideDeleteModal = () => setDeleteModalVisible(false)
+
+  // TODO: role name lenght VALIDATION
+  const handleCreateRole = (e: React.FormEvent) => {
     e.preventDefault()
-    fetch(`http://localhost:8080/admin/role/delete/${clickedRoleId}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data)
-        fetchRoles(token)
-        hideDeleteModal()
-      })
-      .catch((error) => console.error("Error:", error))
-  };
+    const formDataObj = new FormData()
+    formDataObj.append('name', formData.roleName)
+    handleCreate("http://localhost:8080/admin/role/create", formDataObj)
+    hideCreateModal()
+  }
 
   const handleRoleUpdate = (e: any) => {
     e.preventDefault()
-    fetch(`http://localhost:8080/admin/role/update/${clickedRoleId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        name: formData.roleName,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data)
-        fetchRoles(token)
-        hideEditModal()
-      })
-      .catch((error) => console.error("Error:", error))
+    const formDataObj = new FormData()
+    formDataObj.append('name', formData.roleName)
+    handleUpdate(`http://localhost:8080/admin/role/update/${clickedItemId}`, formDataObj)
+    hideEditModal()
   }
 
+  const handleRoleDeletion = () => {
+    handleDelete(`http://localhost:8080/admin/role/delete/${clickedItemId}`)
+    hideDeleteModal()
+  }
   return (
     <div>
       <CrudHeader
@@ -155,15 +99,15 @@ export default function roles() {
       <CrudBody
         data={data}
         searchTerm={searchTerm}
-        onDelete={deleteButtonClicked}
-        onEdit={editButtonClicked}
+        onDelete={(id) => showDeleteModal(id)}
+        onEdit={(id) => showEditModal(id)}
       />
       {isCreateModalVisible && (
         <div className="modal-overlay">
           <ModalBase
             onClose={hideCreateModal}
             header='Crear nuevo Rol'
-            onSubmit={handleRoleCreation}
+            onSubmit={handleCreateRole}
           >
             <BorderTextField
               name='roleName'
