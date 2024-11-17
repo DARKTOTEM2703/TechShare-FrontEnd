@@ -4,6 +4,7 @@ import Categories from '@/components/AdminCrud/MaterialCatalog/Categories';
 import SubCategories from '@/components/AdminCrud/MaterialCatalog/SubCategories';
 import { useAuth } from '@/hooks/useAuth';
 import { getToken } from '@/services/storageService';
+import endpoints from '@/app/infraestructure/config/configAPI';
 
 export default function Catalog() {
 
@@ -24,11 +25,11 @@ export default function Catalog() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [subCategories, setSubCategories] = useState<SubCategory[]>([]);
 
-  useAuth()
-  const token = getToken()
+  useAuth();
+  const token = getToken();
 
   const fetchCategories = () => {
-    fetch("http://localhost:8080/categories/all", {
+    fetch(endpoints.categories.getAll, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -48,7 +49,7 @@ export default function Catalog() {
   };
 
   const fetchSubCategories = () => {
-    fetch("http://localhost:8080/subcategories/all", {
+    fetch(endpoints.subcategories.getAll, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

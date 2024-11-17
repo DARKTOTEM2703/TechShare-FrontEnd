@@ -3,6 +3,8 @@ import CrudHeader from '@/components/AdminCrud/CrudHeader';
 import CrudBody from '@/components/AdminCrud/CrudBodyWithImages';
 import ModalBase from '@/components/Modal/ModalBase';
 import BorderTextField from '@/components/Inputs/BorderTextField';
+import { useCrudOperations } from '@/hooks/useCrudOperations';
+import endpoints from '@/app/infraestructure/config/configAPI';
 
 export default function SubCategories({ token, categories, subCategories, refreshSubCategories }: { token: any, categories: any, subCategories: any, refreshSubCategories: any }) {
 
@@ -10,8 +12,9 @@ export default function SubCategories({ token, categories, subCategories, refres
     const [isCreateModalVisible, setCreateModalVisible] = useState(false);
     const [isEditModalVisible, setEditModalVisible] = useState(false);
     const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
-    const [clickedSubCategoryId, setClickedSubCategoryId] = useState<number | null>(null);
     const [formData, setFormData] = useState<{ name: string; image?: File | null; idCategoria: number }>({ name: '', image: null, idCategoria: 0 });
+
+    const { setClickedItemId, handleCreate, handleUpdate, handleDelete, clickedItemId } = useCrudOperations(token, refreshSubCategories);
 
     const handleSearchChange = (value: string) => setSearchTerm(value);
 
@@ -27,14 +30,14 @@ export default function SubCategories({ token, categories, subCategories, refres
     const editButtonClicked = (id: number) => {
         const selectedSubCategory = subCategories.find((subCategory: any) => subCategory.subCategoriesId === id);
         if (selectedSubCategory) {
-            setClickedSubCategoryId(id);
+            setClickedItemId(id);
             setFormData({ name: selectedSubCategory.name, image: null, idCategoria: selectedSubCategory.idCategory });
             showEditModal();
         }
     };
 
     const deleteButtonClicked = (id: number) => {
-        setClickedSubCategoryId(id);
+        setClickedItemId(id);
         showDeleteModal();
     };
 
@@ -44,19 +47,8 @@ export default function SubCategories({ token, categories, subCategories, refres
         formDataObj.append('name', formData.name);
         formDataObj.append('idCategory', formData.idCategoria.toString());
         if (formData.image) formDataObj.append('image', formData.image);
-        fetch("http://localhost:8080/subcategories/create", {
-            method: "POST",
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-            body: formDataObj,
-        })
-            .then((response) => response.json())
-            .then(() => {
-                refreshSubCategories();
-                hideCreateModal();
-            })
-            .catch((error) => console.error("Error:", error));
+        handleCreate(endpoints.subcategories.create, formDataObj);
+        hideCreateModal();
     };
 
     const handleSubCategoryUpdate = (e: any) => {
@@ -65,36 +57,18 @@ export default function SubCategories({ token, categories, subCategories, refres
         formDataObj.append('name', formData.name);
         formDataObj.append('idCategory', formData.idCategoria.toString());
         if (formData.image) formDataObj.append('image', formData.image);
-        fetch(`http://localhost:8080/subcategories/update/${clickedSubCategoryId}`, {
-            method: "PUT",
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-            body: formDataObj,
-        })
-            .then((response) => response.json())
-            .then(() => {
-                refreshSubCategories();
-                hideEditModal();
-            })
-            .catch((error) => console.error("Error:", error));
+        if (clickedItemId !== null) {
+            handleUpdate(endpoints.subcategories.update(clickedItemId), formDataObj);
+        }
+        hideEditModal();
     };
 
     const handleSubCategoryDeletion = (e: any) => {
         e.preventDefault();
-        fetch(`http://localhost:8080/subcategories/delete/${clickedSubCategoryId}`, {
-            method: "DELETE",
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        })
-            .then((response) => {
-                if (response.status === 204) {
-                    refreshSubCategories();
-                    hideDeleteModal();
-                }
-            })
-            .catch((error) => console.error("Error:", error));
+        if (clickedItemId !== null) {
+            handleDelete(endpoints.subcategories.delete(clickedItemId));
+        }
+        hideDeleteModal();
     };
 
     return (

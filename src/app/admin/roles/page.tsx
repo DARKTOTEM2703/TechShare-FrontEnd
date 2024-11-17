@@ -8,6 +8,7 @@ import BorderTextField from '@/components/Inputs/BorderTextField' // Importamos 
 import { useAuth } from '@/hooks/useAuth'
 import { getToken } from '@/services/storageService'
 import { useCrudOperations } from '@/hooks/useCrudOperations'
+import endpoints from '@/app/infraestructure/config/configAPI'
 
 export default function roles() {
 
@@ -20,7 +21,7 @@ export default function roles() {
   const token = getToken() || ''
 
   const fetchRoles = () => {
-    fetch("http://localhost:8080/admin/role/all", {
+    fetch(endpoints.roles.getAll, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -66,25 +67,28 @@ export default function roles() {
 
   const hideDeleteModal = () => setDeleteModalVisible(false)
 
-  // TODO: role name lenght VALIDATION
+  // TODO: role name length VALIDATION
   const handleCreateRole = (e: React.FormEvent) => {
     e.preventDefault()
-    const formDataObj = new FormData()
-    formDataObj.append('name', formData.roleName)
-    handleCreate("http://localhost:8080/admin/role/create", formDataObj)
+    const payload = { name: formData.roleName }
+    handleCreate(endpoints.roles.create, payload)
     hideCreateModal()
-  }
+}
 
-  const handleRoleUpdate = (e: any) => {
+const handleRoleUpdate = (e: any) => {
     e.preventDefault()
-    const formDataObj = new FormData()
-    formDataObj.append('name', formData.roleName)
-    handleUpdate(`http://localhost:8080/admin/role/update/${clickedItemId}`, formDataObj)
+    const payload = { name: formData.roleName }
+    if (clickedItemId !== null) {
+        handleUpdate(endpoints.roles.update(clickedItemId), payload)
+    }
     hideEditModal()
-  }
+}
+
 
   const handleRoleDeletion = () => {
-    handleDelete(`http://localhost:8080/admin/role/delete/${clickedItemId}`)
+    if (clickedItemId !== null) {
+      handleDelete(endpoints.roles.delete(clickedItemId))
+    }
     hideDeleteModal()
   }
   return (
@@ -140,7 +144,7 @@ export default function roles() {
             onClose={hideDeleteModal}
             header='Confirmar borrado de rol'
             onSubmit={handleRoleDeletion}>
-            <p>¿Estás seguro de que deseas borrar este rol</p>
+            <p>¿Estás seguro de que deseas borrar este rol?</p>
           </ModalBase>
         </div>)}
     </div>

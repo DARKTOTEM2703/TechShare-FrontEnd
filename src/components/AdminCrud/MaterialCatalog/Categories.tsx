@@ -4,6 +4,7 @@ import CrudBody from '@/components/AdminCrud/CrudBodyWithImages';
 import ModalBase from '@/components/Modal/ModalBase';
 import BorderTextField from '@/components/Inputs/BorderTextField';
 import { useCrudOperations } from '@/hooks/useCrudOperations';
+import endpoints from '@/app/infraestructure/config/configAPI';
 
 export default function Categories({ token, categories, refreshCategories }: { token: any | null, categories: any, refreshCategories: () => void }) {
 
@@ -38,7 +39,7 @@ export default function Categories({ token, categories, refreshCategories }: { t
     const formDataObj = new FormData()
     formDataObj.append('name', formData.name)
     if (formData.image) formDataObj.append('image', formData.image)
-    handleCreate("http://localhost:8080/categories/create", formDataObj)
+    handleCreate(endpoints.categories.create, formDataObj)
     hideCreateModal()
   }
 
@@ -47,12 +48,16 @@ export default function Categories({ token, categories, refreshCategories }: { t
     const formDataObj = new FormData()
     formDataObj.append('name', formData.name)
     if (formData.image) formDataObj.append('image', formData.image)
-    handleUpdate(`http://localhost:8080/categories/update/${clickedItemId}`, formDataObj)
+    if (clickedItemId !== null) {
+      handleUpdate(endpoints.categories.update(clickedItemId), formDataObj)
+    }
     hideEditModal()
   }
 
   const handleDeleteCategory = () => {
-    handleDelete(`http://localhost:8080/categories/delete/${clickedItemId}`)
+    if (clickedItemId !== null) {
+      handleDelete(endpoints.categories.delete(clickedItemId))
+    }
     hideDeleteModal()
   }
 

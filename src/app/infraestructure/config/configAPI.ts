@@ -1,0 +1,24 @@
+const BASE_URL = 'http://localhost:8080'
+
+const endpoints = {
+    categories: {
+        getAll: `${BASE_URL}/categories/all`,
+        create: `${BASE_URL}/categories/create`,
+        update: (id: number) => `${BASE_URL}/categories/update/${id}`,
+        delete: (id: number) => `${BASE_URL}/categories/delete/${id}`
+    },
+    subcategories: {
+        getAll: `${BASE_URL}/subcategories/all`,
+        create: `${BASE_URL}/subcategories/create`,
+        update: (id: number) => `${BASE_URL}/subcategories/update/${id}`,
+        delete: (id: number) => `${BASE_URL}/subcategories/delete/${id}`
+    },
+    roles: {
+        getAll: `${BASE_URL}/admin/role/all`,
+        create: `${BASE_URL}/admin/role/create`,
+        update: (id: number) => `${BASE_URL}/admin/role/update/${id}`,
+        delete: (id: number) => `${BASE_URL}/admin/role/delete/${id}`
+    }
+}
+
+export default endpoints
