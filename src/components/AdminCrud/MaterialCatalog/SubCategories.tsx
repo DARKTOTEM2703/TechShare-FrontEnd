@@ -5,6 +5,7 @@ import ModalBase from '@/components/Modal/ModalBase';
 import BorderTextField from '@/components/Inputs/BorderTextField';
 import { useCrudOperations } from '@/hooks/useCrudOperations';
 import endpoints from '@/app/infraestructure/config/configAPI';
+import DynamicDropdown from '@/components/Dropdowns/DynamicDropdown';
 
 export default function SubCategories({ token, categories, subCategories, refreshSubCategories }: { token: any, categories: any, subCategories: any, refreshSubCategories: any }) {
 
@@ -84,8 +85,16 @@ export default function SubCategories({ token, categories, subCategories, refres
                 <div className="modal-overlay">
                     <div className="modal-content">
                         <ModalBase onClose={hideCreateModal} header="Create New SubCategory" onSubmit={handleSubCategoryCreation}>
-                            <BorderTextField name="name" placeholder="SubCategory Name" onChange={(e) => setFormData({ ...formData, name: e.target.value })} value={formData.name} />
-                            <BorderTextField name="categoryId" placeholder="Category ID" onChange={(e) => setFormData({ ...formData, idCategory: parseInt(e.target.value) })} value={formData.idCategory.toString()} />
+                            <BorderTextField name="name" 
+                            placeholder="SubCategory Name" 
+                            onChange={(e) => setFormData({ ...formData, name: e.target.value })} value={formData.name} />
+                            <DynamicDropdown
+                                data={categories}
+                                valueKey="categoryId"
+                                labelKey="name"
+                                selectedValue={formData.idCategory}
+                                onChange={(value: number) => setFormData({ ...formData, idCategory: value })}
+                            />
                             <input type="file" onChange={(e) => setFormData({ ...formData, image: e.target.files ? e.target.files[0] : null })} />
                         </ModalBase>
                     </div>
@@ -96,14 +105,21 @@ export default function SubCategories({ token, categories, subCategories, refres
                 <div className="modal-overlay">
                     <div className="modal-content">
                         <ModalBase onClose={hideEditModal} header="Edit SubCategory" onSubmit={handleSubCategoryUpdate}>
-                            <BorderTextField name="name" placeholder="SubCategory Name" onChange={(e) => setFormData({ ...formData, name: e.target.value })} value={formData.name} />
-                            <BorderTextField name="categoryId" placeholder="Category ID" onChange={(e) => setFormData({ ...formData, idCategory: parseInt(e.target.value) })} value={formData.idCategory.toString()} />
+                            <BorderTextField name="name" 
+                            placeholder="SubCategory Name" 
+                            onChange={(e) => setFormData({ ...formData, name: e.target.value })} value={formData.name} />
+                            <DynamicDropdown
+                                data={categories}
+                                valueKey="categoryId"
+                                labelKey="name"
+                                selectedValue={formData.idCategory}
+                                onChange={(value: number) => setFormData({ ...formData, idCategory: value })}
+                            />
                             <input type="file" onChange={(e) => setFormData({ ...formData, image: e.target.files ? e.target.files[0] : null })} />
                         </ModalBase>
                     </div>
                 </div>
             )}
-
             {isDeleteModalVisible && (
                 <div className="modal-overlay">
                     <div className="modal-content">
