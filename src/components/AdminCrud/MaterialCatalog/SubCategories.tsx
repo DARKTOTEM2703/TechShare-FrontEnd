@@ -38,7 +38,6 @@ export default function SubCategories({ token, categories, subCategories, refres
         if (selectedSubCategory) {
             setClickedItemId(id);
             setFormData({ name: selectedSubCategory.name, image: selectedSubCategory.imagePath, idCategory: selectedSubCategory.categoryId });
-            console.log(selectedSubCategory.imagePath);
             showEditModal();
         }
     };

@@ -13,6 +13,12 @@ const endpoints = {
         update: (id: number) => `${BASE_URL}/subcategories/update/${id}`,
         delete: (id: number) => `${BASE_URL}/subcategories/delete/${id}`
     },
+    materials: {
+        getAll: `${BASE_URL}/admin/materials/all`,
+        create: `${BASE_URL}/admin/materials/create`,
+        update: (id: number) => `${BASE_URL}/admin/materials/update/${id}`,
+        delete: (id: number) => `${BASE_URL}/admin/materials/delete/${id}`
+    },
     roles: {
         getAll: `${BASE_URL}/admin/role/all`,
         create: `${BASE_URL}/admin/role/create`,
