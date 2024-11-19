@@ -20,6 +20,13 @@ export const useCrudOperations = (token: string, refreshData: () => void) => {
             method,
             headers,
             body,
+        }).then(response => {
+            if (!response.ok) {
+                return response.json().then(error => {
+                    throw new Error(`Error: ${response.status} ${response.statusText} - ${JSON.stringify(error.message)}`);
+                });
+            }
+            return response;
         });
     };
 

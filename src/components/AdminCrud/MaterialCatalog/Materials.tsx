@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import AsyncSelect from 'react-select/async';
 import CrudHeader from '@/components/AdminCrud/CrudHeader';
 import CrudBody from '@/components/AdminCrud/CrudBodyWithImages';
 import ModalBase from '@/components/Modal/ModalBase';
@@ -13,9 +14,15 @@ export default function Materials({ token, subCategories, roles, materials, refr
     const [isCreateModalVisible, setCreateModalVisible] = useState(false);
     const [isEditModalVisible, setEditModalVisible] = useState(false);
     const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
-    const [formData, setFormData] = useState<{ name: string; description: string; price: number; image?: File | null; subCategoryId: number; roleIds: number[] }>({ name: '', description: '', price: 0, image: null, subCategoryId: 0, roleIds: [45] });
+    const [formData, setFormData] = useState<{ name: string; description: string; price: number; image?: File | null; subCategoryId: number; roleIds: number[] }>({ name: '', description: '', price: 0, image: null, subCategoryId: 0, roleIds: [] });
 
     const { setClickedItemId, handleCreate, handleUpdate, handleDelete, clickedItemId } = useCrudOperations(token, refreshMaterials);
+
+    // Crear opciones iniciales para los roles
+    const roleOptions = roles.map((role: any) => ({
+        value: role.roleId,
+        label: role.name,
+    }));
 
     const handleSearchChange = (value: string) => setSearchTerm(value);
 
@@ -29,15 +36,22 @@ export default function Materials({ token, subCategories, roles, materials, refr
     const hideDeleteModal = () => setDeleteModalVisible(false);
 
     const createButtonClicked = () => {
-        setFormData({ name: '', description: '', price: 0, image: null, subCategoryId: 0, roleIds: [45] });
+        setFormData({ name: '', description: '', price: 0, image: null, subCategoryId: 0, roleIds: [] });
         showCreateModal();
-    }
+    };
 
     const editButtonClicked = (id: number) => {
         const selectedMaterial = materials.find((material: any) => material.materialsId === id);
         if (selectedMaterial) {
             setClickedItemId(id);
-            setFormData({ name: selectedMaterial.name, description: selectedMaterial.description, price: selectedMaterial.price, image: selectedMaterial.imagePath, subCategoryId: selectedMaterial.subCategoryId, roleIds: [45] });
+            setFormData({
+                name: selectedMaterial.name,
+                description: selectedMaterial.description,
+                price: selectedMaterial.price,
+                image: selectedMaterial.imagePath,
+                subCategoryId: selectedMaterial.subCategoryId,
+                roleIds: selectedMaterial.roleIds,
+            });
             showEditModal();
         }
     };
@@ -54,7 +68,10 @@ export default function Materials({ token, subCategories, roles, materials, refr
         formDataToSend.append('description', formData.description);
         formDataToSend.append('price', formData.price.toString());
         formDataToSend.append('subCategoryId', formData.subCategoryId.toString());
-        formDataToSend.append('roleIds', '45');
+    
+        // Agregamos roleIds directamente como en la versión estable
+        formDataToSend.append('roleIds', formData.roleIds.toString());
+    
         if (formData.image) {
             formDataToSend.append('image', formData.image);
         }
@@ -69,7 +86,10 @@ export default function Materials({ token, subCategories, roles, materials, refr
         formDataToSend.append('description', formData.description);
         formDataToSend.append('price', formData.price.toString());
         formDataToSend.append('subCategoryId', formData.subCategoryId.toString());
-        formDataToSend.append('roleIds', '45');
+    
+        // Agregamos roleIds directamente como en la versión estable
+        formDataToSend.append('roleIds', formData.roleIds.toString());
+    
         if (formData.image) {
             formDataToSend.append('image', formData.image);
         }
@@ -78,6 +98,7 @@ export default function Materials({ token, subCategories, roles, materials, refr
         }
         hideEditModal();
     };
+    
 
     const handleMaterialDeletion = (e: any) => {
         e.preventDefault();
@@ -85,6 +106,13 @@ export default function Materials({ token, subCategories, roles, materials, refr
             handleDelete(endpoints.materials.delete(clickedItemId));
         }
         hideDeleteModal();
+    };
+
+    const loadRoleOptions = (inputValue: string, callback: (options: any[]) => void) => {
+        const filteredOptions = roleOptions.filter((role:any) =>
+            role.label.toLowerCase().includes(inputValue.toLowerCase())
+        );
+        callback(filteredOptions);
     };
 
     return (
@@ -100,6 +128,20 @@ export default function Materials({ token, subCategories, roles, materials, refr
                             <BorderTextField name="description" placeholder="Material Description" onChange={(e) => setFormData({ ...formData, description: e.target.value })} value={formData.description} />
                             <BorderTextField name="price" placeholder="Material Price" onChange={(e) => setFormData({ ...formData, price: parseFloat(e.target.value) })} value={formData.price} />
                             <DynamicDropdown data={subCategories} valueKey="subCategoriesId" labelKey="name" selectedValue={formData.subCategoryId} onChange={(value: number) => setFormData({ ...formData, subCategoryId: value })} />
+                            <AsyncSelect
+                                cacheOptions
+                                defaultOptions={roleOptions}
+                                loadOptions={loadRoleOptions}
+                                isMulti
+                                placeholder="Select Roles"
+                                value={roleOptions.filter((role:any) => formData.roleIds.includes(role.value))}
+                                onChange={(selectedOptions) =>
+                                    setFormData({
+                                        ...formData,
+                                        roleIds: selectedOptions.map((option: any) => option.value),
+                                    })
+                                }
+                            />
                             <input type="file" onChange={(e) => setFormData({ ...formData, image: e.target.files ? e.target.files[0] : null })} />
                         </ModalBase>
                     </div>
@@ -114,6 +156,20 @@ export default function Materials({ token, subCategories, roles, materials, refr
                             <BorderTextField name="description" placeholder="Material Description" onChange={(e) => setFormData({ ...formData, description: e.target.value })} value={formData.description} />
                             <BorderTextField name="price" placeholder="Material Price" onChange={(e) => setFormData({ ...formData, price: parseFloat(e.target.value) })} value={formData.price} />
                             <DynamicDropdown data={subCategories} valueKey="subCategoriesId" labelKey="name" selectedValue={formData.subCategoryId} onChange={(value: number) => setFormData({ ...formData, subCategoryId: value })} />
+                            <AsyncSelect
+                                cacheOptions
+                                defaultOptions={roleOptions}
+                                loadOptions={loadRoleOptions}
+                                isMulti
+                                placeholder="Select Roles"
+                                value={roleOptions.filter((role:any) => formData.roleIds.includes(role.value))}
+                                onChange={(selectedOptions) =>
+                                    setFormData({
+                                        ...formData,
+                                        roleIds: selectedOptions.map((option: any) => option.value),
+                                    })
+                                }
+                            />
                             <input type="file" onChange={(e) => setFormData({ ...formData, image: e.target.files ? e.target.files[0] : null })} />
                         </ModalBase>
                     </div>
