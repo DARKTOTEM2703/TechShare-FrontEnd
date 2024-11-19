@@ -28,11 +28,17 @@ export default function SubCategories({ token, categories, subCategories, refres
     const showDeleteModal = () => setDeleteModalVisible(true);
     const hideDeleteModal = () => setDeleteModalVisible(false);
 
+    const createButtonClicked = () => {
+        setFormData({ name: '', image: null, idCategory: 0 });
+        showCreateModal();
+    }
+
     const editButtonClicked = (id: number) => {
         const selectedSubCategory = subCategories.find((subCategory: any) => subCategory.subCategoriesId === id);
         if (selectedSubCategory) {
             setClickedItemId(id);
-            setFormData({ name: selectedSubCategory.name, image: null, idCategory: selectedSubCategory.idCategory });
+            setFormData({ name: selectedSubCategory.name, image: selectedSubCategory.imagePath, idCategory: selectedSubCategory.categoryId });
+            console.log(selectedSubCategory.imagePath);
             showEditModal();
         }
     };
@@ -53,12 +59,12 @@ export default function SubCategories({ token, categories, subCategories, refres
         handleCreate(endpoints.subcategories.create, formDataToSend);
         hideCreateModal();
     };
-
+    
     const handleSubCategoryUpdate = (e: any) => {
         e.preventDefault();
         const formDataToSend = new FormData();
         formDataToSend.append('name', formData.name);
-        formDataToSend.append('idCategory', formData.idCategory.toString());
+        formDataToSend.append('idCategoria', formData.idCategory.toString());
         if (formData.image) {
             formDataToSend.append('image', formData.image);
         }
@@ -67,6 +73,7 @@ export default function SubCategories({ token, categories, subCategories, refres
         }
         hideEditModal();
     };
+    
 
     const handleSubCategoryDeletion = (e: any) => {
         e.preventDefault();
@@ -78,7 +85,7 @@ export default function SubCategories({ token, categories, subCategories, refres
 
     return (
         <div>
-            <CrudHeader title="SubCategories" buttonLabel="Add SubCategory" buttonFunction={showCreateModal} onSearchChange={handleSearchChange} />
+            <CrudHeader title="SubCategories" buttonLabel="Add SubCategory" buttonFunction={createButtonClicked} onSearchChange={handleSearchChange} />
             <CrudBody data={subCategories} searchTerm={searchTerm} onDelete={deleteButtonClicked} onEdit={editButtonClicked} />
 
             {isCreateModalVisible && (
@@ -107,7 +114,8 @@ export default function SubCategories({ token, categories, subCategories, refres
                         <ModalBase onClose={hideEditModal} header="Edit SubCategory" onSubmit={handleSubCategoryUpdate}>
                             <BorderTextField name="name" 
                             placeholder="SubCategory Name" 
-                            onChange={(e) => setFormData({ ...formData, name: e.target.value })} value={formData.name} />
+                            onChange={(e) => setFormData({ ...formData, name: e.target.value })} 
+                            value={formData.name} />
                             <DynamicDropdown
                                 data={categories}
                                 valueKey="categoryId"
