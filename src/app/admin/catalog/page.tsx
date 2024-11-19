@@ -5,14 +5,9 @@ import SubCategories from '@/components/AdminCrud/MaterialCatalog/SubCategories'
 import { useAuth } from '@/hooks/useAuth';
 import { getToken } from '@/services/storageService';
 import endpoints from '@/app/infraestructure/config/configAPI';
+import fetchData from '@/services/fetchData';
 
 export default function Catalog() {
-
-  type Category = {
-    categoryId: number;
-    name: string;
-    imageUrl?: string;
-  };
 
   type SubCategory = {
     subCategoryId: number;
@@ -20,6 +15,12 @@ export default function Catalog() {
     description?: string;
     imageUrl?: string;
     categoryId: number;
+  };
+  
+  type Category = {
+    categoryId: number;
+    name: string;
+    imageUrl?: string;
   };
 
   const [categories, setCategories] = useState<Category[]>([]);
@@ -29,44 +30,14 @@ export default function Catalog() {
   const token = getToken();
 
   const fetchCategories = () => {
-    fetch(endpoints.categories.getAll, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((response) => {
-        if (response.status === 204) {
-          return []; // Si no hay contenido, devuelve un array vacío para limpiar el estado.
-        }
-        return response.json(); // Procesa JSON si hay contenido.
-      })
-      .then((data) => {
-        setCategories(data); // Actualiza el estado con los datos recibidos o con el array vacío.
-      })
-      .catch(error => console.error('Error:', error));
-  };
+    fetchData(endpoints.categories.getAll, token)
+      .then((data) => setCategories(data))
+  }
 
   const fetchSubCategories = () => {
-    fetch(endpoints.subcategories.getAll, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((response) => {
-        if (response.status === 204) {
-          return []; // Si no hay contenido, devuelve un array vacío para limpiar el estado.
-        }
-        return response.json();
-      })
-      .then((data) => {
-        setSubCategories(data);
-      })
-      .catch(error => console.error('Error:', error));
-  };
+    fetchData(endpoints.subcategories.getAll, token)
+      .then((data) => setSubCategories(data))
+  }
 
   useEffect(() => {
     fetchSubCategories();
