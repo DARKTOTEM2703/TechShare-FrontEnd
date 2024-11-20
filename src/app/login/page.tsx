@@ -39,6 +39,7 @@ const Page = () => {
             .then(token => {
                 if (token) {
                     setToken(token);
+                    console.log('Token:', token);
                 } else {
                     console.warn('Token no encontrado en el header "Authorization".');
                 }

@@ -72,6 +72,14 @@ export default function Catalog() {
     fetchRoles()
   }, []);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      console.log(categories);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [categories]);
+
   return (
     <div>
       <div className='mb-6'>

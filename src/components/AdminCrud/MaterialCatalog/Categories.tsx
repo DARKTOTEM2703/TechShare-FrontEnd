@@ -5,36 +5,46 @@ import ModalBase from '@/components/Modal/ModalBase';
 import BorderTextField from '@/components/Inputs/BorderTextField';
 import { useCrudOperations } from '@/hooks/useCrudOperations';
 import endpoints from '@/app/infraestructure/config/configAPI';
-import DropzoneWithPreview from '@/components/DropZone'; // Importa el nuevo componente Dropzone
+import DropzoneWithPreview from '@/components/DropZone';
 
 export default function Categories({ token, categories, refreshCategories }: { token: any, categories: any, refreshCategories: any }) {
     const { setClickedItemId, handleCreate, handleUpdate, handleDelete, clickedItemId } = useCrudOperations(token, refreshCategories);
 
-    const [formData, setFormData] = useState<{ name: string; image: File | null }>({ name: '', image: null });
+    const [formData, setFormData] = useState<{ name: string; image: File | null; imagePreview: string | null }>({
+        name: '',
+        image: null,
+        imagePreview: null, // Añadimos este campo para manejar la previsualización inicial
+    });
     const [searchTerm, setSearchTerm] = useState('');
     const [isCreateModalVisible, setCreateModalVisible] = useState(false);
     const [isEditModalVisible, setEditModalVisible] = useState(false);
     const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
+    const [selectedCategory, setSelectedCategory] = useState<any>(null);
 
     // Mostrar/Cerrar modal de creación
     const showCreateModal = () => setCreateModalVisible(true);
     const hideCreateModal = () => {
         setCreateModalVisible(false);
-        setFormData({ name: '', image: null }); // Limpiar datos del formulario
+        setFormData({ name: '', image: null, imagePreview: null }); // Limpiar datos del formulario
     };
 
     // Mostrar/Cerrar modal de edición
     const showEditModal = (id: number) => {
         const selectedCategory = categories.find((category: any) => category.categoryId === id);
+        setSelectedCategory(selectedCategory);
         if (selectedCategory) {
             setClickedItemId(id);
-            setFormData({ name: selectedCategory.name, image: null });
+            setFormData({
+                name: selectedCategory.name,
+                image: null, // Se inicializa como null
+                imagePreview: selectedCategory.imageUrl || null, // Precargar URL de la imagen
+            });
             setEditModalVisible(true);
         }
     };
     const hideEditModal = () => {
         setEditModalVisible(false);
-        setFormData({ name: '', image: null }); // Limpiar datos del formulario
+        setFormData({ name: '', image: null, imagePreview: null }); // Limpiar datos del formulario
     };
 
     // Mostrar/Cerrar modal de eliminación
@@ -115,7 +125,7 @@ export default function Categories({ token, categories, refreshCategories }: { t
                             />
                             <DropzoneWithPreview
                                 onFileChange={(file) => setFormData({ ...formData, image: file })}
-                                initialPreview={null} // Si tienes una URL previa, cámbiala aquí
+                                initialPreview={selectedCategory.imagePath} // Precargar la imagen existente
                             />
                         </ModalBase>
                     </div>
