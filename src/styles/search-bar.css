@@ -1,9 +1,9 @@
 /* components/SearchBar.module.css */
 .search-bar {
   width: 100%;
-  padding: 1% 2% 1% 2%; /* Arriba, derecha, abajo, izquierda */
-  border-radius: 10px; 
-  border: none; 
+  padding: 1.5%; /* Arriba, derecha, abajo, izquierda */
+  border-radius: 10px;
+  border: none;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
   background-color: #ffffff;
 }

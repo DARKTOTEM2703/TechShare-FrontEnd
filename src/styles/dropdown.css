@@ -1,17 +1,17 @@
 .dropdown {
-    width: 100%;
-    border-radius: 10px;
-    padding: 3%;
-    border: none;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-    background-color: #ffffff;
-    appearance: none; 
-  }
-  
-  .dropdown-icon {
-    position: absolute;
-    right: 10px;
-    pointer-events: none; /* Evita que el icono interfiera con el dropdown */
-    top: 50%;
-    transform: translateY(-50%);
-  }
+  width: 100%;
+  border-radius: 10px;
+  padding: 4.2%;
+  border: none;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  background-color: #ffffff;
+  appearance: none;
+}
+
+.dropdown-icon {
+  position: absolute;
+  right: 10px;
+  pointer-events: none; /* Evita que el icono interfiera con el dropdown */
+  top: 50%;
+  transform: translateY(-50%);
+}

@@ -3,6 +3,7 @@ import Image from 'next/image'
 import '@/styles/search-bar.css'
 import '@/styles/containers.css'
 import lupaIcon from '/src/assets/icons/lupa.svg'
+import { FaSearch } from 'react-icons/fa';
 
 interface SearchBarProps {
   onSearchChange: (value: string) => void; // Nueva prop para manejar cambios en la búsqueda
@@ -14,20 +15,14 @@ export default function SearchBar({ onSearchChange }: SearchBarProps) {
   };
 
   return (
-    <div className='my-6 relative'>
+    <div className='my-8 relative'>
       <input
-        type="text"
-        className="search-bar text-sm"
-        placeholder="Search"
-        onChange={handleInputChange} // Manejar el cambio del input
+      type="text"
+      className="search-bar text-sm" 
+      placeholder="Search"
+      onChange={handleInputChange} // Manejar el cambio del input
       />
-      <Image
-        src={lupaIcon}
-        width={20}
-        height={20}
-        alt="Search Icon"
-        className='search-bar-icon'
-      />
+      <FaSearch className='search-bar-icon text-secondary' />
     </div>
   );
 }

@@ -71,7 +71,7 @@ export default function Catalog() {
     fetchMaterials()
     fetchRoles()
   }, []);
-
+/*
   useEffect(() => {
     const interval = setInterval(() => {
       console.log(categories);
@@ -79,7 +79,7 @@ export default function Catalog() {
 
     return () => clearInterval(interval);
   }, [categories]);
-
+  */
   return (
     <div>
       <div className='mb-6'>
