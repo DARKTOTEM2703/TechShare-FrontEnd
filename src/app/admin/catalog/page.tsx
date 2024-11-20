@@ -25,13 +25,11 @@ export default function Catalog() {
     imageUrl?: string;
     categoryId: number;
   };
-
   type Category = {
     categoryId: number;
     name: string;
     imageUrl?: string;
   };
-
   type Role = {
     roleId: number;
     name: string;
@@ -71,15 +69,15 @@ export default function Catalog() {
     fetchMaterials()
     fetchRoles()
   }, []);
-/*
-  useEffect(() => {
-    const interval = setInterval(() => {
-      console.log(categories);
-    }, 5000);
-
-    return () => clearInterval(interval);
-  }, [categories]);
-  */
+  /*
+    useEffect(() => {
+      const interval = setInterval(() => {
+        console.log(categories);
+      }, 5000);
+  
+      return () => clearInterval(interval);
+    }, [categories]);
+    */
   return (
     <div>
       <div className='mb-6'>

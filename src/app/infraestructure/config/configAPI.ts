@@ -1,3 +1,6 @@
+import { loginUser } from "@/services/Auth/AuthService"
+import { sign } from "crypto"
+
 const BASE_URL = 'http://localhost:8080'
 
 const endpoints = {
@@ -24,7 +27,9 @@ const endpoints = {
         create: `${BASE_URL}/admin/role/create`,
         update: (id: number) => `${BASE_URL}/admin/role/update/${id}`,
         delete: (id: number) => `${BASE_URL}/admin/role/delete/${id}`
-    }
+    },
+    signUp: `${BASE_URL}/register`,
+    login: `${BASE_URL}/login`
 }
 
 export default endpoints

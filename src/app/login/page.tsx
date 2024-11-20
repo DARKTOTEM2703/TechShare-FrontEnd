@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React from 'react';
 import { useState } from 'react';
 import TextField from '@/components/Inputs/TextField';
@@ -6,15 +6,8 @@ import PasswordField from '@/components/Inputs/PasswordField';
 import '@/styles/form.css';
 import '@/styles/buttons.css';
 import { useForm } from '@/hooks/useForm';
-import {
-    getToken,
-    clearStorage,
-    getUserEmail,
-    getUserId,
-    getUserName,
-    setToken
-}
-    from '@/services/storageService';
+import { setToken } from '@/services/storageService';
+import { loginUser } from '@/services/Auth/AuthService';
 
 const Page = () => {
     const [formData, handleChange] = useForm({
@@ -22,36 +15,26 @@ const Page = () => {
         password: '',
     });
 
-    const handleLogin = (e: any) => {
-        e.preventDefault(); // Evitar que el formulario se envíe por defecto
+    const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
 
-        const requestOptions = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                email: formData.email,
-                password: formData.password,
-            }),
-        };
-
-        fetch('http://localhost:8080/login', requestOptions)
-            .then(response => response.headers.get('Authorization'))
-            .then(token => {
-                if (token) {
-                    setToken(token);
-                    console.log('Token:', token);
-                } else {
-                    console.warn('Token no encontrado en el header "Authorization".');
-                }
-            })
-            .catch(error => console.error('Error:', error));
+        try {
+            const token = await loginUser(formData.email, formData.password);
+            if (token) {
+                setToken(token);
+                console.log('Login successful, token set:', token);
+            } else {
+                console.warn('Login failed, no token received.');
+            }
+        } catch (error) {
+            console.error('Error during login:', error);
+        }
     };
+
     return (
         <div>
             <div className="form-container">
-                <h1 className="text-primary font-bold">
-                    INICIO DE SESIÓN
-                </h1>
+                <h1 className="text-primary font-bold">INICIO DE SESIÓN</h1>
                 <form onSubmit={handleLogin}>
                     <TextField
                         placeholder="Correo electrónico"
@@ -65,9 +48,7 @@ const Page = () => {
                         value={formData.password}
                         handleChange={handleChange}
                     />
-                    <button
-                        className="primary-button font-bold"
-                        type="submit">
+                    <button className="primary-button font-bold" type="submit">
                         INICIAR SESIÓN
                     </button>
                 </form>
@@ -75,6 +56,6 @@ const Page = () => {
             </div>
         </div>
     );
-}
+};
 
 export default Page;
