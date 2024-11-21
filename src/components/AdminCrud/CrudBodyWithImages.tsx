@@ -30,7 +30,7 @@ export default function CrudBody({ data, searchTerm, onDelete, onEdit }: CrudBod
                 Object.values(item).some((val: any) =>
                     String(val).toLowerCase().includes(lowercasedFilter)
                 )
-              )
+            )
             : [];
         setFilteredData(filtered);
     }, [searchTerm, data]);
@@ -38,9 +38,9 @@ export default function CrudBody({ data, searchTerm, onDelete, onEdit }: CrudBod
     return (
         <div>
             <div className='card-list-container'>
-                <CardRenderer 
+                <CardRenderer
                     currentRecords={currentRecords}
-                    onDelete={onDelete} 
+                    onDelete={onDelete}
                     onEdit={onEdit}
                 />
             </div>
