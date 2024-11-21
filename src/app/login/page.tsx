@@ -52,7 +52,7 @@ const Page = () => {
                         INICIAR SESIÓN
                     </button>
                 </form>
-                <p>¿No tienes una cuenta? <a href="#">Regístrate</a></p>
+                <p className='mt-[20px]'>¿No tienes una cuenta? <a href="#">Regístrate</a></p>
             </div>
         </div>
     );
