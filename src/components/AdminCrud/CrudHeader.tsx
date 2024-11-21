@@ -22,7 +22,7 @@ const CrudHeader: React.FC<CrudHeaderProps> = ({ title, buttonLabel, buttonFunct
         <p className={`${inter.className} antialiased font-semibold text-lg pl-1 text-[#1E2A5E]`} >
           {title}
         </p>
-        <Button buttonLabel={buttonLabel} buttonFunction={buttonFunction} isDisabled={buttonDisabled} /> {/* Pasamos el estado de disabled */}
+        <Button buttonLabel={buttonLabel} buttonFunction={buttonFunction} isDisabled={buttonDisabled} />
       </div>
       <div className='flex gap-6'>
         <div className='w-3/4 '>

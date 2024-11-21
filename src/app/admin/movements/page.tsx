@@ -54,18 +54,19 @@ export default function movements() {
       }
     }, 5000); // Intervalo de 5 segundos
 
-    return () => clearInterval(intervalId); // Limpiar el intervalo al desmontar el componente
+    return () => clearInterval(intervalId);
   }, [token]);
 
   return (
     <div>
       <CrudHeader
         title='Movimientos'
-        buttonLabel=''
+        buttonLabel=' '
         buttonFunction={() => alert('')}
-        onSearchChange={handleSearchChange} // Asegúrate de pasar esta función
+        buttonDisabled={true}
+        onSearchChange={handleSearchChange}
       />
-      <CrudBody data={data} searchTerm={searchTerm} /> {/* Pasar el término de búsqueda */}
+      <CrudBody data={data} searchTerm={searchTerm} />
     </div>
   )
 }

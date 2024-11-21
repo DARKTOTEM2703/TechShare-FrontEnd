@@ -9,12 +9,12 @@ interface ButtonProps {
 
 export default function Button({ buttonLabel, buttonFunction, isDisabled = false }: ButtonProps) {
     return (
-        <button className='primary-button'
+        <button className={`primary-button ${isDisabled ? 'invisible' : ''}`}
             onClick={buttonFunction}
             disabled={isDisabled}
             type='submit'
         >
-            {isDisabled ? '' : buttonLabel}
+            {isDisabled ? 'Empty' : buttonLabel /*This is only to ensure there is the same padding as the headers with text*/}
         </button>
     )
 }
