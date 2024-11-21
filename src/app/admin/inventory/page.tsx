@@ -1,6 +1,7 @@
 "use client"
 import React from 'react';
 import CrudHeader from '@/components/AdminCrud/CrudHeader'
+import NewMovementForm from '@/components/AdminCrud/InventoryPage/NewMovementForm';
 
 const Inventory = () => {
     return (
@@ -10,7 +11,7 @@ const Inventory = () => {
                 buttonDisabled={true}
                 buttonFunction={() => { }}
                 onSearchChange={() => { }} />
-
+            <NewMovementForm />
         </div>
     );
 }
