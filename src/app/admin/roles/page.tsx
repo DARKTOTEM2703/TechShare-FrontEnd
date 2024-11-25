@@ -73,16 +73,16 @@ export default function roles() {
     const payload = { name: formData.roleName }
     handleCreate(endpoints.roles.create, payload)
     hideCreateModal()
-}
+  }
 
-const handleRoleUpdate = (e: any) => {
+  const handleRoleUpdate = (e: any) => {
     e.preventDefault()
     const payload = { name: formData.roleName }
     if (clickedItemId !== null) {
-        handleUpdate(endpoints.roles.update(clickedItemId), payload)
+      handleUpdate(endpoints.roles.update(clickedItemId), payload)
     }
     hideEditModal()
-}
+  }
 
 
   const handleRoleDeletion = () => {

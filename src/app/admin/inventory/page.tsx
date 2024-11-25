@@ -1,7 +1,7 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 import CrudHeader from '@/components/AdminCrud/CrudHeader'
-import CrudBody from '@/components/AdminCrud/CrudBody';
+import CrudBody from '@/components/AdminCrud/CrudBodyViewOnly';
 import NewMovementForm from '@/components/AdminCrud/InventoryPage/NewMovementForm';
 import { useAuth } from '@/hooks/useAuth';
 import { getToken } from '@/services/storageService';
@@ -46,8 +46,8 @@ const Inventory = () => {
             data={materials}
             headers={['name', 'stock', 'borrowable_stock']}
             searchTerm=""
-            onDelete={() => { }}
-            onEdit={() => { }}
+            onSelected={(id) => { console.log('selected id: ', id) }}
+            onMoreInfo={(id) => { console.log('display info of: ', id) }}
           />
         </div>
         <div className="">

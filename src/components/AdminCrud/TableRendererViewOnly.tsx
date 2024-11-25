@@ -1,26 +1,32 @@
 import { FaEdit, FaTrash } from 'react-icons/fa';
+import { FaCircleInfo } from 'react-icons/fa6';
 
 interface TableRowsProps {
     headers: string[];
     currentRecords: any[];
+    onSelected: (id: number) => void;
+    onMoreInfo: (id: number) => void;
 }
 
-const TableRows: React.FC<TableRowsProps> = ({ headers, currentRecords }) => {
+const TableRows: React.FC<TableRowsProps> = ({ headers, currentRecords, onSelected, onMoreInfo }) => {
     return (
         <>
             {currentRecords.map((row: any, rowIndex: number) => {
-                // Obtiene el nombre del primer atributo de cada objeto
                 const idKey = Object.keys(row)[0];
-                const idValue = row[idKey]; // Toma el valor del primer atributo como ID
+                const idValue = row[idKey];
 
                 return (
-                    <tr key={`row-${idValue}-${rowIndex}`}>
-                        {headers.map((header: string, headerIndex: number) => (
-                            <td key={`${header}-${idValue}-${headerIndex}`}>{row[header]}</td>
-                        ))}
-                        <td key={`empty-td-${idValue}`} />
-                        <td key={`actions-td-${idValue}`} />
-                    </tr>
+                    <tr key={`row-${idValue}-${rowIndex}`}>{
+                        headers.map((header: string, headerIndex: number) => (
+                            <td key={`${header}-${idValue}-${headerIndex}`} onClick={() => onSelected(idValue)}>
+                                {row[header]}
+                            </td>
+                        ))
+                    }<td key={`actions-td-${idValue}`}>
+                            <button className="action-button" onClick={() => onMoreInfo(idValue)}>
+                                <FaCircleInfo />
+                            </button>
+                        </td></tr>
                 );
             })}
         </>
@@ -33,13 +39,11 @@ interface TableHeadersProps {
 
 const TableHeaders: React.FC<TableHeadersProps> = ({ headers }) => {
     return (
-        <tr className='text-lg'>
-            {headers.map((header: string, index: number) => (
+        <tr className='text-lg'>{
+            headers.map((header: string, index: number) => (
                 <th key={`${header}-${index}`}>{header.toUpperCase()}</th>
-            ))}
-            <th key="empty-th-1" />
-            <th key="empty-th-2" />
-        </tr>
+            ))
+        }<th key="actions-th">Actions</th></tr>
     );
 };
 

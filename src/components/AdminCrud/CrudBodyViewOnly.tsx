@@ -7,10 +7,13 @@ import Pagination from '@/components/AdminCrud/Pagination';
 
 interface CrudBodyProps {
     data: any;
+    headers: string[];
     searchTerm: string;
+    onSelected: (id: number) => void;
+    onMoreInfo: (id: number) => void;
 }
 
-export default function CrudBody({ data, searchTerm }: CrudBodyProps) {
+export default function CrudBody({ data, headers, searchTerm, onSelected, onMoreInfo }: CrudBodyProps) {
     const [currentPage, setCurrentPage] = useState(1);
     const [filteredData, setFilteredData] = useState(data);
 
@@ -21,7 +24,7 @@ export default function CrudBody({ data, searchTerm }: CrudBodyProps) {
     const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
     const currentRecords = filteredData.slice(indexOfFirstRecord, indexOfLastRecord);
 
-    const headers = data && data.length > 0 && !isDataEmpty(data) ? Object.keys(data[0]) : [];
+    //const headers = data && data.length > 0 && !isDataEmpty(data) ? Object.keys(data[0]) : [];
 
     useEffect(() => {
         const lowercasedFilter = searchTerm.toLowerCase();
@@ -44,6 +47,8 @@ export default function CrudBody({ data, searchTerm }: CrudBodyProps) {
                     </thead>
                     <tbody>
                         <TableRows
+                            onSelected={onSelected}
+                            onMoreInfo={onMoreInfo}
                             headers={headers}
                             currentRecords={currentRecords}
                         />
