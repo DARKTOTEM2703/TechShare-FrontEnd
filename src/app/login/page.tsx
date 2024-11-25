@@ -32,7 +32,7 @@ const Page = () => {
     };
 
     return (
-        <div>
+        <div className='flex items-center justify-center min-h-screen'>
             <div className="form-container">
                 <h1 className="text-primary font-bold">INICIO DE SESIÓN</h1>
                 <form onSubmit={handleLogin}>

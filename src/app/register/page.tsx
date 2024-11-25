@@ -47,48 +47,50 @@ export default function Register() {
     };
 
     return (
-        <div className="form-container">
-            <h1 className="text-primary font-bold">
-                CREA UNA CUENTA
-            </h1>
-            <form onSubmit={handleRegister}>
-                <TextField
-                    placeholder="Nombre"
-                    name="first_name"
-                    value={formData.first_name}
-                    onChange={handleChange}
-                />
-                <TextField
-                    placeholder="Apellido"
-                    name="last_name"
-                    value={formData.last_name}
-                    onChange={handleChange}
-                />
-                <TextField
-                    placeholder="Correo electrónico"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                />
-                <PasswordField
-                    placeholder="Contraseña"
-                    name="password"
-                    value={formData.password}
-                    handleChange={handleChange}
-                />
-                <PasswordField
-                    placeholder="Confirmar contraseña"
-                    name="confirmPassword"
-                    value={formData.confirmPassword}
-                    handleChange={handleChange}
-                />
-                <button
-                    className="primary-button font-bold"
-                    type="submit">
-                    REGÍSTRATE
-                </button>
-            </form>
-            <p>¿Ya tienes una cuenta? <a href="#">Iniciar sesión</a></p>
+        <div className="flex items-center justify-center min-h-screen">
+            <div className="form-container">
+                <h1 className="text-primary font-bold">
+                    CREA UNA CUENTA
+                </h1>
+                <form onSubmit={handleRegister}>
+                    <TextField
+                        placeholder="Nombre"
+                        name="first_name"
+                        value={formData.first_name}
+                        onChange={handleChange}
+                    />
+                    <TextField
+                        placeholder="Apellido"
+                        name="last_name"
+                        value={formData.last_name}
+                        onChange={handleChange}
+                    />
+                    <TextField
+                        placeholder="Correo electrónico"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                    />
+                    <PasswordField
+                        placeholder="Contraseña"
+                        name="password"
+                        value={formData.password}
+                        handleChange={handleChange}
+                    />
+                    <PasswordField
+                        placeholder="Confirmar contraseña"
+                        name="confirmPassword"
+                        value={formData.confirmPassword}
+                        handleChange={handleChange}
+                    />
+                    <button
+                        className="primary-button font-bold"
+                        type="submit">
+                        REGÍSTRATE
+                    </button>
+                </form>
+                <p>¿Ya tienes una cuenta? <a href="#">Iniciar sesión</a></p>
+            </div>
         </div>
     )
 }
