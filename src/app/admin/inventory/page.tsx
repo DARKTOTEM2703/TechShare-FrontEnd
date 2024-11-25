@@ -1,5 +1,5 @@
 "use client"
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import CrudHeader from '@/components/AdminCrud/CrudHeader'
 import CrudBody from '@/components/AdminCrud/CrudBody';
 import NewMovementForm from '@/components/AdminCrud/InventoryPage/NewMovementForm';
@@ -14,20 +14,20 @@ const Inventory = () => {
     const token = getToken();
 
     type Material = {
-    image: File;
-    name: string;
-    description: string;
-    price: number;
-    subCategoryId: number;
-    roleIds: number[];
-  };
+        image: File;
+        name: string;
+        description: string;
+        price: number;
+        subCategoryId: number;
+        roleIds: number[];
+    };
 
     const [materials, setMaterials] = useState<Material[]>([]);
 
-      const fetchMaterials = () => {
-    fetchData(endpoints.materials.getAll, token)
-      .then((data) => setMaterials(data))
-   }
+    const fetchMaterials = () => {
+        fetchData(endpoints.materials.getAll, token)
+            .then((data) => setMaterials(data))
+    }
 
     useEffect(() => {
         fetchMaterials();
@@ -42,10 +42,11 @@ const Inventory = () => {
                 onSearchChange={() => { }} />
             <CrudBody
                 data={materials}
+                headers={['name', 'stock', 'borrowable_stock']}
                 searchTerm=''
-                onDelete={() => {}}
-                onEdit={() => {}}
-             />
+                onDelete={() => { }}
+                onEdit={() => { }}
+            />
             <NewMovementForm />
         </div>
     );

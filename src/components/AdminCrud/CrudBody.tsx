@@ -7,12 +7,13 @@ import Pagination from '@/components/AdminCrud/Pagination';
 
 interface CrudBodyProps {
     data: any;
+    headers: string[];
     searchTerm: string;
     onDelete: (id: number) => void;
     onEdit: (id: number) => void;
 }
 
-export default function CrudBody({ data, searchTerm, onDelete, onEdit }: CrudBodyProps) {
+export default function CrudBody({ data, headers, searchTerm, onDelete, onEdit }: CrudBodyProps) {
     const [currentPage, setCurrentPage] = useState(1);
     const [filteredData, setFilteredData] = useState(data);
 
@@ -23,8 +24,8 @@ export default function CrudBody({ data, searchTerm, onDelete, onEdit }: CrudBod
     const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
     const currentRecords = filteredData.slice(indexOfFirstRecord, indexOfLastRecord);
 
-    // Muestra todos los encabezados, incluyendo "id"
-    const headers = data && data.length > 0 && !isDataEmpty(data) ? Object.keys(data[0]) : [];
+    //USE THIS ONLY IF: you want to show all headers, including "id"
+    //const headers = data && data.length > 0 && !isDataEmpty(data) ? Object.keys(data[0]) : [];
 
     // Filtrar los datos cuando el término de búsqueda cambia
     useEffect(() => {

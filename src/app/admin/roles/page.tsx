@@ -102,6 +102,7 @@ const handleRoleUpdate = (e: any) => {
       />
       <CrudBody
         data={data}
+        headers={['roleId', 'name']}
         searchTerm={searchTerm}
         onDelete={(id) => showDeleteModal(id)}
         onEdit={(id) => showEditModal(id)}
