@@ -10,46 +10,52 @@ import endpoints from '@/app/infraestructure/config/configAPI';
 
 const Inventory = () => {
 
-    useAuth();
-    const token = getToken();
+  useAuth();
+  const token = getToken();
 
-    type Material = {
-        image: File;
-        name: string;
-        description: string;
-        price: number;
-        subCategoryId: number;
-        roleIds: number[];
-    };
+  type Material = {
+    image: File;
+    name: string;
+    description: string;
+    price: number;
+    subCategoryId: number;
+    roleIds: number[];
+  };
 
-    const [materials, setMaterials] = useState<Material[]>([]);
+  const [materials, setMaterials] = useState<Material[]>([]);
 
-    const fetchMaterials = () => {
-        fetchData(endpoints.materials.getAll, token)
-            .then((data) => setMaterials(data))
-    }
+  const fetchMaterials = () => {
+    fetchData(endpoints.materials.getAll, token)
+      .then((data) => setMaterials(data))
+  }
 
-    useEffect(() => {
-        fetchMaterials();
-    }, []);
+  useEffect(() => {
+    fetchMaterials();
+  }, []);
 
-    return (
-        <div>
-            <CrudHeader title="Inventario"
-                buttonLabel=''
-                buttonDisabled={true}
-                buttonFunction={() => { }}
-                onSearchChange={() => { }} />
-            <CrudBody
-                data={materials}
-                headers={['name', 'stock', 'borrowable_stock']}
-                searchTerm=''
-                onDelete={() => { }}
-                onEdit={() => { }}
-            />
-            <NewMovementForm />
+  return (
+    <div>
+      <CrudHeader title="Inventario"
+        buttonLabel=''
+        buttonDisabled={true}
+        buttonFunction={() => { }}
+        onSearchChange={() => { }} />
+      <div className="flex flex-col lg:flex-row gap-4">
+        <div className="flex-1">
+          <CrudBody
+            data={materials}
+            headers={['name', 'stock', 'borrowable_stock']}
+            searchTerm=""
+            onDelete={() => { }}
+            onEdit={() => { }}
+          />
         </div>
-    );
+        <div className="">
+          <NewMovementForm />
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default Inventory;
