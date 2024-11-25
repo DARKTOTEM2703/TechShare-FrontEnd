@@ -69,22 +69,14 @@ export default function Catalog() {
     fetchMaterials()
     fetchRoles()
   }, []);
-  /*
-    useEffect(() => {
-      const interval = setInterval(() => {
-        console.log(categories);
-      }, 5000);
-  
-      return () => clearInterval(interval);
-    }, [categories]);
-    */
+
   return (
     <div>
       <div className='mb-6'>
         <Materials
           token={token}
           subCategories={subCategories}
-          roles={roles} // Add the appropriate roles array here
+          roles={roles} 
           materials={materials}
           refreshMaterials={fetchMaterials} />
       </div>
