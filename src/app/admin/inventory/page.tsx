@@ -9,25 +9,43 @@ import fetchData from '@/services/fetchData';
 import endpoints from '@/app/infraestructure/config/configAPI';
 
 const Inventory = () => {
-
   useAuth();
   const token = getToken();
 
   type Material = {
-    image: File;
+    materialsId: number;
+    imagePath: string;
     name: string;
     description: string;
     price: number;
+    stock: number;
+    borrowable_stock: number;
     subCategoryId: number;
+    subCategoryName: string;
     roleIds: number[];
+    roleNames: string[];
   };
 
   const [materials, setMaterials] = useState<Material[]>([]);
+  const [selectedMaterialName, setSelectedMaterialName] = useState<string>('Seleccione un material'); // Estado para el nombre del material seleccionado
 
   const fetchMaterials = () => {
     fetchData(endpoints.materials.getAll, token)
-      .then((data) => setMaterials(data))
-  }
+      .then((data) => setMaterials(data));
+  };
+
+  const clickedItem = (id: number) => {
+    console.log('selected id: ', id);
+    console.log('materials: ', materials);
+    const selectedMaterial = materials.find((material) => material.materialsId === id);
+    if (selectedMaterial) {
+      setSelectedMaterialName(selectedMaterial.name); // Actualiza el estado con el nombre del material seleccionado
+    }
+  };
+
+  const clickedMoreInfo = (id: number) => {
+    console.log('display info of: ', id);
+  };
 
   useEffect(() => {
     fetchMaterials();
@@ -35,27 +53,31 @@ const Inventory = () => {
 
   return (
     <div>
-      <CrudHeader title="Inventario"
-        buttonLabel=''
+      <CrudHeader
+        title="Inventario"
+        buttonLabel=""
         buttonDisabled={true}
         buttonFunction={() => { }}
-        onSearchChange={() => { }} />
+        onSearchChange={() => { }}
+      />
       <div className="flex flex-col lg:flex-row gap-4">
         <div className="flex-1 w-auto">
           <CrudBody
             data={materials}
             headers={['name', 'stock', 'borrowable_stock']}
             searchTerm=""
-            onSelected={(id) => { console.log('selected id: ', id) }}
-            onMoreInfo={(id) => { console.log('display info of: ', id) }}
+            onSelected={(id) => { clickedItem(id) }}
+            onMoreInfo={(id) => { clickedMoreInfo(id) }}
           />
         </div>
-        <div className="w-auto">
-          <NewMovementForm />
+        <div className="min-w-[50vh] pl-">
+          <NewMovementForm
+            selectedMaterial={selectedMaterialName} // Pasamos el nombre del material seleccionado
+          />
         </div>
       </div>
     </div>
   );
-}
+};
 
 export default Inventory;
