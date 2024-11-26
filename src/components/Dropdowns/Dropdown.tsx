@@ -10,12 +10,13 @@ interface DropdownProps {
     options: string[];
     value: string;
     onChange: (value: string) => void;
+    className?: string; // Nueva prop para className
 }
 
-export default function Dropdown({ options, value, onChange }: DropdownProps) {
+export default function Dropdown({ options, value, onChange, className }: DropdownProps) {
     return (
-        <div className=''>
-            <div className='my-8 relative '>
+        <div className={className}>
+            <div className='relative'>
                 <select
                     className='dropdown text-sm'
                     value={value}
@@ -28,7 +29,7 @@ export default function Dropdown({ options, value, onChange }: DropdownProps) {
                         </option>
                     ))}
                 </select>
-                <IoMdArrowDropdown className='dropdown-icon text-3xl text-primary ' />
+                <IoMdArrowDropdown className='dropdown-icon text-3xl text-primary' />
             </div>
         </div>
     )

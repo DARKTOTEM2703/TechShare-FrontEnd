@@ -50,44 +50,69 @@ const NewMovementForm: React.FC<NewMovementFormProps> = ({ selectedMaterial, tok
         handleCreate(endpoints.movements.create, formData);
         refreshData();
     };
-
     return (
-        <div>
-            <div className="form-container">
-                <h2 className="text-primary text-center font-semibold">Nuevo movimiento</h2>
-                <div className="w-[80%] h-px bg-primary my-4 mx-auto" />
+        <div className="flex justify-center items-center">
+            <div className="bg-white rounded-lg shadow-md p-6 w-96">
+                <h2 className="text-primary text-center font-semibold text-lg">Nuevo movimiento</h2>
+                <div className="w-full h-px bg-primary my-4" />
                 <form onSubmit={handleSubmit}>
-                    <h2 className="font-bold text-lg text-primary">
-                        {selectedMaterial ? selectedMaterial.name : 'Sin material seleccionado'}
+                    <h2 className="font-bold text-base text-primary mb-4 text-center">
+                        {selectedMaterial ? selectedMaterial.name : 'Paquete De 4 Resistencias'}
                     </h2>
-                    <Dropdown
-                        options={['IN', 'OUT', 'ADJUSTMENT']}
-                        value={moveType}
-                        onChange={(value: string) => setMoveType(value)}
-                    />
-                    <BorderTextField
-                        placeholder="Ingrese la cantidad"
-                        name="quantity"
-                        value={quantity}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                            setQuantity(Number(e.target.value))
-                        }
-                    />
-                    <BorderRichTextBox
-                        placeholder="Ingrese un comentario"
-                        name="comment"
-                        value={comment}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                            setComment(e.target.value)
-                        }
-                    />
-                    <button type="submit" className="btn-primary">
-                        Enviar
+                    {/* Contenedor del Dropdown y Quantity */}
+                    <div className="flex mb-4 space-x-4">
+                        <div className="flex-1">
+                            <label className="block text-sm font-semibold mb-3">Tipo de movimiento</label>
+                            <div>
+                                <Dropdown
+                                    options={['IN', 'OUT', 'ADJUSTMENT']}
+                                    value={moveType}
+                                    onChange={(value: string) => setMoveType(value)}
+                                />
+                            </div>
+                        </div>
+                        <div className="w-1/3">
+                            <label className="block text-sm font-semibold mb-3">Quantity</label>
+                            <div>
+                                <input
+                                    type="number"
+                                    placeholder="Ingrese la cantidad"
+                                    name="quantity"
+                                    value={quantity}
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                        setQuantity(Number(e.target.value))
+                                    }
+                                    className="border rounded-md border-primary p-2 w-full text-sm"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                    {/* Contenedor del RichTextBox */}
+                    <div className="">
+                        <label className="block text-sm font-semibold mb-3">Comentarios:</label>
+                        <div>
+                            <BorderRichTextBox
+                                placeholder="Ingrese un comentario"
+                                name="comment"
+                                value={comment}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                    setComment(e.target.value)
+                                }
+                            />
+                        </div>
+                    </div>
+                    {/* Botón */}
+                    <button
+                        type="submit"
+                        className="w-full bg-primary text-white font-bold py-2 rounded-md hover:bg-primary-dark transition-colors"
+                    >
+                        INSERTAR
                     </button>
                 </form>
             </div>
         </div>
     );
+
 };
 
 export default NewMovementForm;

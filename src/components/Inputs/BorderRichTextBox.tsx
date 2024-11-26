@@ -3,22 +3,24 @@ import React from 'react';
 interface TextFieldProps {
     placeholder: string;
     name: string;
-    value: any;
+    value: string;
     onChange: (e: any) => void;
+    className?: string;
 }
 
-const TextField: React.FC<TextFieldProps> = ({ placeholder, name, value, onChange }) => {
+const TextField: React.FC<TextFieldProps> = ({ placeholder, name, value, onChange, className }) => {
     return (
-        <input className='text-sm p-[10px] mb-[15px] border-[1px] border-primary rounded-md'
+        <textarea
+            className={`text-sm p-3 mb-4 border border-primary rounded-md w-full min-h-[80px] resize-none focus:outline-none focus:ring-2 focus:ring-primary ${className || ''}`}
             placeholder={placeholder}
-            type="text"
             id={name}
             name={name}
             value={value}
             onChange={onChange}
+            rows={3} // Opcional: filas iniciales visibles
             required
         />
     );
-}
+};
 
 export default TextField;
