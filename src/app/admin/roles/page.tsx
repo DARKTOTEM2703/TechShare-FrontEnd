@@ -95,7 +95,7 @@ export default function roles() {
     <div>
       <CrudHeader
         title='Roles'
-        options={[]}
+        dropdownOptions={[]}
         buttonLabel='AÑADIR ROL'
         buttonDisabled={false}
         buttonFunction={showCreateModal}

@@ -9,14 +9,14 @@ import Button from '../Buttons/PrimaryButton'
 
 interface CrudHeaderProps {
   title: string;
-  options: string[];
+  dropdownOptions: string[];
   buttonLabel: string;
   buttonFunction: any;
   onSearchChange: (value: string) => void;
   buttonDisabled?: boolean; // Nueva prop opcional para deshabilitar el botón
 }
 
-const CrudHeader: React.FC<CrudHeaderProps> = ({ title, options, buttonLabel, buttonFunction, onSearchChange, buttonDisabled }) => {
+const CrudHeader: React.FC<CrudHeaderProps> = ({ title, dropdownOptions, buttonLabel, buttonFunction, onSearchChange, buttonDisabled }) => {
   return (
     <div>
       <div className='white-container'>
@@ -30,7 +30,7 @@ const CrudHeader: React.FC<CrudHeaderProps> = ({ title, options, buttonLabel, bu
           <SearchBar onSearchChange={onSearchChange} />
         </div>
         <div className='w-1/4'>
-          <Dropdown options={options} />
+          <Dropdown options={dropdownOptions} />
         </div>
       </div>
     </div>

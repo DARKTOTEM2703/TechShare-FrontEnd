@@ -120,7 +120,7 @@ export default function Materials({ token, subCategories, roles, materials, refr
 
     return (
         <div>
-            <CrudHeader title="Materials" options={[]} buttonLabel="Add Material" buttonFunction={createButtonClicked} onSearchChange={handleSearchChange} />
+            <CrudHeader title="Materials" dropdownOptions={[]} buttonLabel="Add Material" buttonFunction={createButtonClicked} onSearchChange={handleSearchChange} />
             <CrudBody data={materials} searchTerm={searchTerm} onDelete={deleteButtonClicked} onEdit={editButtonClicked} />
 
             {isCreateModalVisible && (

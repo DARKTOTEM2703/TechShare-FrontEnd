@@ -88,7 +88,7 @@ export default function SubCategories({ token, categories, subCategories, refres
 
     return (
         <div>
-            <CrudHeader title="SubCategories" options={[]} buttonLabel="Add SubCategory" buttonFunction={createButtonClicked} onSearchChange={handleSearchChange} />
+            <CrudHeader title="SubCategories" dropdownOptions={[]} buttonLabel="Add SubCategory" buttonFunction={createButtonClicked} onSearchChange={handleSearchChange} />
             <CrudBody data={subCategories} searchTerm={searchTerm} onDelete={deleteButtonClicked} onEdit={editButtonClicked} />
 
             {isCreateModalVisible && (

@@ -36,7 +36,7 @@ export default function users() {
     <div>
       <CrudHeader
         title='Usuarios'
-        options={[]}
+        dropdownOptions={[]}
         buttonLabel=''
         buttonFunction={() => alert('Adding stuff')}
         onSearchChange={handleSearchChange}

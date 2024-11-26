@@ -6,6 +6,8 @@ import { useState } from 'react'
 import { useAuth } from '@/hooks/useAuth'
 import { getToken } from '@/services/storageService'
 import { useEffect } from 'react';
+import endpoints from '@/app/infraestructure/config/configAPI'
+import fetchData from '@/services/fetchData'
 
 export default function movements() {
 
@@ -28,18 +30,8 @@ export default function movements() {
   const token = getToken()
 
   const fetchMovements = (token: string) => {
-    //e.preventDefault();
-    console.log("Fetching movements");
-    fetch("http://localhost:8080/admin/movement/all", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((response) => response.json())
+    fetchData(endpoints.movements.getAll, token)
       .then((data) => setData(data))
-
   }
 
   // Función que actualiza el término de búsqueda
@@ -61,12 +53,18 @@ export default function movements() {
     <div>
       <CrudHeader
         title='Movimientos'
+        dropdownOptions={['dummy']}
         buttonLabel=' '
         buttonFunction={() => alert('')}
         buttonDisabled={true}
         onSearchChange={handleSearchChange}
       />
-      <CrudBody data={data} searchTerm={searchTerm} />
+      <CrudBody
+        data={data}
+        headers={['movementsId', 'moveType', 'quantity', 'date', 'materialsName']}
+        onSelected={() => { }}
+        onMoreInfo={() => alert('')}
+        searchTerm={searchTerm} />
     </div>
   )
 }

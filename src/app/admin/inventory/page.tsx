@@ -56,13 +56,13 @@ const Inventory = () => {
     <div>
       <CrudHeader
         title="Inventario"
-        options={[]}
+        dropdownOptions={[]}
         buttonLabel=""
         buttonDisabled={true}
         buttonFunction={() => { }}
         onSearchChange={() => { }}
       />
-      <div className="flex flex-col lg:flex-row gap-4">
+      <div className="flex flex-col lg:flex-row gap-8">
         <div className="flex-1 w-auto">
           <CrudBody
             data={materials}
