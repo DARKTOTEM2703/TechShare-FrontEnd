@@ -41,7 +41,7 @@ const Inventory = () => {
         buttonFunction={() => { }}
         onSearchChange={() => { }} />
       <div className="flex flex-col lg:flex-row gap-4">
-        <div className="flex-1">
+        <div className="flex-1 w-auto">
           <CrudBody
             data={materials}
             headers={['name', 'stock', 'borrowable_stock']}
@@ -50,7 +50,7 @@ const Inventory = () => {
             onMoreInfo={(id) => { console.log('display info of: ', id) }}
           />
         </div>
-        <div className="">
+        <div className="w-auto">
           <NewMovementForm />
         </div>
       </div>

@@ -2,7 +2,7 @@
 import CrudHeader from '@/components/AdminCrud/CrudHeader'
 import CrudBody from '@/components/AdminCrud/CrudBodyViewOnly'
 import { useFetchData } from '@/services/useFetchData'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import fetchData from '@/services/fetchData'
 import { useAuth } from '@/hooks/useAuth'
 import { getToken } from '@/services/storageService'
@@ -27,18 +27,23 @@ export default function users() {
     setSearchTerm(value);
   };
 
+  useEffect(() => {
+    fetchUsers();
+  }
+    , []);
+
   return (
     <div>
       <CrudHeader
         title='Usuarios'
         buttonLabel=''
         buttonFunction={() => alert('Adding stuff')}
-        onSearchChange={handleSearchChange} // Asegúrate de pasar esta función
+        onSearchChange={handleSearchChange}
         buttonDisabled={true}
       />
       <CrudBody
         data={data}
-        headers={['ID', 'Nombre', 'Email', 'Teléfono']}
+        headers={['id', 'firstName', 'lastName', 'email']}
         searchTerm={searchTerm}
         onSelected={(id: number) => alert(`Selected ${id}`)}
         onMoreInfo={(id: number) => alert(`More info ${id}`)}

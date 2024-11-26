@@ -1,4 +1,4 @@
-import { FaEdit, FaTrash } from 'react-icons/fa';
+import { FaEdit, FaTrash, FaInfo } from 'react-icons/fa';
 import { FaCircleInfo } from 'react-icons/fa6';
 
 interface TableRowsProps {
@@ -43,7 +43,7 @@ const TableHeaders: React.FC<TableHeadersProps> = ({ headers }) => {
             headers.map((header: string, index: number) => (
                 <th key={`${header}-${index}`}>{header.toUpperCase()}</th>
             ))
-        }<th key="actions-th">Actions</th></tr>
+        }<th key="actions-th"></th></tr>
     );
 };
 
