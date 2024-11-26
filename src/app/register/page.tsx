@@ -48,7 +48,7 @@ export default function Register() {
 
     return (
         <div className="flex items-center justify-center min-h-screen">
-            <div className="form-container">
+            <div className="form-container w-[50vh]">
                 <h1 className="text-primary font-bold">
                     CREA UNA CUENTA
                 </h1>

@@ -28,6 +28,10 @@ const endpoints = {
         update: (id: number) => `${BASE_URL}/admin/role/update/${id}`,
         delete: (id: number) => `${BASE_URL}/admin/role/delete/${id}`
     },
+    users: {
+        getAll: `${BASE_URL}/admin/user/all`,
+        update: (id: number) => `${BASE_URL}/admin/users/update/${id}`,
+    },
     signUp: `${BASE_URL}/register`,
     login: `${BASE_URL}/login`
 }
