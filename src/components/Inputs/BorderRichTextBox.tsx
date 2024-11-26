@@ -18,7 +18,6 @@ const TextField: React.FC<TextFieldProps> = ({ placeholder, name, value, onChang
             value={value}
             onChange={onChange}
             rows={3} // Opcional: filas iniciales visibles
-            required
         />
     );
 };

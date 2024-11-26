@@ -21,6 +21,7 @@ const DynamicDropdown = <T,>({
         <select
             value={Number(selectedValue) || ""}
             onChange={(e) => onChange(e.target.value as T[keyof T])}
+            required
         >
             <option value="" disabled>
                 {placeholder}

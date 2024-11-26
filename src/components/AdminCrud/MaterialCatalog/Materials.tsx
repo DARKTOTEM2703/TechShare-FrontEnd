@@ -7,6 +7,7 @@ import BorderTextField from '@/components/Inputs/BorderTextField';
 import { useCrudOperations } from '@/hooks/useCrudOperations';
 import endpoints from '@/app/infraestructure/config/configAPI';
 import DynamicDropdown from '@/components/Dropdowns/DynamicDropdown';
+import DropzoneWithPreview from '@/components/DropZone';
 
 export default function Materials({ token, subCategories, roles, materials, refreshMaterials }: { token: any, subCategories: any, roles: any, materials: any, refreshMaterials: any }) {
 
@@ -15,6 +16,7 @@ export default function Materials({ token, subCategories, roles, materials, refr
     const [isEditModalVisible, setEditModalVisible] = useState(false);
     const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
     const [formData, setFormData] = useState<{ name: string; description: string; price: number; image?: File | null; subCategoryId: number; roleIds: number[] }>({ name: '', description: '', price: 0, image: null, subCategoryId: 0, roleIds: [] });
+    const [selectedMaterial, setSelectedMaterial] = useState<any>(null);
 
     const { setClickedItemId, handleCreate, handleUpdate, handleDelete, clickedItemId } = useCrudOperations(token, refreshMaterials);
 
@@ -42,6 +44,7 @@ export default function Materials({ token, subCategories, roles, materials, refr
 
     const editButtonClicked = (id: number) => {
         const selectedMaterial = materials.find((material: any) => material.materialsId === id);
+        setSelectedMaterial(selectedMaterial);
         if (selectedMaterial) {
             setClickedItemId(id);
             setFormData({
@@ -68,17 +71,17 @@ export default function Materials({ token, subCategories, roles, materials, refr
         formDataToSend.append('description', formData.description);
         formDataToSend.append('price', formData.price.toString());
         formDataToSend.append('subCategoryId', formData.subCategoryId.toString());
-    
+
         // Agregamos roleIds directamente como en la versión estable
         formDataToSend.append('roleIds', formData.roleIds.toString());
-    
+
         if (formData.image) {
             formDataToSend.append('image', formData.image);
         }
         handleCreate(endpoints.materials.create, formDataToSend);
         hideCreateModal();
     };
-    
+
     const handleMaterialUpdate = (e: any) => {
         e.preventDefault();
         const formDataToSend = new FormData();
@@ -86,10 +89,10 @@ export default function Materials({ token, subCategories, roles, materials, refr
         formDataToSend.append('description', formData.description);
         formDataToSend.append('price', formData.price.toString());
         formDataToSend.append('subCategoryId', formData.subCategoryId.toString());
-    
+
         // Agregamos roleIds directamente como en la versión estable
         formDataToSend.append('roleIds', formData.roleIds.toString());
-    
+
         if (formData.image) {
             formDataToSend.append('image', formData.image);
         }
@@ -98,7 +101,7 @@ export default function Materials({ token, subCategories, roles, materials, refr
         }
         hideEditModal();
     };
-    
+
 
     const handleMaterialDeletion = (e: any) => {
         e.preventDefault();
@@ -109,7 +112,7 @@ export default function Materials({ token, subCategories, roles, materials, refr
     };
 
     const loadRoleOptions = (inputValue: string, callback: (options: any[]) => void) => {
-        const filteredOptions = roleOptions.filter((role:any) =>
+        const filteredOptions = roleOptions.filter((role: any) =>
             role.label.toLowerCase().includes(inputValue.toLowerCase())
         );
         callback(filteredOptions);
@@ -134,7 +137,7 @@ export default function Materials({ token, subCategories, roles, materials, refr
                                 loadOptions={loadRoleOptions}
                                 isMulti
                                 placeholder="Select Roles"
-                                value={roleOptions.filter((role:any) => formData.roleIds.includes(role.value))}
+                                value={roleOptions.filter((role: any) => formData.roleIds.includes(role.value))}
                                 onChange={(selectedOptions) =>
                                     setFormData({
                                         ...formData,
@@ -142,7 +145,7 @@ export default function Materials({ token, subCategories, roles, materials, refr
                                     })
                                 }
                             />
-                            <input type="file" onChange={(e) => setFormData({ ...formData, image: e.target.files ? e.target.files[0] : null })} />
+                            <DropzoneWithPreview onFileChange={(file) => setFormData({ ...formData, image: file })} />
                         </ModalBase>
                     </div>
                 </div>
@@ -162,7 +165,7 @@ export default function Materials({ token, subCategories, roles, materials, refr
                                 loadOptions={loadRoleOptions}
                                 isMulti
                                 placeholder="Select Roles"
-                                value={roleOptions.filter((role:any) => formData.roleIds.includes(role.value))}
+                                value={roleOptions.filter((role: any) => formData.roleIds.includes(role.value))}
                                 onChange={(selectedOptions) =>
                                     setFormData({
                                         ...formData,
@@ -170,7 +173,7 @@ export default function Materials({ token, subCategories, roles, materials, refr
                                     })
                                 }
                             />
-                            <input type="file" onChange={(e) => setFormData({ ...formData, image: e.target.files ? e.target.files[0] : null })} />
+                            <DropzoneWithPreview onFileChange={(file) => setFormData({ ...formData, image: file })} initialPreview={selectedMaterial.imagePath} />
                         </ModalBase>
                     </div>
                 </div>
