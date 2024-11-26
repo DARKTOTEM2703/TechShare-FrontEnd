@@ -11,7 +11,7 @@ import BorderRichTextBox from '@/components/Inputs/BorderRichTextBox';
 
 const Inventory = () => {
   useAuth();
-  const token = getToken();
+  const token = getToken() || '';
 
   type Material = {
     materialsId: number;
@@ -74,6 +74,8 @@ const Inventory = () => {
         </div>
         <div className="min-w-[50vh]">
           <NewMovementForm
+            token={token}
+            refreshData={fetchMaterials}
             selectedMaterial={selectedMaterial}
           />
         </div>

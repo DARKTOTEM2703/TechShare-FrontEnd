@@ -8,7 +8,7 @@ export const useCrudOperations = (token: string, refreshData: () => void) => {
         method: string,
         data: any
     ) => {
-        const headers: HeadersInit = { Authorization: `Bearer ${token}` };
+        const headers: HeadersInit = { Authorization: `${token}` };
 
         // Si no es FormData, añadimos Content-Type: application/json
         const body = data instanceof FormData ? data : JSON.stringify(data);
@@ -37,7 +37,7 @@ export const useCrudOperations = (token: string, refreshData: () => void) => {
                 console.log("Created:", data);
                 refreshData();
             })
-            .catch((error) => console.error("Error:", error));
+            .catch((error) => console.error(error));
     };
 
     const handleUpdate = (url: string, data: any) => {

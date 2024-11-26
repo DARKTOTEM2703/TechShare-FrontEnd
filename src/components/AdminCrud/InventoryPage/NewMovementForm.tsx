@@ -5,27 +5,50 @@ import '@/components/Inputs/BorderTextField';
 import BorderTextField from '@/components/Inputs/BorderTextField';
 import BorderRichTextBox from '@/components/Inputs/BorderRichTextBox';
 import Dropdown from '../../Dropdowns/Dropdown';
+import { useCrudOperations } from '@/hooks/useCrudOperations';
+import endpoints from '@/app/infraestructure/config/configAPI';
 
 interface NewMovementFormProps {
     selectedMaterial: { id: number; name: string } | null;
+    refreshData: () => void;
+    token: string;
 }
 
-const NewMovementForm: React.FC<NewMovementFormProps> = ({ selectedMaterial }) => {
+const NewMovementForm: React.FC<NewMovementFormProps> = ({ selectedMaterial, token, refreshData }) => {
     const [quantity, setQuantity] = useState<number>(0);
     const [moveType, setMoveType] = useState<string>('');
     const [comment, setComment] = useState<string>('');
 
+    const { handleCreate } = useCrudOperations(token, refreshData);
+
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        const formData = {
-            quantity,
-            moveType,
-            id_material: selectedMaterial ? selectedMaterial.id : null,
-            comment,
-        };
+        // Validación del formulario
+        if (!quantity || quantity <= 0) {
+            alert('Por favor, ingrese una cantidad válida');
+            return;
+        }
 
-        console.log(formData);
+        if (!moveType) {
+            alert('Por favor, seleccione un tipo de movimiento');
+            return;
+        }
+
+        console.log(token)
+
+        // Crear FormData y agregar los datos del formulario
+        const formData = new FormData();
+        formData.append('quantity', quantity.toString());
+        formData.append('moveType', moveType.toUpperCase());
+        formData.append('id_material', selectedMaterial ? selectedMaterial.id.toString() : '');
+        formData.append('comment', comment);
+
+        console.log('Datos enviados:', Object.fromEntries(formData.entries()));
+
+        // Enviar datos al servidor
+        handleCreate(endpoints.movements.create, formData);
+        refreshData();
     };
 
     return (
@@ -46,15 +69,21 @@ const NewMovementForm: React.FC<NewMovementFormProps> = ({ selectedMaterial }) =
                         placeholder="Ingrese la cantidad"
                         name="quantity"
                         value={quantity}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setQuantity(Number(e.target.value))}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                            setQuantity(Number(e.target.value))
+                        }
                     />
                     <BorderRichTextBox
                         placeholder="Ingrese un comentario"
                         name="comment"
                         value={comment}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setComment(e.target.value)}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                            setComment(e.target.value)
+                        }
                     />
-                    <button type="submit">Enviar</button>
+                    <button type="submit" className="btn-primary">
+                        Enviar
+                    </button>
                 </form>
             </div>
         </div>

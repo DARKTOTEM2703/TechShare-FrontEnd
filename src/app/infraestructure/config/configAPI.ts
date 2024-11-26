@@ -32,6 +32,11 @@ const endpoints = {
         getAll: `${BASE_URL}/admin/user/all`,
         update: (id: number) => `${BASE_URL}/admin/users/update/${id}`,
     },
+    movements: {
+        getAll: `${BASE_URL}/admin/movement/all`,
+        create: `${BASE_URL}/admin/movement/create`
+    },
+
     signUp: `${BASE_URL}/register`,
     login: `${BASE_URL}/login`
 }
