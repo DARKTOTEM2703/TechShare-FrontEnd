@@ -4,7 +4,7 @@ import '@/styles/containers.css'
 import '@/styles/buttons.css'
 import { inter } from '@/services/fonts'
 import SearchBar from '@/components/AdminCrud/SearchBar'
-import Dropdown from './Dropdown'
+import Dropdown from '../Dropdowns/FilterDropdown'
 import Button from '../Buttons/PrimaryButton'
 
 interface CrudHeaderProps {

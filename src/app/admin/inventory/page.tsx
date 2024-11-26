@@ -7,6 +7,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { getToken } from '@/services/storageService';
 import fetchData from '@/services/fetchData';
 import endpoints from '@/app/infraestructure/config/configAPI';
+import BorderRichTextBox from '@/components/Inputs/BorderRichTextBox';
 
 const Inventory = () => {
   useAuth();
@@ -27,7 +28,7 @@ const Inventory = () => {
   };
 
   const [materials, setMaterials] = useState<Material[]>([]);
-  const [selectedMaterialName, setSelectedMaterialName] = useState<string>('Seleccione un material'); // Estado para el nombre del material seleccionado
+  const [selectedMaterial, setSelectedMaterial] = useState<{ id: number; name: string } | null>(null);
 
   const fetchMaterials = () => {
     fetchData(endpoints.materials.getAll, token)
@@ -37,9 +38,9 @@ const Inventory = () => {
   const clickedItem = (id: number) => {
     console.log('selected id: ', id);
     console.log('materials: ', materials);
-    const selectedMaterial = materials.find((material) => material.materialsId === id);
-    if (selectedMaterial) {
-      setSelectedMaterialName(selectedMaterial.name); // Actualiza el estado con el nombre del material seleccionado
+    const selected = materials.find((material) => material.materialsId === id);
+    if (selected) {
+      setSelectedMaterial({ id: selected.materialsId, name: selected.name });
     }
   };
 
@@ -73,9 +74,8 @@ const Inventory = () => {
         </div>
         <div className="min-w-[50vh]">
           <NewMovementForm
-            selectedMaterial={selectedMaterialName} // Pasamos el nombre del material seleccionado
-          >
-          </NewMovementForm>
+            selectedMaterial={selectedMaterial}
+          />
         </div>
       </div>
     </div>

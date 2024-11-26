@@ -13,7 +13,7 @@ export default function Dropdown({ options }: DropdownProps) {
   return (
     <div className=''>
       <div className='my-8 relative '>
-        <select className='dropdown text-sm' defaultValue="">
+        <select className='dropdown-filter text-sm' defaultValue="">
           <option value="" disabled>Select an option</option>
           {options.map((option, index) => (
             <option key={index} value={option.toLowerCase()}>
