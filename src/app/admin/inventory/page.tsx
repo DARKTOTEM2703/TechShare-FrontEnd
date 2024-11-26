@@ -55,6 +55,7 @@ const Inventory = () => {
     <div>
       <CrudHeader
         title="Inventario"
+        options={[]}
         buttonLabel=""
         buttonDisabled={true}
         buttonFunction={() => { }}
@@ -70,10 +71,11 @@ const Inventory = () => {
             onMoreInfo={(id) => { clickedMoreInfo(id) }}
           />
         </div>
-        <div className="min-w-[50vh] pl-">
+        <div className="min-w-[50vh]">
           <NewMovementForm
             selectedMaterial={selectedMaterialName} // Pasamos el nombre del material seleccionado
-          />
+          >
+          </NewMovementForm>
         </div>
       </div>
     </div>

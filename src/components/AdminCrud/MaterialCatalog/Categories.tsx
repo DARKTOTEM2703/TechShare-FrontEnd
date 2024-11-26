@@ -92,7 +92,7 @@ export default function Categories({ token, categories, refreshCategories }: { t
 
     return (
         <div>
-            <CrudHeader title="Categories" buttonLabel="Add Category" buttonFunction={showCreateModal} onSearchChange={handleSearchChange} />
+            <CrudHeader title="Categories" options={[]} buttonLabel="Add Category" buttonFunction={showCreateModal} onSearchChange={handleSearchChange} />
             <CrudBody data={categories} searchTerm={searchTerm} onDelete={(id) => showDeleteModal(id)} onEdit={(id) => showEditModal(id)} />
 
             {isCreateModalVisible && (

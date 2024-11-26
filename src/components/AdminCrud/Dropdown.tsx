@@ -5,15 +5,21 @@ import '@/styles/containers.css'
 import filterIcon from '/src/assets/icons/filter.svg'
 import { FaFilter } from 'react-icons/fa';
 
-export default function Dropdown() {
+interface DropdownProps {
+  options: string[];
+}
+
+export default function Dropdown({ options }: DropdownProps) {
   return (
     <div className=''>
       <div className='my-8 relative '>
         <select className='dropdown text-sm' defaultValue="">
           <option value="" disabled>Select an option</option>
-          <option value="option1">Option 1</option>
-          <option value="option2">Option 2</option>
-          <option value="option3">Option 3</option>
+          {options.map((option, index) => (
+            <option key={index} value={option.toLowerCase()}>
+              {option}
+            </option>
+          ))}
         </select>
         <FaFilter className='dropdown-icon text-secondary' />
       </div>
