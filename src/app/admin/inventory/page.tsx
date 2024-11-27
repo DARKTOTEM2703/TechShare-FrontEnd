@@ -29,6 +29,9 @@ const Inventory = () => {
 
   const [materials, setMaterials] = useState<Material[]>([]);
   const [selectedMaterial, setSelectedMaterial] = useState<{ id: number; name: string } | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const handleSearchChange = (value: string) => setSearchTerm(value);
 
   const fetchMaterials = () => {
     fetchData(endpoints.materials.getAll, token)
@@ -60,14 +63,14 @@ const Inventory = () => {
         buttonLabel=""
         buttonDisabled={true}
         buttonFunction={() => { }}
-        onSearchChange={() => { }}
+        onSearchChange={handleSearchChange}
       />
       <div className="flex flex-col lg:flex-row gap-8">
         <div className="flex-1 w-auto">
           <CrudBody
             data={materials}
             headers={['name', 'stock', 'borrowable_stock']}
-            searchTerm=""
+            searchTerm={searchTerm}
             onSelected={(id) => { clickedItem(id) }}
             onMoreInfo={(id) => { clickedMoreInfo(id) }}
           />

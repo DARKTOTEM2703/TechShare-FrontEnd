@@ -44,7 +44,7 @@ export default function movements() {
       if (token) {
         fetchMovements(token);
       }
-    }, 5000); // Intervalo de 5 segundos
+    }, 1000); // Intervalo de 5 segundos
 
     return () => clearInterval(intervalId);
   }, [token]);
