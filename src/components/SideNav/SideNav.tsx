@@ -7,10 +7,13 @@ import NavUser from '@/components/SideNav/NavUser';
 
 const SideBar = () => {
     return (
-        <>
-            <NavUser />
+        <div>
+            <div className='border-b-primary border-b-[1px] mb-4 pb-6' style={{ paddingBottom: '26x' }}>
+                <NavUser />
+            </div>
             <NavLinks />
-        </>
+        </div>
+
     );
 };
 
