@@ -20,7 +20,7 @@ export default function AdminLayout(
       <div className="side-nav">
         <SideNav />
       </div>
-      <div className="m-7" style={{ width: '100%' }}>
+      <div className="content"> {/* Agregado "content" aquí */}
         {children}
       </div>
     </div>
