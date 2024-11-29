@@ -10,16 +10,25 @@ import endpoints from '@/app/infraestructure/config/configAPI'
 
 export default function users() {
 
+  interface User {
+    id: number;
+    userName: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    roles: string[];
+  }
+
   useAuth();
   const token = getToken();
 
   // Estado para el término de búsqueda
-  const [data, setData] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [users, setUsers] = useState<User[]>([]);
 
   const fetchUsers = () => {
     fetchData(endpoints.users.getAll, token)
-      .then((data) => setData(data))
+      .then((data: User[]) => setUsers(data));
   }
 
   // Función que actualiza el término de búsqueda
@@ -43,7 +52,7 @@ export default function users() {
         buttonDisabled={true}
       />
       <CrudBody
-        data={data}
+        data={users}
         headers={['id', 'firstName', 'lastName', 'email']}
         searchTerm={searchTerm}
         onSelected={(id: number) => alert(`Selected ${id}`)}

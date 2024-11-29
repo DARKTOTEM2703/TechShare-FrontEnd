@@ -1,4 +1,5 @@
 import { loginUser } from "@/services/Auth/AuthService"
+import { getUserId } from "@/services/storageService"
 import { sign } from "crypto"
 
 const BASE_URL = 'http://localhost:8080'
@@ -35,6 +36,9 @@ const endpoints = {
     movements: {
         getAll: `${BASE_URL}/admin/movement/all`,
         create: `${BASE_URL}/admin/movement/create`
+    },
+    tokens: {
+        getUserId: `${BASE_URL}/tokens/userId`
     },
 
     signUp: `${BASE_URL}/register`,

@@ -22,10 +22,8 @@ export const setUserEmail = (email:string) => {
 };
 
 export const getToken = () => {
-  if (typeof window !== "undefined") {
     return localStorage.getItem(TOKEN_KEY);
-  }
-  return null;
+  
 };
 
 export const getUserId = () => {
