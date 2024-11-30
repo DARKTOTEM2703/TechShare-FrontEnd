@@ -18,7 +18,7 @@ const TableRows: React.FC<TableRowsProps> = ({ headers, currentRecords, onSelect
 
                     </div>
                     <h1 className="flex justify-center items-center pt-6 font-semibold text-lg">
-                        Loading content ...
+                        Cargando contenido ...
                     </h1>
                 </td>
             </tr>

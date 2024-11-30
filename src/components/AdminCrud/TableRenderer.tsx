@@ -1,4 +1,5 @@
 import { FaEdit, FaTrash } from 'react-icons/fa';
+import RollingSpinner from '@/assets/animations/rolling-spinner.svg';
 
 interface TableRowsProps {
     headers: string[];
@@ -8,6 +9,20 @@ interface TableRowsProps {
 }
 
 const TableRows: React.FC<TableRowsProps> = ({ headers, currentRecords, onDelete ,onEdit}) => {
+    if (currentRecords.length === 0) {
+        return (
+            <tr>
+                <td rowSpan={6} colSpan={6} className="text-center">
+                    <div className="flex justify-center items-center pt-6">
+                        <RollingSpinner width={80} height={80} />
+                    </div>
+                    <h1 className="flex justify-center items-center pt-6 font-semibold text-lg">
+                        Cargando contenido ...
+                    </h1>
+                </td>
+            </tr>
+        );
+    }
     return (
         <>
             {currentRecords.map((row: any, rowIndex: number) => {
