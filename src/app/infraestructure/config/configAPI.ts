@@ -41,6 +41,11 @@ const endpoints = {
     tokens: {
         getUserId: `${BASE_URL}/tokens/userId`
     },
+    borrowings: {
+        getAll: `${BASE_URL}/admin/borrow/all`,
+        create: `${BASE_URL}/admin/borrow/create`,
+        update: (id: number) => `${BASE_URL}/admin/borrow/update/${id}`
+    },
 
     signUp: `${BASE_URL}/register`,
     login: `${BASE_URL}/login`
