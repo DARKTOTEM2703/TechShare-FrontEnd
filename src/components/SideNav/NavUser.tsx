@@ -13,24 +13,16 @@ export default function NavUser() {
     const [userName, setUserName] = useState('User Name');
     const [userRole, setUserRole] = useState('Role');
 
-    const fetchUserId = () => {
-        fetchData(endpoints.tokens.getUserId, token)
-            .then((data) => {
-                const userId = data.id;
-                fetchUserDetails(userId);
-            });
-    };
-
-    const fetchUserDetails = (userId: number) => {
-        fetchData(`${endpoints.users.getAll}/${userId}`, token)
+    const fetchUserDetails = () => {
+        fetchData(endpoints.users.getUserDetails, token)
             .then((user) => {
                 setUserName(`${user.firstName} ${user.lastName}`);
-                setUserRole(user.roles.join(', '));
+                setUserRole(user.roles[0]);
             });
     };
 
     useEffect(() => {
-        fetchUserId();
+        fetchUserDetails();
     }, []);
 
     return (
