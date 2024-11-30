@@ -29,7 +29,7 @@ export default function page() {
 
     const fetchRequests = () => {
         fetchData(endpoints.borrowings.getAll,token)
-            .then((data) => setRequests(data))
+            .then((data) => setRequests(data.reverse()))
     }
 
     useEffect(() => {

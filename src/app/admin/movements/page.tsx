@@ -31,7 +31,7 @@ export default function movements() {
 
   const fetchMovements = (token: string) => {
     fetchData(endpoints.movements.getAll, token)
-      .then((data) => setData(data))
+      .then((data) => setData(data.reverse()))
   }
 
   // Función que actualiza el término de búsqueda
