@@ -5,7 +5,6 @@ import CrudBody from '@/components/AdminCrud/CrudBodyRequests'
 import fetchData from '@/services/fetchData'
 import endpoints from '@/app/infraestructure/config/configAPI'
 import { getToken } from '@/services/storageService'
-import { inter } from '@/services/fonts'
 
 export default function page() {
 
@@ -23,18 +22,52 @@ export default function page() {
         adminName: string | null;
     }
 
-    const token = getToken()
+    const token = getToken() || ''
+
+    const fetchRequests = () => {
+        fetchData(endpoints.borrowings.getAll, token)
+            .then((data) => {
+                const filteredData = data.filter((request: Request) => request.status === 'PROCCES')
+                setRequests(filteredData)
+            })
+    }
 
     const [requests, setRequests] = useState<Request[]>([])
 
-    const fetchRequests = () => {
-        fetchData(endpoints.borrowings.getAll,token)
-            .then((data) => setRequests(data.reverse()))
+    // Función para realizar el PUT con FormData
+    const handleStatusUpdate = (id: number) => {
+        // Construimos la URL de la API para la solicitud PUT
+        const url = `${endpoints.borrowings.update(id)}`;
+
+        // Creamos el objeto FormData y agregamos el nuevo estado
+        const formData = new FormData();
+        formData.append('status', 'BORROWED');
+
+        // Hacemos la solicitud PUT con FormData
+        fetch(url, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `${token}`, // Agregar token de autenticación si es necesario
+            },
+            body: formData, // Enviamos el FormData con los datos
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error al actualizar el estado');
+                }
+                return response.json();
+            })
+            .then(() => {
+                // Si la actualización fue exitosa, volvemos a obtener las solicitudes actualizadas
+                fetchRequests();
+            })
+            .catch(error => {
+                console.error("Error al actualizar el estado:", error);
+            });
     }
 
     useEffect(() => {
         fetchRequests()
-        console.log(requests)
     }, [])
 
     return (
@@ -45,15 +78,15 @@ export default function page() {
                 buttonLabel=' '
                 buttonFunction={() => alert('')}
                 buttonDisabled={true}
-                onSearchChange={() => {}}
+                onSearchChange={() => { }}
             />
             <CrudBody
                 data={requests}
-                headers={['usuarioName','amount', 'date']}
+                headers={['usuarioName', 'amount', 'date']}
                 searchTerm=''
-                onMoreInfo={() => {}}
-                onDenial={() => {}}
-                onApproval={() => {}} 
+                onMoreInfo={() => { }}
+                onDenial={() => { }}
+                onApproval={(id: number) => handleStatusUpdate(id)}  // Aquí se invoca handleStatusUpdate al aprobar
             />
         </div>
     )

@@ -53,7 +53,7 @@ export const useCrudOperations = (token: string, refreshData: () => void) => {
     const handleDelete = (url: string) => {
         fetch(url, {
             method: "DELETE",
-            headers: { Authorization: `Bearer ${token}` },
+            headers: { Authorization: `${token}` },
         })
             .then(() => {
                 console.log("Deleted successfully.");

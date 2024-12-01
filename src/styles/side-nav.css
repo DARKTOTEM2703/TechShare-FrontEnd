@@ -1,28 +1,43 @@
-/* Asegura que el contenedor principal tenga un display horizontal */
 .horizontal-flex {
   display: flex;
-  height: 100vh; /* Asegúrate de que ocupe toda la altura de la ventana */
+  height: 100vh;
 }
 
-/* Fijamos la SideNav a la izquierda de la pantalla */
 .side-nav {
-  position: fixed; /* Esto hace que la SideNav quede fija */
+  position: fixed;
   top: 0;
   left: 0;
-  width: 40vh; /* Mantienes el tamaño actual */
-  height: 100vh; /* Asegúrate de que ocupe toda la altura de la pantalla */
+  width: 40vh;
+  height: 100vh;
   background: #ffffff;
   padding: 20px;
-  box-shadow: 2px 0px 5px 0px rgba(0, 0, 0, 0.55); /* Mantienes el sombreado */
-  transition: 0.5s;
-  z-index: 100; /* Asegura que la SideNav se muestre por encima del contenido */
+  box-shadow: 2px 0px 5px 0px rgba(0, 0, 0, 0.55);
+  z-index: 100;
 }
 
-/* Asegúrate de que el contenedor principal ocupe toda la altura de la pantalla y se haga scroll en los children */
 .content {
-  margin-left: 40vh; /* Asegura que el contenido no quede debajo de la SideNav */
+  margin-left: 40vh;
   padding: 4vh;
-  height: 100vh; /* Esto hace que el contenido ocupe toda la pantalla */
-  overflow-y: auto; /* Activa el scroll solo para el contenido */
+  height: 100vh;
+  overflow-y: auto;
   width: 100%;
+}
+
+/* Media query para pantallas pequeñas */
+@media (max-width: 768px) {
+  .horizontal-flex {
+    display: block;
+  }
+
+  .side-nav {
+    width: 100%;
+    height: auto;
+    position: relative;
+    box-shadow: none;
+  }
+
+  .content {
+    margin-left: 0;
+    padding-top: 20px; /* Espacio adicional si necesitas compensar */
+  }
 }
