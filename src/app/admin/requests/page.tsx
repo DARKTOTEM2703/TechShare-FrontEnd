@@ -5,6 +5,7 @@ import CrudBody from '@/components/AdminCrud/CrudBodyRequests'
 import fetchData from '@/services/fetchData'
 import endpoints from '@/app/infraestructure/config/configAPI'
 import { getToken } from '@/services/storageService'
+import { useCrudOperations } from '@/hooks/useCrudOperations'
 
 export default function page() {
 
@@ -51,12 +52,8 @@ export default function page() {
             },
             body: formData, // Enviamos el FormData con los datos
         })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Error al actualizar el estado');
-                }
-                return response.json();
-            })
+            .then(response => response.text())
+            .then(text => console.log(text))
             .then(() => {
                 // Si la actualización fue exitosa, volvemos a obtener las solicitudes actualizadas
                 fetchRequests();
@@ -82,7 +79,7 @@ export default function page() {
             />
             <CrudBody
                 data={requests}
-                headers={['usuarioName', 'amount', 'date']}
+                headers={['borrowId', 'usuarioName', 'amount', 'date']}
                 searchTerm=''
                 onMoreInfo={() => { }}
                 onDenial={() => { }}

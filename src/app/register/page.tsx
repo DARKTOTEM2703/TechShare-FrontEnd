@@ -92,7 +92,7 @@ export default function Register() {
                         REGÍSTRATE
                     </button>
                 </form>
-                <p>¿Ya tienes una cuenta? <Link href="/login">Iniciar sesión</Link></p>
+                <p>¿Ya tienes una cuenta? <a href="#">Iniciar sesión</a></p>
             </div>
         </div>
     )
