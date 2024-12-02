@@ -1,4 +1,6 @@
 "use client";
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import React from 'react';
 import { useState } from 'react';
 import TextField from '@/components/Inputs/TextField';
@@ -15,6 +17,8 @@ const Page = () => {
         password: '',
     });
 
+    const router = useRouter();
+
     const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
@@ -22,7 +26,8 @@ const Page = () => {
             const token = await loginUser(formData.email, formData.password);
             if (token) {
                 setToken(token);
-                console.log('Login successful, token set:', token);
+                alert('Inicio de sesión exitoso');
+                router.push('/admin/');
             } else {
                 console.warn('Login failed, no token received.');
             }
@@ -52,7 +57,7 @@ const Page = () => {
                         INICIAR SESIÓN
                     </button>
                 </form>
-                <p className='mt-[20px]'>¿No tienes una cuenta? <a href="#">Regístrate</a></p>
+                <p className='mt-[20px]'>¿No tienes una cuenta? <Link href="/register">Regístrate</Link></p>
             </div>
         </div>
     );

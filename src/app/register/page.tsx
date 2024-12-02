@@ -1,4 +1,5 @@
 "use client"
+import Link from 'next/link';
 import Image from "next/image";
 import { FaEye } from "react-icons/fa";
 import { useState } from "react";
@@ -44,7 +45,8 @@ export default function Register() {
             .then(response => response.text())
             .then(text => {
                 alert(text);
-            }).catch(error => alert('Error: ' + error));
+            })
+            .catch(error => alert('Error: ' + error));
     };
 
     return (
@@ -90,7 +92,7 @@ export default function Register() {
                         REGÍSTRATE
                     </button>
                 </form>
-                <p>¿Ya tienes una cuenta? <a href="#">Iniciar sesión</a></p>
+                <p>¿Ya tienes una cuenta? <Link href="/login">Iniciar sesión</Link></p>
             </div>
         </div>
     )
