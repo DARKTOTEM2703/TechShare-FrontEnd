@@ -42,8 +42,9 @@ export default function Register() {
 
         fetch('http://localhost:8080/register', requestOptions)
             .then(response => response.text())
-            .then(data => console.log(data))
-            .catch(error => console.error('Error:', error));
+            .then(text => {
+                alert(text);
+            }).catch(error => alert('Error: ' + error));
     };
 
     return (
