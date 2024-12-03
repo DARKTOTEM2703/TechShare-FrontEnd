@@ -31,6 +31,7 @@ const TableRows: React.FC<TableRowsProps> = ({ headers, currentRecords, onConfir
             {currentRecords.map((row: any, rowIndex: number) => {
                 const idKey = Object.keys(row)[0];
                 const idValue = row[idKey];
+                const showConfirmReturn = row.status === "BORROWED";
 
                 return (
                     <tr key={`row-${idValue}-${rowIndex}`}>
@@ -40,12 +41,14 @@ const TableRows: React.FC<TableRowsProps> = ({ headers, currentRecords, onConfir
                             </td>
                         ))}
                         <td key={`actions-td-${idValue}`} className='flex justify-end space-x-4'>
-                            <button
-                                className="bg-primary text-white rounded-md w-8 h-8 flex items-center justify-center hover:bg-secondary"
-                                onClick={() => onConfirmReturn(idValue)}
-                            >
-                                <RiArrowTurnBackLine size={16} />
-                            </button>
+                            {showConfirmReturn && (
+                                <button
+                                    className="bg-primary text-white rounded-md w-8 h-8 flex items-center justify-center hover:bg-secondary"
+                                    onClick={() => onConfirmReturn(idValue)}
+                                >
+                                    <RiArrowTurnBackLine size={16} />
+                                </button>
+                            )}
                             <button className='text-secondary w-8 h-8 flex items-center justify-center'
                                 onClick={() => onMoreInfo(idValue)}>
                                 <FaCircleInfo size={26} />
