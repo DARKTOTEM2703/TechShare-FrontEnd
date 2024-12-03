@@ -1,13 +1,13 @@
 "use client"
 import React, { useState, useEffect } from 'react';
-import CrudHeader from '@/components/AdminCrud/CrudHeader'
+import CrudHeader from '@/components/AdminCrud/CrudHeader';
 import CrudBody from '@/components/AdminCrud/CrudBodyViewOnly';
 import NewMovementForm from '@/components/AdminCrud/InventoryPage/NewMovementForm';
 import { useAuth } from '@/hooks/useAuth';
 import { getToken } from '@/services/storageService';
 import fetchData from '@/services/fetchData';
 import endpoints from '@/app/infraestructure/config/configAPI';
-import BorderRichTextBox from '@/components/Inputs/BorderRichTextBox';
+import MaterialInfo from '@/components/AdminCrud/InfoModals/MaterialInfo';
 
 const Inventory = () => {
   useAuth();
@@ -30,6 +30,8 @@ const Inventory = () => {
   const [materials, setMaterials] = useState<Material[]>([]);
   const [selectedMaterial, setSelectedMaterial] = useState<{ id: number; name: string } | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [materialInfo, setMaterialInfo] = useState<Material | null>(null);
 
   const handleSearchChange = (value: string) => setSearchTerm(value);
 
@@ -39,8 +41,6 @@ const Inventory = () => {
   };
 
   const clickedItem = (id: number) => {
-    console.log('selected id: ', id);
-    console.log('materials: ', materials);
     const selected = materials.find((material) => material.materialsId === id);
     if (selected) {
       setSelectedMaterial({ id: selected.materialsId, name: selected.name });
@@ -48,7 +48,16 @@ const Inventory = () => {
   };
 
   const clickedMoreInfo = (id: number) => {
-    console.log('display info of: ', id);
+    const selected = materials.find((material) => material.materialsId === id);
+    if (selected) {
+      setMaterialInfo(selected);
+      setIsModalOpen(true);
+    }
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setMaterialInfo(null);
   };
 
   useEffect(() => {
@@ -83,6 +92,21 @@ const Inventory = () => {
           />
         </div>
       </div>
+
+      {/* Capa de fondo oscuro */}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50" onClick={closeModal}></div>
+      )}
+
+      {/* Modal */}
+      {isModalOpen && materialInfo && (
+        <div className="fixed inset-0 flex items-center justify-center z-60">
+          <MaterialInfo
+            material={materialInfo}
+            onClose={closeModal}
+          />
+        </div>
+      )}
     </div>
   );
 };
