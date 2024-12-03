@@ -29,38 +29,18 @@ export default function page() {
         fetchData(endpoints.borrowings.getAll, token)
             .then((data) => {
                 const filteredData = data.filter((request: Request) => request.status === 'PROCCES')
-                setRequests(filteredData)
+                setRequests(filteredData.reverse())
             })
     }
 
     const [requests, setRequests] = useState<Request[]>([])
+    const { setClickedItemId, handleCreate, handleUpdate, handleDelete, clickedItemId } = useCrudOperations(token, fetchRequests);
 
     // Función para realizar el PUT con FormData
     const handleStatusUpdate = (id: number) => {
-        // Construimos la URL de la API para la solicitud PUT
-        const url = `${endpoints.borrowings.update(id)}`;
-
-        // Creamos el objeto FormData y agregamos el nuevo estado
         const formData = new FormData();
         formData.append('status', 'BORROWED');
-
-        // Hacemos la solicitud PUT con FormData
-        fetch(url, {
-            method: 'PUT',
-            headers: {
-                'Authorization': `${token}`, // Agregar token de autenticación si es necesario
-            },
-            body: formData, // Enviamos el FormData con los datos
-        })
-            .then(response => response.text())
-            .then(text => console.log(text))
-            .then(() => {
-                // Si la actualización fue exitosa, volvemos a obtener las solicitudes actualizadas
-                fetchRequests();
-            })
-            .catch(error => {
-                console.error("Error al actualizar el estado:", error);
-            });
+        handleUpdate(endpoints.borrowings.update(id), formData)
     }
 
     useEffect(() => {

@@ -42,12 +42,11 @@ export const useCrudOperations = (token: string, refreshData: () => void) => {
 
     const handleUpdate = (url: string, data: any) => {
         fetchWithDynamicHeaders(url, "PUT", data)
-            .then((response) => response.json())
+            .then((response) => response.text())
             .then(() => {
                 console.log("Updated successfully.");
                 refreshData();
             })
-            .catch((error) => console.error("Error:", error));
     };
 
     const handleDelete = (url: string) => {
