@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  images: {
+    domains: ['localhost'], // Agrega 'localhost' para permitir imágenes desde este dominio
+  },
   webpack(config, { isServer }) {
     // Agregamos la configuración para SVG
     config.module.rules.push({

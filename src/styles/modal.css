@@ -1,88 +1,84 @@
 /* Estilos generales para el modal */
 .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.5); /* Fondo oscuro semi-transparente */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 999; /* Asegúrate de que el modal esté por encima de todo */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5); /* Fondo oscuro semi-transparente */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999; /* Asegúrate de que el modal esté por encima de todo */
 }
 
 .modal {
-    width: none;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: none;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 /* Título del modal */
 .modal h2 {
-    text-align: left;
-    color: #1E2A5E;
-    font-weight: bold;
-    margin-bottom: 16px;
+  text-align: left;
+  color: #1e2a5e;
+  font-weight: bold;
+  margin-bottom: 16px;
 }
 
 /* Input del modal */
 .modal-input {
-    width: 100%;
-    padding: 8px 12px;
-    border: 1.2px solid #1E2A5E;
-    border-radius: 8px;
-    margin-bottom: 16px;
-    font-size: 14px;
+  width: 100%;
+  padding: 8px 12px;
+  border: 1.2px solid #1e2a5e;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 14px;
 }
 
 /* Botones de acción en el modal */
 .action-button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: #55679C;
-    margin-right: 8px;
-}
-
-.action-button:hover {
-    color: #63778c; /* Color al hacer hover */
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #55679c;
+  margin-right: 8px;
 }
 
 /* Contenedor de botones alineados a la derecha */
 .modal .flex {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
 }
 
 /* Botón de guardar y cancelar */
 .primary-button {
-    padding: 8px 16px;
-    background-color: #1E2A5E;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 14px;
+  padding: 8px 16px;
+  background-color: #1e2a5e;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
 }
 
 .primary-button:hover {
-    background-color: #3e4b88; /* Color al hacer hover */
+  background-color: #3e4b88; /* Color al hacer hover */
 }
 
 .primary-button.disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
+  background-color: #ccc;
+  cursor: not-allowed;
 }
 
 .primary-button.isSecondary {
-    background-color: #f0f0f0;
-    color: #1E2A5E;
+  background-color: #f0f0f0;
+  color: #1e2a5e;
 }
 
 .primary-button.isSecondary:hover {
-    background-color: #e0e0e0;
+  background-color: #e0e0e0;
 }

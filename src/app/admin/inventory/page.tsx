@@ -8,6 +8,7 @@ import { getToken } from '@/services/storageService';
 import fetchData from '@/services/fetchData';
 import endpoints from '@/app/infraestructure/config/configAPI';
 import MaterialInfo from '@/components/AdminCrud/InfoModals/MaterialInfo';
+import '@/styles/modal.css'
 
 const Inventory = () => {
   useAuth();
@@ -92,19 +93,15 @@ const Inventory = () => {
           />
         </div>
       </div>
-
-      {/* Capa de fondo oscuro */}
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50" onClick={closeModal}></div>
-      )}
-
       {/* Modal */}
       {isModalOpen && materialInfo && (
-        <div className="fixed inset-0 flex items-center justify-center z-60">
-          <MaterialInfo
-            material={materialInfo}
-            onClose={closeModal}
-          />
+        <div className='modal-overlay'>
+          <div className="fixed inset-0 flex items-center justify-center z-60">
+            <MaterialInfo
+              material={materialInfo}
+              onClose={closeModal}
+            />
+          </div>
         </div>
       )}
     </div>

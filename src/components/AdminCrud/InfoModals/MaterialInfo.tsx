@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import Image from "next/image";
 
 interface MaterialInfoProps {
     material: {
@@ -46,14 +47,16 @@ const MaterialInfo: React.FC<MaterialInfoProps> = ({ material, onClose }) => {
 
             {/* Imagen y Nombre */}
             <div className="flex items-start mb-4">
-                <img
-                    src={material.imagePath}
-                    alt="Material"
-                    className="w-16 h-16 object-contain mr-4"
-                />
+                <div className="w-48 h-32 relative mr-4">
+                    <img
+                        src={material.imagePath}
+                        alt="Material"
+                        className="rounded w-full h-full object-contain"
+                    />
+                </div>
                 <div className="flex-1">
-                    <h3 className="font-semibold text-gray-700">Nombre del material</h3>
-                    <div className="border border-primary px-4 py-2 rounded-lg mt-1">
+                    <h3 className="font-semibold text-lg text-primary">Nombre del material</h3>
+                    <div className="border border-primary px-4 py-2 rounded-lg mt-1 text-sm">
                         {material.name}
                     </div>
                 </div>
@@ -62,35 +65,35 @@ const MaterialInfo: React.FC<MaterialInfoProps> = ({ material, onClose }) => {
             {/* Stocks */}
             <div className="grid grid-cols-2 gap-4 mb-4">
                 <div>
-                    <h4 className="font-semibold text-gray-700">Available Stock</h4>
-                    <p className="text-gray-800 mt-1">{material.borrowable_stock}</p>
+                    <h4 className="font-semibold text-lg text-primary">Available Stock</h4>
+                    <p className="text-gray-800 mt-1 text-sm">{material.borrowable_stock}</p>
                 </div>
                 <div>
-                    <h4 className="font-semibold text-gray-700">Real Stock</h4>
-                    <p className="text-gray-800 mt-1">{material.stock}</p>
+                    <h4 className="font-semibold text-lg text-primary">Real Stock</h4>
+                    <p className="text-gray-800 mt-1 text-sm">{material.stock}</p>
                 </div>
             </div>
 
             {/* Descripción */}
             <div className="mb-4">
-                <h4 className="font-semibold text-gray-700">Descripción</h4>
-                <div className="border border-primary px-4 py-2 rounded-lg mt-1">
+                <h4 className="font-semibold text-lg text-primary">Descripción</h4>
+                <div className="border border-primary px-4 py-2 rounded-lg mt-1 text-sm">
                     {material.description}
                 </div>
             </div>
 
             {/* Subcategoría */}
             <div className="mb-4">
-                <h4 className="font-semibold text-gray-700">Subcategoría</h4>
-                <div className="border border-primary px-4 py-2 rounded-lg mt-1">
+                <h4 className="font-semibold text-lg text-primary">Subcategoría</h4>
+                <div className="border border-primary px-4 py-2 rounded-lg mt-1 text-sm">
                     {material.subCategoryName}
                 </div>
             </div>
 
             {/* Roles */}
             <div className="mb-4">
-                <h4 className="font-semibold text-gray-700">Roles de material</h4>
-                <div className="border border-primary px-4 py-2 rounded-lg mt-1">
+                <h4 className="font-semibold text-lg text-primary">Roles de material</h4>
+                <div className="border border-primary px-4 py-2 rounded-lg mt-1 text-sm">
                     <div className="flex flex-wrap gap-2">
                         {Array.isArray(material.roleNames) &&
                             material.roleNames.map((role: string, index: number) => (
