@@ -1,14 +1,15 @@
-"use client"
-import React, { useState, useEffect } from 'react'
-import CrudHeader from '@/components/AdminCrud/CrudHeader'
-import CrudBody from '@/components/AdminCrud/CrudBodyRequests'
-import fetchData from '@/services/fetchData'
-import endpoints from '@/app/infraestructure/config/configAPI'
-import { getToken } from '@/services/storageService'
-import { useCrudOperations } from '@/hooks/useCrudOperations'
+"use client";
+import React, { useState, useEffect } from "react";
+import CrudHeader from "@/components/AdminCrud/CrudHeader";
+import CrudBody from "@/components/AdminCrud/CrudBodyRequests";
+import RequestDetails from "@/components/AdminCrud/InfoModals/RequestInformation"; // Componente de Detalles de Solicitud
+import fetchData from "@/services/fetchData";
+import endpoints from "@/app/infraestructure/config/configAPI";
+import { getToken } from "@/services/storageService";
+import { useCrudOperations } from "@/hooks/useCrudOperations";
+import "@/styles/modal.css";
 
-export default function page() {
-
+export default function Page() {
     interface Request {
         borrowId: number;
         date: string;
@@ -21,50 +22,128 @@ export default function page() {
         usuarioName: string;
         adminId: number;
         adminName: string | null;
+        details: {
+            detailsBorrowId: number;
+            quantity: number;
+            unitPrice: number;
+            totalPrice: number;
+            materialsId: number;
+            borrowId: number;
+        }[];
     }
 
-    const token = getToken() || ''
+    interface EnrichedRequest extends Omit<Request, "details"> {
+        details: (Request["details"][number] & {
+            materialName: string;
+            materialImage: string | null;
+            stock: number;
+            borrowable_stock: number;
+        })[];
+    }
+
+    interface Material {
+        materialsId: number;
+        imagePath: string;
+        name: string;
+        description: string;
+        price: number;
+        stock: number;
+        borrowable_stock: number;
+        subCategoryId: number;
+        subCategoryName: string;
+        roleIds: number[];
+        roleNames: string[];
+    }
+
+    const token = getToken() || "";
 
     const fetchRequests = () => {
-        fetchData(endpoints.borrowings.getAll, token)
-            .then((data) => {
-                const filteredData = data.filter((request: Request) => request.status === 'PROCCES')
-                setRequests(filteredData.reverse())
-            })
-    }
+        fetchData(endpoints.borrowings.getAll, token).then((data) => {
+            const filteredData = data.filter(
+                (request: Request) => request.status === "PROCCES"
+            );
+            setRequests(filteredData.reverse());
+        });
+    };
 
-    const [requests, setRequests] = useState<Request[]>([])
-    const { setClickedItemId, handleCreate, handleUpdate, handleDelete, clickedItemId } = useCrudOperations(token, fetchRequests);
+    const fetchMaterials = () => {
+        fetchData(endpoints.materials.getAll, token).then((data) => {
+            setMaterials(data);
+        });
+    };
 
-    // Función para realizar el PUT con FormData
+    const [requests, setRequests] = useState<Request[]>([]);
+    const [materials, setMaterials] = useState<Material[]>([]);
+    const [selectedRequest, setSelectedRequest] = useState<EnrichedRequest | null>(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const { handleUpdate } = useCrudOperations(token, fetchRequests);
+
     const handleStatusUpdate = (id: number) => {
         const formData = new FormData();
-        formData.append('status', 'BORROWED');
-        handleUpdate(endpoints.borrowings.update(id), formData)
-    }
+        formData.append("status", "BORROWED");
+        handleUpdate(endpoints.borrowings.update(id), formData);
+    };
+
+    const handleMoreInfo = (id: number) => {
+        const request = requests.find((req) => req.borrowId === id);
+        if (request) {
+            const enrichedRequest: EnrichedRequest = {
+                ...request,
+                details: request.details.map((detail) => {
+                    const material = materials.find(
+                        (mat) => mat.materialsId === detail.materialsId
+                    );
+                    return {
+                        ...detail,
+                        materialName: material ? material.name : "Desconocido",
+                        materialImage: material ? material.imagePath : null,
+                        stock: material ? material.stock : 0,
+                        borrowable_stock: material ? material.borrowable_stock : 0,
+                    };
+                }),
+            };
+            setSelectedRequest(enrichedRequest);
+            setIsModalOpen(true);
+        }
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+        setSelectedRequest(null);
+    };
 
     useEffect(() => {
-        fetchRequests()
-    }, [])
+        fetchRequests();
+        fetchMaterials();
+    }, []);
 
     return (
         <div>
             <CrudHeader
-                title='Solicitudes'
-                dropdownOptions={['dummy']}
-                buttonLabel=' '
-                buttonFunction={() => alert('')}
+                title="Solicitudes"
+                dropdownOptions={["dummy"]}
+                buttonLabel=" "
+                buttonFunction={() => alert("")}
                 buttonDisabled={true}
                 onSearchChange={() => { }}
             />
             <CrudBody
                 data={requests}
-                headers={['borrowId', 'usuarioName', 'amount', 'date']}
-                searchTerm=''
-                onMoreInfo={() => { }}
-                onDenial={() => { }}
-                onApproval={(id: number) => handleStatusUpdate(id)}  // Aquí se invoca handleStatusUpdate al aprobar
+                headers={["borrowId", "usuarioName", "amount", "date"]}
+                searchTerm=""
+                onMoreInfo={handleMoreInfo}
+                onDenial={(id: number) => { }}
+                onApproval={(id: number) => handleStatusUpdate(id)} // Maneja la aprobación
             />
+            {/* Modal de Detalles */}
+            {isModalOpen && selectedRequest && (
+                <div className="modal-overlay">
+                    <div className="fixed inset-0 flex items-center justify-center z-60">
+                        <RequestDetails request={selectedRequest} onClose={closeModal} />
+                    </div>
+                </div>
+            )}
         </div>
-    )
+    );
 }

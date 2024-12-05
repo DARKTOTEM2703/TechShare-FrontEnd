@@ -1,5 +1,4 @@
-import React, { useEffect } from "react";
-import Image from "next/image";
+import React from "react";
 
 interface MaterialInfoProps {
     material: {
@@ -15,16 +14,17 @@ interface MaterialInfoProps {
         roleIds: number[];
         roleNames: string[];
     };
-    onClose: () => void; // Función para cerrar el modal
+    onClose: () => void;
 }
 
 const MaterialInfo: React.FC<MaterialInfoProps> = ({ material, onClose }) => {
     return (
-        <div className="p-6 bg-white shadow-md rounded-lg max-w-md mx-auto relative">
+        <div className="p-6 bg-white shadow-md rounded-lg max-w-lg mx-auto relative">
             {/* Botón de cerrar (X) */}
             <button
                 onClick={onClose}
                 className="absolute top-4 right-4 text-gray-600 hover:text-gray-800 focus:outline-none"
+                aria-label="Cerrar modal"
             >
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -45,7 +45,7 @@ const MaterialInfo: React.FC<MaterialInfoProps> = ({ material, onClose }) => {
             <h2 className="text-lg font-bold mb-4 text-primary">Material Info</h2>
             <hr className="my-4 border-gray-300" />
 
-            {/* Imagen y Nombre */}
+            {/* Imagen, Nombre y Stocks */}
             <div className="flex items-start mb-4">
                 <div className="w-48 h-32 relative mr-4">
                     <img
@@ -55,22 +55,22 @@ const MaterialInfo: React.FC<MaterialInfoProps> = ({ material, onClose }) => {
                     />
                 </div>
                 <div className="flex-1">
-                    <h3 className="font-semibold text-lg text-primary">Nombre del material</h3>
-                    <div className="border border-primary px-4 py-2 rounded-lg mt-1 text-sm">
+                    {/* Nombre */}
+                    <h3 className="font-semibold text-lg text-primary mb-2">Nombre del material</h3>
+                    <div className="border border-primary px-4 py-2 rounded-lg mb-4 text-sm">
                         {material.name}
                     </div>
-                </div>
-            </div>
-
-            {/* Stocks */}
-            <div className="grid grid-cols-2 gap-4 mb-4">
-                <div>
-                    <h4 className="font-semibold text-lg text-primary">Available Stock</h4>
-                    <p className="text-gray-800 mt-1 text-sm">{material.borrowable_stock}</p>
-                </div>
-                <div>
-                    <h4 className="font-semibold text-lg text-primary">Real Stock</h4>
-                    <p className="text-gray-800 mt-1 text-sm">{material.stock}</p>
+                    {/* Stocks */}
+                    <div className="grid grid-cols-2 gap-4">
+                        <div>
+                            <h4 className="font-semibold text-sm text-primary">Available Stock</h4>
+                            <p className="text-gray-800 mt-1 text-sm">{material.borrowable_stock}</p>
+                        </div>
+                        <div>
+                            <h4 className="font-semibold text-sm text-primary">Real Stock</h4>
+                            <p className="text-gray-800 mt-1 text-sm">{material.stock}</p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
