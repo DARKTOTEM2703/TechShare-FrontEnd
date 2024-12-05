@@ -6,7 +6,8 @@ import fetchData from "@/services/fetchData";
 import endpoints from "@/app/infraestructure/config/configAPI";
 import { getToken } from "@/services/storageService";
 import { useCrudOperations } from "@/hooks/useCrudOperations";
-import BorrowingInformation from "@/components/AdminCrud/InfoModals/BorrowingInformation";
+import BorrowingInformation from "@/components/AdminCrud/InfoModals/BorrowingReturn";
+import "@/styles/modal.css";
 
 export default function Page() {
     const token = getToken() || "";
@@ -126,11 +127,15 @@ export default function Page() {
                 onConfirmReturn={handleConfirmReturn}
             />
             {selectedBorrow && (
-                <BorrowingInformation
-                    borrow={selectedBorrow}
-                    onClose={closeModal}
-                    onConfirm={confirmReturn}
-                />
+                <div className="modal-overlay">
+                    <div className="fixed inset-0 flex items-center justify-center z-60">
+                        <BorrowingInformation
+                            borrow={selectedBorrow}
+                            onClose={closeModal}
+                            onConfirm={confirmReturn}
+                        />
+                    </div>
+                </div>
             )}
         </div>
     );

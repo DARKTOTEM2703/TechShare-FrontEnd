@@ -139,7 +139,7 @@ export default function Page() {
             {/* Modal de Detalles */}
             {isModalOpen && selectedRequest && (
                 <div className="modal-overlay">
-                    <div className="fixed inset-0 flex items-center justify-center z-60">
+                    <div >
                         <RequestDetails request={selectedRequest} onClose={closeModal} />
                     </div>
                 </div>
