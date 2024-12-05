@@ -102,14 +102,17 @@ const BorrowDetails: React.FC<BorrowDetailsProps> = ({ borrow, onClose }) => {
                         </div>
                     </div>
 
-                    {/* Estado del préstamo */}
-                    <div className="mb-4">
-                        <h4 className="font-semibold text-sm text-primary">Estatus</h4>
-                        {renderStatus(borrow.status)}
+                    {/* Materiales prestados y Estado del préstamo */}
+                    <div className="flex justify-between items-center mb-4">
+                        <div className="flex items-center">
+                            <h4 className="font-semibold text-sm text-primary">Materiales prestados</h4>
+                        </div>
+                        <div className="flex items-center">
+                            <span className="font-semibold text-sm text-primary mr-2">Status</span>
+                            {renderStatus(borrow.status)}
+                        </div>
                     </div>
 
-                    {/* Materiales prestados */}
-                    <h4 className="font-semibold text-sm text-primary mb-2">Materiales prestados</h4>
                     <div className="border border-primary rounded-lg overflow-hidden">
                         <table className="table-auto w-full text-left">
                             <thead className="bg-gray-100">
