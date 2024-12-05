@@ -36,7 +36,7 @@ const TableRows: React.FC<TableRowsProps> = ({ headers, currentRecords, onConfir
                 return (
                     <tr key={`row-${idValue}-${rowIndex}`}>
                         {headers.map((header: string, headerIndex: number) => (
-                            <td key={`${header}-${idValue}-${headerIndex}`} onClick={() => onConfirmReturn(idValue)}>
+                            <td key={`${header}-${idValue}-${headerIndex}`}>
                                 {row[header]}
                             </td>
                         ))}
@@ -49,11 +49,14 @@ const TableRows: React.FC<TableRowsProps> = ({ headers, currentRecords, onConfir
                                     <RiArrowTurnBackLine size={16} />
                                 </button>
                             )}
-                            <button className='text-secondary w-8 h-8 flex items-center justify-center'
-                                onClick={() => onMoreInfo(idValue)}>
+                            <button
+                                className="text-secondary w-8 h-8 flex items-center justify-center"
+                                onClick={() => onMoreInfo(idValue)}
+                            >
                                 <FaCircleInfo size={26} />
                             </button>
                         </td>
+
                     </tr>
                 );
             })}
