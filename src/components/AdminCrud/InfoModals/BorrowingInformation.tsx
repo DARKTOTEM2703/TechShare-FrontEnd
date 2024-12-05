@@ -19,6 +19,35 @@ interface BorrowDetailsProps {
 }
 
 const BorrowDetails: React.FC<BorrowDetailsProps> = ({ borrow, onClose }) => {
+    const renderStatus = (status: string) => {
+        switch (status) {
+            case "BORROWED":
+                return (
+                    <div className="border border-orange-500 text-orange-500 px-4 py-2 rounded-lg mt-1 text-sm font-semibold">
+                        PRÉSTAMO ACTIVO
+                    </div>
+                );
+            case "RETURNED":
+                return (
+                    <div className="border border-green-500 text-green-500 px-4 py-2 rounded-lg mt-1 text-sm font-semibold">
+                        PRÉSTAMO FINALIZADO
+                    </div>
+                );
+            case "REJECETD":
+                return (
+                    <div className="border border-red-500 text-red-500 px-4 py-2 rounded-lg mt-1 text-sm font-semibold">
+                        PRÉSTAMO RECHAZADO
+                    </div>
+                );
+            default:
+                return (
+                    <div className="border border-gray-400 text-gray-400 px-4 py-2 rounded-lg mt-1 text-sm font-semibold">
+                        ESTADO DESCONOCIDO
+                    </div>
+                );
+        }
+    };
+
     return (
         <div className="modal-overlay">
             <div className="fixed inset-0 flex items-center justify-center z-50">
@@ -76,14 +105,7 @@ const BorrowDetails: React.FC<BorrowDetailsProps> = ({ borrow, onClose }) => {
                     {/* Estado del préstamo */}
                     <div className="mb-4">
                         <h4 className="font-semibold text-sm text-primary">Estatus</h4>
-                        <div
-                            className={`border px-4 py-2 rounded-lg mt-1 text-sm font-semibold ${borrow.status === "BORROWED"
-                                    ? "border-orange-500 text-orange-500"
-                                    : "border-green-500 text-green-500"
-                                }`}
-                        >
-                            {borrow.status === "BORROWED" ? "PRÉSTAMO ACTIVO" : "PRÉSTAMO FINALIZADO"}
-                        </div>
+                        {renderStatus(borrow.status)}
                     </div>
 
                     {/* Materiales prestados */}

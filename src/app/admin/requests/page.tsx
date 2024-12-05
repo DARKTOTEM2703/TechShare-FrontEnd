@@ -79,9 +79,9 @@ export default function Page() {
 
     const { handleUpdate } = useCrudOperations(token, fetchRequests);
 
-    const handleStatusUpdate = (id: number) => {
+    const handleStatusUpdate = (id: number, status: string) => {
         const formData = new FormData();
-        formData.append("status", "BORROWED");
+        formData.append("status", status);
         handleUpdate(endpoints.borrowings.update(id), formData);
     };
 
@@ -133,8 +133,8 @@ export default function Page() {
                 headers={["borrowId", "usuarioName", "amount", "date"]}
                 searchTerm=""
                 onMoreInfo={handleMoreInfo}
-                onDenial={(id: number) => { }}
-                onApproval={(id: number) => handleStatusUpdate(id)} // Maneja la aprobación
+                onDenial={(id: number) => handleStatusUpdate(id, "REJECETD")}
+                onApproval={(id: number) => handleStatusUpdate(id, "BORROWED")} // Maneja la aprobación
             />
             {/* Modal de Detalles */}
             {isModalOpen && selectedRequest && (

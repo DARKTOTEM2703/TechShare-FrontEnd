@@ -6,7 +6,8 @@ import fetchData from "@/services/fetchData";
 import endpoints from "@/app/infraestructure/config/configAPI";
 import { getToken } from "@/services/storageService";
 import { useCrudOperations } from "@/hooks/useCrudOperations";
-import BorrowingInformation from "@/components/AdminCrud/InfoModals/BorrowingReturn";
+import BorrowingReturn from "@/components/AdminCrud/InfoModals/BorrowingReturn";
+import BorrowingInformation from "@/components/AdminCrud/InfoModals/BorrowingInformation";
 import "@/styles/modal.css";
 
 export default function Page() {
@@ -30,8 +31,8 @@ export default function Page() {
             unitPrice: number;
             totalPrice: number;
             materialsId: number;
-            materialName?: string;
-            materialImage?: string | null;
+            materialName: string; // Ahora garantizamos que siempre es string
+            materialImage: string | null; // No es opcional, tendrá null o un string
         }[];
     }
 
@@ -46,30 +47,36 @@ export default function Page() {
     const [data, setData] = useState<Borrow[]>([]);
     const [materials, setMaterials] = useState<Material[]>([]);
     const [selectedBorrow, setSelectedBorrow] = useState<Borrow | null>(null);
-    const [searchTerm, setSearchTerm] = useState('');
+    const [searchTerm, setSearchTerm] = useState("");
+
+    const [selectedBorrowDetails, setSelectedBorrowDetails] = useState<Borrow | null>(null);
 
     const handleSearchChange = (value: string) => setSearchTerm(value);
 
-    const fetchBorrowings = () => {
-        fetchData(endpoints.borrowings.getAll, token).then((data) => {
-            // Filtrar préstamos con estados específicos
+    const fetchBorrowings = async () => {
+        try {
+            const data = await fetchData(endpoints.borrowings.getAll, token);
             const filteredData = data.filter(
                 (borrowing: Borrow) =>
-                    borrowing.status === "BORROWED" || borrowing.status === "RETURNED"
+                    !borrowing.status.includes("PROCCES")
             );
             setData(filteredData);
-        });
+        } catch (error) {
+            console.error("Error fetching borrowings:", error);
+        }
     };
 
-    const fetchMaterials = () => {
-        fetchData(endpoints.materials.getAll, token).then((data) => {
+    const fetchMaterials = async () => {
+        try {
+            const data = await fetchData(endpoints.materials.getAll, token);
             setMaterials(data);
-        });
+        } catch (error) {
+            console.error("Error fetching materials:", error);
+        }
     };
 
     const { handleUpdate } = useCrudOperations(token, fetchBorrowings);
 
-    // Enriquecer datos del préstamo con nombres e imágenes de materiales
     const enrichBorrow = (borrow: Borrow): Borrow => {
         return {
             ...borrow,
@@ -77,11 +84,18 @@ export default function Page() {
                 const material = materials.find((mat) => mat.materialsId === detail.materialsId);
                 return {
                     ...detail,
-                    materialName: material ? material.name : "Desconocido",
+                    materialName: material ? material.name : "Desconocido", // Siempre asegura un string
                     materialImage: material ? material.imagePath : null,
                 };
             }),
         };
+    };
+
+    const handleMoreInfo = (id: number) => {
+        const borrow = data.find((item) => item.borrowId === id);
+        if (borrow) {
+            setSelectedBorrowDetails(enrichBorrow(borrow));
+        }
     };
 
     const handleConfirmReturn = (id: number) => {
@@ -109,6 +123,10 @@ export default function Page() {
         fetchMaterials();
     }, []);
 
+    const filteredData = data.filter((borrow) =>
+        borrow.usuarioName.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
     return (
         <div>
             <CrudHeader
@@ -120,22 +138,28 @@ export default function Page() {
                 buttonLabel=""
             />
             <CrudBody
-                data={data}
-                headers={["borrowId","usuarioName", "status", "startDate", "endDate"]}
+                data={filteredData}
+                headers={["borrowId", "usuarioName", "status", "startDate", "endDate"]}
                 searchTerm={searchTerm}
-                onMoreInfo={(id) => console.log("Más información", id)}
+                onMoreInfo={handleMoreInfo}
                 onConfirmReturn={handleConfirmReturn}
             />
             {selectedBorrow && (
                 <div className="modal-overlay">
                     <div className="fixed inset-0 flex items-center justify-center z-60">
-                        <BorrowingInformation
+                        <BorrowingReturn
                             borrow={selectedBorrow}
                             onClose={closeModal}
                             onConfirm={confirmReturn}
                         />
                     </div>
                 </div>
+            )}
+            {selectedBorrowDetails && (
+                <BorrowingInformation
+                    borrow={selectedBorrowDetails}
+                    onClose={() => setSelectedBorrowDetails(null)}
+                />
             )}
         </div>
     );
