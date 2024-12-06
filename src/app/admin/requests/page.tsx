@@ -114,9 +114,27 @@ export default function Page() {
     };
 
     useEffect(() => {
-        fetchRequests();
-        fetchMaterials();
-    }, [fetchRequests, fetchMaterials]);
+        const fetchDataAll = async () => {
+            try {
+                const [requestsData, materialsData] = await Promise.all([
+                    fetchData(endpoints.borrowings.getAll, token),
+                    fetchData(endpoints.materials.getAll, token),
+                ]);
+
+                const filteredRequests = requestsData.filter(
+                    (request: Request) => request.status === "PROCCES"
+                );
+
+                setRequests(filteredRequests.reverse());
+                setMaterials(materialsData);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+
+        fetchDataAll();
+    }, [token]);
+
 
     return (
         <div>
