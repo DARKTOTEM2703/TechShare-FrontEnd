@@ -1,4 +1,4 @@
-const BASE_URL = 'https://back-end-techshare-java-1.onrender.com'
+const BASE_URL = '100.20.92.101'
 
 const endpoints = {
     categories: {
