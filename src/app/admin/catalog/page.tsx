@@ -64,11 +64,27 @@ export default function Catalog() {
   }
 
   useEffect(() => {
-    fetchSubCategories()
-    fetchCategories()
-    fetchMaterials()
-    fetchRoles()
-  }, [fetchCategories, fetchMaterials, fetchRoles, fetchSubCategories]);
+    const fetchAllData = async () => {
+      try {
+        const [categoriesData, subCategoriesData, materialsData, rolesData] = await Promise.all([
+          fetchData(endpoints.categories.getAll, token),
+          fetchData(endpoints.subcategories.getAll, token),
+          fetchData(endpoints.materials.getAll, token),
+          fetchData(endpoints.roles.getAll, token),
+        ]);
+
+        setCategories(categoriesData);
+        setSubCategories(subCategoriesData);
+        setMaterials(materialsData);
+        setRoles(rolesData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchAllData();
+  }, [token]);
+
 
   return (
     <div>
