@@ -1,52 +1,67 @@
-"use client"
-import CrudHeader from '@/components/AdminCrud/CrudHeader'
-import CrudBody from '@/components/AdminCrud/CrudBodyViewOnly'
-import { useFetchData } from '@/services/useFetchData'
-import { useState, useEffect } from 'react'
-import fetchData from '@/services/fetchData'
-import { useAuth } from '@/hooks/useAuth'
-import { getToken } from '@/services/storageService'
-import endpoints from '@/app/infraestructure/config/configAPI'
+"use client";
+import CrudHeader from '@/components/AdminCrud/CrudHeader';
+import CrudBody from '@/components/AdminCrud/CrudBodyViewOnly';
+import { useAuth } from '@/hooks/useAuth';
+import { getToken } from '@/services/storageService';
+import fetchData from '@/services/fetchData';
+import endpoints from '@/app/infraestructure/config/configAPI';
+import UserInformation from '@/components/AdminCrud/InfoModals/UserInformation';
+import { useState, useEffect } from 'react';
+import "@/styles/modal.css";
 
 export default function users() {
-
   interface User {
     id: number;
     userName: string;
     firstName: string;
     lastName: string;
     email: string;
+    phoneNumber: string;
     roles: string[];
   }
 
   useAuth();
   const token = getToken();
 
-  // Estado para el término de búsqueda
   const [searchTerm, setSearchTerm] = useState('');
   const [users, setUsers] = useState<User[]>([]);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
   const fetchUsers = () => {
     fetchData(endpoints.users.getAll, token)
       .then((data: User[]) => setUsers(data));
-  }
+  };
 
-  // Función que actualiza el término de búsqueda
   const handleSearchChange = (value: string) => {
     setSearchTerm(value);
   };
 
+  const handleMoreInfo = (id: number) => {
+    const user = users.find((user) => user.id === id);
+    if (user) {
+      setSelectedUser(user);
+    }
+  };
+
+  const closeModal = () => {
+    setSelectedUser(null);
+  };
+
+  const saveChanges = () => {
+    console.log("Save changes for:", selectedUser);
+    closeModal();
+  };
+
   useEffect(() => {
     fetchUsers();
-  }
-    , []);
+  }, []);
 
   return (
     <div>
       <CrudHeader
-        title='Usuarios'
+        title="Usuarios"
         dropdownOptions={[]}
-        buttonLabel=''
+        buttonLabel=""
         buttonFunction={() => alert('Adding stuff')}
         onSearchChange={handleSearchChange}
         buttonDisabled={true}
@@ -56,8 +71,17 @@ export default function users() {
         headers={['id', 'firstName', 'lastName', 'email']}
         searchTerm={searchTerm}
         onSelected={(id: number) => alert(`Selected ${id}`)}
-        onMoreInfo={(id: number) => alert(`More info ${id}`)}
+        onMoreInfo={handleMoreInfo}
       />
+      {selectedUser && (
+        <div className='modal-overlay'>
+          <UserInformation
+            user={selectedUser}
+            onClose={closeModal}
+            onSave={saveChanges}
+          />
+        </div>
+      )}
     </div>
-  )
+  );
 }
