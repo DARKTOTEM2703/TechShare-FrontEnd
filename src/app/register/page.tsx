@@ -9,6 +9,7 @@ import '@/styles/containers.css'
 import '@/styles/form.css'
 import '@/styles/buttons.css'
 import { useForm } from "@/hooks/useForm";
+import endpoints from '../infraestructure/config/configAPI';
 
 export default function Register() {
 
@@ -41,7 +42,7 @@ export default function Register() {
             })
         };
 
-        fetch('http://localhost:8080/register', requestOptions)
+        fetch(endpoints.signUp, requestOptions)
             .then(response => response.text())
             .then(text => {
                 alert(text);

@@ -22,7 +22,7 @@ export default function Home() {
           fontSize: '16px'
         }}
       >
-        Go to Admin Roles
+        Go to Admin Page
       </button>
       {/*TODO: Develop de NavBar */}
       <NavBar></NavBar>
