@@ -2,7 +2,6 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React from 'react';
-import { useState } from 'react';
 import TextField from '@/components/Inputs/TextField';
 import PasswordField from '@/components/Inputs/PasswordField';
 import '@/styles/form.css';

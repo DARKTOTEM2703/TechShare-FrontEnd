@@ -68,7 +68,7 @@ export default function Catalog() {
     fetchCategories()
     fetchMaterials()
     fetchRoles()
-  }, []);
+  }, [fetchCategories, fetchMaterials, fetchRoles, fetchSubCategories]);
 
   return (
     <div>

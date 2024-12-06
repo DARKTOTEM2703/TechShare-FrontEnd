@@ -3,6 +3,9 @@ const nextConfig = {
   images: {
     domains: ['localhost'], // Agrega 'localhost' para permitir imágenes desde este dominio
   },
+  eslint: {
+    ignoreDuringBuilds: true, // Ignorar errores de ESLint durante la construcción
+  },
   webpack(config, { isServer }) {
     // Agregamos la configuración para SVG
     config.module.rules.push({

@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import "@/styles/globals.css";
-import { useForm } from "@/hooks/useForm"
 import "@/styles/globals.css";
-import SideNav from "@/components/SideNav/SideNav";
 import { inter } from "@/services/fonts"
 
 export const metadata: Metadata = {

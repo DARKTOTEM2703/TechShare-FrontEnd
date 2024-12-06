@@ -9,7 +9,7 @@ import UserInformation from '@/components/AdminCrud/InfoModals/UserInformation';
 import { useState, useEffect } from 'react';
 import "@/styles/modal.css";
 
-export default function users() {
+export default function Users() {
   interface User {
     id: number;
     userName: string;
@@ -54,7 +54,7 @@ export default function users() {
 
   useEffect(() => {
     fetchUsers();
-  }, []);
+  }, [fetchUsers]);
 
   return (
     <div>

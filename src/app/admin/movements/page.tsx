@@ -1,7 +1,6 @@
 "use client"
 import CrudHeader from '@/components/AdminCrud/CrudHeader'
 import CrudBody from '@/components/AdminCrud/CrudBodyViewOnly'
-import { useFetchData } from '@/services/useFetchData'
 import { useState } from 'react'
 import { useAuth } from '@/hooks/useAuth'
 import { getToken } from '@/services/storageService'
@@ -10,7 +9,6 @@ import endpoints from '@/app/infraestructure/config/configAPI'
 import fetchData from '@/services/fetchData'
 
 export default function movements() {
-
   type Movement = {
     movementsId: number,
     moveType: string,

@@ -1,7 +1,7 @@
 "use client"
 import CrudHeader from '@/components/AdminCrud/CrudHeader'
 import CrudBody from '@/components/AdminCrud/CrudBody'
-import { useFetchData } from '@/services/useFetchData'
+// import { useFetchData } from '@/services/useFetchData'
 import { useState, useEffect } from 'react'
 import ModalBase from '@/components/Modal/ModalBase' // Importamos el ModalBase
 import BorderTextField from '@/components/Inputs/BorderTextField' // Importamos el BorderTextField
@@ -10,7 +10,7 @@ import { getToken } from '@/services/storageService'
 import { useCrudOperations } from '@/hooks/useCrudOperations'
 import endpoints from '@/app/infraestructure/config/configAPI'
 
-export default function roles() {
+export default function Roles() {
 
   type Role = {
     roleId: number;
@@ -34,7 +34,7 @@ export default function roles() {
 
   useEffect(() => {
     fetchRoles()
-  }, [])
+  }, [fetchRoles])
 
   const { setClickedItemId, handleCreate, handleUpdate, handleDelete, clickedItemId } = useCrudOperations(token, fetchRoles);
   const [data, setData] = useState<Role[]>([])
@@ -75,7 +75,7 @@ export default function roles() {
     hideCreateModal()
   }
 
-  const handleRoleUpdate = (e: any) => {
+  const handleRoleUpdate = (e: React.FormEvent) => {
     e.preventDefault()
     const payload = { name: formData.roleName }
     if (clickedItemId !== null) {

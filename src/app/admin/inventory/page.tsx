@@ -63,7 +63,7 @@ const Inventory = () => {
 
   useEffect(() => {
     fetchMaterials();
-  }, []);
+  }, [fetchMaterials]);
 
   return (
     <div>

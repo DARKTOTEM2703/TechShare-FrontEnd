@@ -116,7 +116,7 @@ export default function Page() {
     useEffect(() => {
         fetchRequests();
         fetchMaterials();
-    }, []);
+    }, [fetchRequests, fetchMaterials]);
 
     return (
         <div>

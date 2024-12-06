@@ -1,7 +1,3 @@
-import { loginUser } from "@/services/Auth/AuthService"
-import { getUserId } from "@/services/storageService"
-import { sign } from "crypto"
-
 const BASE_URL = 'https://back-end-techshare-java-1.onrender.com'
 
 const endpoints = {

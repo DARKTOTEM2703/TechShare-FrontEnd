@@ -121,7 +121,7 @@ export default function Page() {
     useEffect(() => {
         fetchBorrowings();
         fetchMaterials();
-    }, []);
+    }, [fetchBorrowings, fetchMaterials]);
 
     const filteredData = data.filter((borrow) =>
         borrow.usuarioName.toLowerCase().includes(searchTerm.toLowerCase())
