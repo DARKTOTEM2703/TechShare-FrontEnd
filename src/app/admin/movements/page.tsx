@@ -38,13 +38,9 @@ export default function movements() {
   };
 
   useEffect(() => {
-    const intervalId = setInterval(() => {
       if (token) {
         fetchMovements(token);
       }
-    }, 1000); // Intervalo de 5 segundos
-
-    return () => clearInterval(intervalId);
   }, [token]);
 
   return (
