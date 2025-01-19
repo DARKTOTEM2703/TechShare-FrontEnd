@@ -26,7 +26,6 @@ export default function movements() {
 
   useAuth()
   const token = getToken()
-
   const fetchMovements = (token: string) => {
     fetchData(endpoints.movements.getAll, token)
       .then((data) => setData(data.reverse()))
