@@ -1,5 +1,5 @@
 "use client"
-import NavBar from '@/components/HomePage/HomeNavBar'
+import NavBar from '@/components/NavBar/NavBar';
 import { useRouter } from 'next/navigation';
 
 export default function Home() {
@@ -9,6 +9,7 @@ export default function Home() {
   };
   return (
     <div>
+      {/*
       <button
         onClick={handleButtonClick}
         style={{
@@ -21,10 +22,13 @@ export default function Home() {
           fontSize: '16px'
         }}
       >
+        
         Go to Admin Page
       </button>
-      {/*TODO: Develop de NavBar */}
-      <NavBar></NavBar>
+      */}
+      <div className='bg-white rounded-md p-4 m-6'>
+        <h1>Esta es la home Page</h1>
+      </div>
     </div>
   );
 }
