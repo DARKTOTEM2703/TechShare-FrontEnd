@@ -102,7 +102,6 @@ export default function Materials({ token, subCategories, roles, materials, refr
         hideEditModal();
     };
 
-
     const handleMaterialDeletion = (e: any) => {
         e.preventDefault();
         if (clickedItemId !== null) {

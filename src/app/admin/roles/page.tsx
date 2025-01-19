@@ -9,6 +9,7 @@ import { useAuth } from '@/hooks/useAuth'
 import { getToken } from '@/services/storageService'
 import { useCrudOperations } from '@/hooks/useCrudOperations'
 import endpoints from '@/app/infraestructure/config/configAPI'
+import fetchData from '@/services/fetchData'
 
 export default function Roles() {
 
@@ -21,20 +22,19 @@ export default function Roles() {
   const token = getToken() || ''
 
   const fetchRoles = () => {
-    fetch(endpoints.roles.getAll, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `${token}`,
-      },
-    })
-      .then((response) => response.json())
+    fetchData(endpoints.roles.getAll, token)
       .then((data) => setData(data))
   }
 
   useEffect(() => {
     fetchRoles()
-  }, [fetchRoles])
+
+    const interval = setInterval(() => {
+      fetchRoles()
+    }
+      , 5000)
+    return () => clearInterval(interval)
+  }, [])
 
   const { setClickedItemId, handleCreate, handleUpdate, handleDelete, clickedItemId } = useCrudOperations(token, fetchRoles);
   const [data, setData] = useState<Role[]>([])

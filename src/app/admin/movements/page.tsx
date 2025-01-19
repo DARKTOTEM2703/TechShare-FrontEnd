@@ -25,10 +25,10 @@ export default function movements() {
   const [searchTerm, setSearchTerm] = useState('')
 
   useAuth()
-  const token = getToken()
+  const token = getToken() || ''
   const fetchMovements = (token: string) => {
     fetchData(endpoints.movements.getAll, token)
-      .then((data) => setData(data.reverse()))
+      .then((data) => setData(data))
   }
 
   // Función que actualiza el término de búsqueda
@@ -37,10 +37,13 @@ export default function movements() {
   };
 
   useEffect(() => {
-      if (token) {
         fetchMovements(token);
-      }
-  }, [token]);
+
+        const interval = setInterval(() => {
+            fetchMovements(token);
+        }, 5000);
+        return () => clearInterval(interval);
+  }, []);
 
   return (
     <div>

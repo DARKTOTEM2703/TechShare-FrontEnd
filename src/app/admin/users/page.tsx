@@ -54,7 +54,12 @@ export default function Users() {
 
   useEffect(() => {
     fetchUsers();
-  }, [fetchUsers]);
+    const interval = setInterval(() => {
+      fetchUsers();
+    }
+      , 5000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div>

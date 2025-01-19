@@ -7,12 +7,17 @@
                 Authorization: `${token}`,
             },
         });
+
+        const data = await response.json(); // Procesa y devuelve los datos en formato JSON.
   
         if (response.status === 204) {
             return []; // Devuelve un array vacío si no hay contenido.
         }
+
+         if (Array.isArray(data)) {
+            return data.reverse(); // Aplica reverse para mostrar los más antiguos primero.
+        }
   
-        const data = await response.json(); // Procesa y devuelve los datos en formato JSON.
         return data;
         } catch (error) {
         console.error("Error:", error);

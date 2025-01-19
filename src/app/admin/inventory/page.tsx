@@ -63,7 +63,12 @@ const Inventory = () => {
 
   useEffect(() => {
     fetchMaterials();
-  }, [fetchMaterials]);
+    const interval = setInterval(() => {
+      fetchMaterials();
+    }
+      , 5000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div>
