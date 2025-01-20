@@ -15,13 +15,13 @@ export default function RootLayout(
         children: React.ReactNode;
     }>) {
     return (
-        <html>
-            <body className="m-8">
+        <div>
+            <div className="m-8">
                 <NavBar />
                 <div className="mt-8 rounded-lg shadow-black/20 shadow-lg">
                     {children}
                 </div>
-            </body>
-        </html>
+            </div>
+        </div>
     );
 }

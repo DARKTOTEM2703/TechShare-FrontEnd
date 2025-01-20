@@ -1,35 +1,27 @@
-"use client"
+"use client";
 import NavBar from '@/components/NavBar/NavBar';
 import { useRouter } from 'next/navigation';
+import SearchBar from '@/components/AdminCrud/SearchBar';
 
 export default function Home() {
-    const router = useRouter();
-    const handleButtonClick = () => {
-        router.push('/admin/roles');
-    };
-    return (
-        <div>
-            {/*
-      <button
-        onClick={handleButtonClick}
-        style={{
-          padding: '10px 20px',
-          backgroundColor: '#0070f3',
-          color: 'white',
-          border: 'none',
-          borderRadius: '5px',
-          cursor: 'pointer',
-          fontSize: '16px'
-        }}
-      >
-        
-        Go to Admin Page
-      </button>
-      */}
-            <div className='bg-white rounded-md p-4'>
-                <h1>Esta es la home Page</h1>
-            </div>
+  const router = useRouter();
+  const handleButtonClick = () => {
+    router.push('/admin/roles');
+  };
+  return (
+    <div className="min-h-screen rounded-lg bg-gray-100 flex flex-col items-center">
+      <div className="w-full max-w-7xl">
+        {/* Contenedor superior */}
+        <div className="px-6 py-4 bg-primary rounded-t-lg flex justify-center">
+          <div className="w-full max-w-4xl">
+            <SearchBar onSearchChange={() => console.log('')} />
+          </div>
         </div>
-    );
+        {/* Título */}
+        <h1 className="text-primary text-lg sm:text-xl md:text-2xl font-semibold text-center py-6">
+          ¡Consigue los materiales que necesitas aquí!
+        </h1>
+      </div>
+    </div>
+  );
 }
-
