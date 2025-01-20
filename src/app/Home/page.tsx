@@ -10,7 +10,7 @@ export default function Home() {
   };
   return (
     <div className="min-h-screen rounded-lg bg-gray-100 flex flex-col items-center">
-      <div className="w-full max-w-7xl">
+      <div className="w-full ">
         {/* Contenedor superior */}
         <div className="px-6 py-4 bg-primary rounded-t-lg flex justify-center">
           <div className="w-full max-w-4xl">
