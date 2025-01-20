@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import SideNav from "@/components/SideNav/SideNav";
+import 'react-image-crop/dist/ReactCrop.css'
 
 export const metadata: Metadata = {
   title: "Admin Page",

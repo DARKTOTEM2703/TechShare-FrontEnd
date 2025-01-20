@@ -6,6 +6,7 @@ import BorderTextField from '@/components/Inputs/BorderTextField';
 import { useCrudOperations } from '@/hooks/useCrudOperations';
 import endpoints from '@/app/infraestructure/config/configAPI';
 import DropzoneWithPreview from '@/components/DropZone';
+import ReactCrop, { centerCrop, makeAspectCrop } from 'react-image-crop';
 
 export default function Categories({ token, categories, refreshCategories }: { token: any, categories: any, refreshCategories: any }) {
     const { setClickedItemId, handleCreate, handleUpdate, handleDelete, clickedItemId } = useCrudOperations(token, refreshCategories);
@@ -20,6 +21,7 @@ export default function Categories({ token, categories, refreshCategories }: { t
     const [isEditModalVisible, setEditModalVisible] = useState(false);
     const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState<any>(null);
+    const [isImageCropping, setIsImageCropping] = useState(false);
 
     // Mostrar/Cerrar modal de creación
     const showCreateModal = () => setCreateModalVisible(true);
@@ -90,6 +92,53 @@ export default function Categories({ token, categories, refreshCategories }: { t
 
     const handleSearchChange = (value: string) => setSearchTerm(value);
 
+    const [imageUrl, setImageUrl] = useState<string | undefined>(undefined);
+    const [crop, setCrop] = useState<any>();
+    const [error, setError] = useState<any>()
+
+    const ASPECT_RATIO = 1
+    const MIN_WIDTH = 100
+    const MIN_DIMESION = 100 
+
+        const onSelectFile = (file: any) => {
+            setIsImageCropping(true)
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.addEventListener('load', () => {
+                const imageUrl = reader.result?.toString() || ""
+                const imageElement = new Image()
+                imageElement.src = imageUrl
+                imageElement.addEventListener('load', (e) => {
+                    //const {naturalWidht, naturalHeight}
+                    //if(naturalWidht < MIN_DIMESION || naturalHeight < MIN_DIMESION){
+                      //  setError('Image is too small')
+                        //setImageUrl("")
+                        //return
+                    //}
+            })
+            setImageUrl(imageUrl)
+        })
+        reader.readAsDataURL(file);
+
+    }
+
+    const onImageLoad = (e:any) => {
+        const {width, height} = e.currentTarget
+        const cropWidhtInPercent = (MIN_DIMESION / width) * 100
+            
+        const crop = makeAspectCrop({
+            unit: '%',
+            width: cropWidhtInPercent,
+        },
+    ASPECT_RATIO,
+    width,
+    height
+    )
+    const centeredCrop = centerCrop(crop,width, height)
+        setCrop(centeredCrop)
+    }
+
     return (
         <div>
             <CrudHeader title="Categories" dropdownOptions={[]} buttonLabel="Add Category" buttonFunction={showCreateModal} onSearchChange={handleSearchChange} />
@@ -99,19 +148,37 @@ export default function Categories({ token, categories, refreshCategories }: { t
                 <div className="modal-overlay">
                     <div className="modal-content">
                         <ModalBase onClose={hideCreateModal} header="Create New Category" onSubmit={handleCreateCategory}>
-                            <BorderTextField
-                                name="name"
-                                placeholder="Category Name"
-                                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                value={formData.name}
-                            />
-                            <DropzoneWithPreview
-                                onFileChange={(file) => setFormData({ ...formData, image: file })}
-                            />
+                            {isImageCropping ? (
+                            <ReactCrop
+                                crop={crop}
+                                onChange={(pixelCrop,percentCrop) => {setCrop(percentCrop)}}
+                                keepSelection
+                                aspect={ASPECT_RATIO}
+                                minWidth={MIN_WIDTH}
+                                >
+                                <img src={imageUrl} alt='Upload' style={{maxHeight:"70vh"}} onLoad={onImageLoad}/>
+                            </ReactCrop>
+                            ) : (
+                                <>
+                                    <BorderTextField
+                                        name="name"
+                                        placeholder="Category Name"
+                                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                                        value={formData.name}
+                                    />
+                                    <DropzoneWithPreview
+                                        onFileChange={(file) => onSelectFile(file)} 
+                                    />
+                                </>
+                            )}
+                            <button>
+                                Aplicar
+                            </button>
                         </ModalBase>
                     </div>
                 </div>
             )}
+
 
             {isEditModalVisible && (
                 <div className="modal-overlay">

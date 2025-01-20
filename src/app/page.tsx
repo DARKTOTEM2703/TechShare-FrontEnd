@@ -1,5 +1,6 @@
 "use client"
 import NavBar from '@/components/NavBar/NavBar';
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 export default function Home() {
@@ -7,6 +8,10 @@ export default function Home() {
   const handleButtonClick = () => {
     router.push('/admin/roles');
   };
+  useEffect(() => {
+    router.push('/home'); 
+  }, [router]);
+
   return (
     <div>
       {/*
@@ -26,9 +31,6 @@ export default function Home() {
         Go to Admin Page
       </button>
       */}
-      <div className='bg-white rounded-md p-4 m-6'>
-        <h1>Esta es la home Page</h1>
-      </div>
     </div>
   );
 }
