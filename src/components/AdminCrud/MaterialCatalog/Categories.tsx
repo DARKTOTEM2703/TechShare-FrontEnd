@@ -11,7 +11,7 @@ import ReactCrop, {
     convertToPixelCrop,
     makeAspectCrop
 } from 'react-image-crop';
-import 'react-image-crop/dist/ReactCrop.css'; // Importa los estilos de ReactCrop si no lo has hecho
+import 'react-image-crop/dist/ReactCrop.css'; // Importa los estilos de ReactCrop
 import setCanvasPreview from '@/utils/setCanvasPreview.js';
 
 export default function Categories({
@@ -26,10 +26,11 @@ export default function Categories({
     const { setClickedItemId, handleCreate, handleUpdate, handleDelete, clickedItemId } =
         useCrudOperations(token, refreshCategories);
 
+    // Agregamos imagePreview (string) para mostrar en el Dropzone
     const [formData, setFormData] = useState<{
         name: string;
         image: File | null;
-        imagePreview: string | null;
+        imagePreview: string | null; // <- DataURL para previsualizar
     }>({
         name: '',
         image: null,
@@ -63,8 +64,9 @@ export default function Categories({
             setClickedItemId(id);
             setFormData({
                 name: selectedCategory.name,
-                image: null, // Se inicializa como null
-                imagePreview: selectedCategory.imageUrl || null // Precarga URL de la imagen existente
+                image: null,
+                // Si el backend te da una URL, úsala como preview inicial
+                imagePreview: selectedCategory.imageUrl || null
             });
             setEditModalVisible(true);
         }
@@ -80,7 +82,6 @@ export default function Categories({
         setClickedItemId(id);
         setDeleteModalVisible(true);
     };
-
     const hideDeleteModal = () => setDeleteModalVisible(false);
 
     // Crear nueva categoría
@@ -89,6 +90,7 @@ export default function Categories({
 
         const formDataToSend = new FormData();
         formDataToSend.append('name', formData.name);
+
         if (formData.image) {
             formDataToSend.append('image', formData.image);
         }
@@ -99,8 +101,10 @@ export default function Categories({
     // Actualizar categoría existente
     const handleEditCategory = (e: React.FormEvent) => {
         e.preventDefault();
+
         const formDataToSend = new FormData();
         formDataToSend.append('name', formData.name);
+
         if (formData.image) {
             formDataToSend.append('image', formData.image);
         }
@@ -121,7 +125,7 @@ export default function Categories({
     const handleSearchChange = (value: string) => setSearchTerm(value);
 
     // Lógica de recorte
-    const [imageUrl, setImageUrl] = useState<string | ''>('');
+    const [imageUrl, setImageUrl] = useState<string>(''); // URL base64 de la imagen sin recortar
     const [crop, setCrop] = useState<any>();
     const [error, setError] = useState<any>();
 
@@ -143,7 +147,7 @@ export default function Categories({
             const imageElement = new Image();
             imageElement.src = resultUrl;
             imageElement.addEventListener('load', () => {
-                // Puedes validar dimensiones mínimas:
+                // Valida dimensiones mínimas
                 if (
                     imageElement.naturalWidth < MIN_DIMENSION ||
                     imageElement.naturalHeight < MIN_DIMENSION
@@ -153,7 +157,7 @@ export default function Categories({
                     return;
                 }
             });
-            setImageUrl(resultUrl);
+            setImageUrl(resultUrl); // Base64 sin recortar
         });
         reader.readAsDataURL(file);
     };
@@ -223,7 +227,7 @@ export default function Categories({
                                         />
                                     </ReactCrop>
 
-                                    {/* Canvas donde dibujamos la imagen recortada */}
+                                    {/* Canvas oculto donde dibujamos la imagen recortada */}
                                     <canvas
                                         ref={previewImageRef}
                                         className="mt-4"
@@ -235,6 +239,53 @@ export default function Categories({
                                             height: 150
                                         }}
                                     />
+
+                                    <button
+                                        className="primary-button"
+                                        type="button"
+                                        onClick={() => {
+                                            if (!imageRef.current || !previewImageRef.current) return;
+
+                                            // 1) Dibujamos la porción recortada en el canvas
+                                            setCanvasPreview(
+                                                imageRef.current,
+                                                previewImageRef.current,
+                                                convertToPixelCrop(
+                                                    crop,
+                                                    imageRef.current.width,
+                                                    imageRef.current.height
+                                                )
+                                            );
+
+                                            // 2) Convertimos el contenido del canvas en Blob
+                                            previewImageRef.current.toBlob(
+                                                (blob) => {
+                                                    if (blob) {
+                                                        // 3) Creamos un File a partir de ese blob
+                                                        const file = new File([blob], 'cropped-image.png', {
+                                                            type: 'image/png'
+                                                        });
+
+                                                        // 4) Generamos un dataURL para previsualizar en el Dropzone
+                                                        const dataURL = previewImageRef.current?.toDataURL('image/png');
+
+                                                        // 5) Actualizamos el estado para envío (File) y para vista (dataURL)
+                                                        setFormData((prev) => ({
+                                                            ...prev,
+                                                            image: file,
+                                                            imagePreview: dataURL || null
+                                                        }));
+
+                                                        // 6) Ocultamos la vista de recorte
+                                                        setIsImageCropping(false);
+                                                    }
+                                                },
+                                                'image/png'
+                                            );
+                                        }}
+                                    >
+                                        Aplicar
+                                    </button>
                                 </>
                             ) : (
                                 <>
@@ -246,52 +297,19 @@ export default function Categories({
                                         }
                                         value={formData.name}
                                     />
-                                    <DropzoneWithPreview onFileChange={(file) => onSelectFile(file)} />
+
+                                    {/* 
+                                      Aquí en initialPreview:
+                                      - Si ya recortaste, muestra formData.imagePreview
+                                      - Si aún no, muestra imageUrl (la imagen subida sin recortar)
+                                    */}
+                                    <DropzoneWithPreview
+                                        onFileChange={(file) => onSelectFile(file)}
+                                        initialPreview={formData.imagePreview || imageUrl}
+                                    />
                                 </>
                             )}
                         </ModalBase>
-                        {/* Botón para “aplicar” el recorte y convertir a File */}
-                        <button
-                            className="primary-button"
-                            type="button"
-                            onClick={() => {
-                                if (!imageRef.current || !previewImageRef.current) return;
-
-                                // 1) Dibujamos la porción recortada en el canvas
-                                setCanvasPreview(
-                                    imageRef.current, // HTMLImageElement
-                                    previewImageRef.current, // HTMLCanvasElement
-                                    convertToPixelCrop(
-                                        crop,
-                                        imageRef.current?.width ?? 0,
-                                        imageRef.current?.height ?? 0
-                                    )
-                                );
-
-                                // 2) Convertimos el contenido del canvas en Blob
-                                previewImageRef.current.toBlob(
-                                    (blob) => {
-                                        if (blob) {
-                                            // 3) Creamos un File a partir de ese blob
-                                            const file = new File([blob], 'cropped-image.png', {
-                                                type: 'image/png'
-                                            });
-                                            // 4) Lo guardamos en nuestro formData (para enviar luego)
-                                            setFormData((prev) => ({
-                                                ...prev,
-                                                image: file
-                                            }));
-
-                                            // Si deseas, podrías ocultar el área de recorte:
-                                            setIsImageCropping(false);
-                                        }
-                                    },
-                                    'image/png'
-                                );
-                            }}
-                        >
-                            Aplicar
-                        </button>
                     </div>
                 </div>
             )}
@@ -315,8 +333,12 @@ export default function Categories({
                             />
                             <DropzoneWithPreview
                                 onFileChange={(file) => setFormData({ ...formData, image: file })}
-                                // Precarga la imagen existente
-                                initialPreview={selectedCategory?.imagePath}
+                                // Usa la imagen del backend o la de formData si se ha recortado
+                                initialPreview={
+                                    formData.imagePreview ||
+                                    selectedCategory?.imagePath ||
+                                    ''
+                                }
                             />
                         </ModalBase>
                     </div>
