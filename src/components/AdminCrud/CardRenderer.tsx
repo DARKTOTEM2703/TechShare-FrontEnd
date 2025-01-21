@@ -15,11 +15,11 @@ const CardRenderer: React.FC<CardRendererProps> = ({ currentRecords, onDelete, o
 
                 return (
                     <div key={`card-${idValue}-${index}`} className="bg-white rounded-lg shadow-lg w-full p-4 flex items-start space-x-4 relative">
-                        {item.imageUrl ? (
+                        {item.imagePath ? (
                             <img
-                                src={item.imageUrl}
+                                src={item.imagePath}
                                 alt={item.name}
-                                className="w-20 h-20 object-cover rounded-md border border-gray-300"
+                                className="w-30 h-20 object-cover rounded-md border border-gray-300"
                                 onError={(e) => {
                                     e.currentTarget.src = "/fallback-image.png"; // Imagen de respaldo en caso de error
                                 }}
