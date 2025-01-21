@@ -10,7 +10,7 @@ import DropzoneWithPreview from '@/components/DropZone';
 import { useImageCrop } from '@/hooks/useReactCrop';
 import ReactCrop from 'react-image-crop';
 
-export default function SubCategories({ token, categories, subCategories, refreshSubCategories }: { token: any, categories: any, subCategories: any, refreshSubCategories: any }) {
+export default function SubCategories({ token, categories, subCategories, refreshSubCategories,ASPECT_RATIO, MIN_DIMENSION, MIN_WIDTH }: { token: any, categories: any, subCategories: any, refreshSubCategories: any, ASPECT_RATIO: number, MIN_DIMENSION: number, MIN_WIDTH: number }) {
 
     const [searchTerm, setSearchTerm] = useState('');
     const [isCreateModalVisible, setCreateModalVisible] = useState(false);
@@ -22,9 +22,6 @@ export default function SubCategories({ token, categories, subCategories, refres
 
     const { setClickedItemId, handleCreate, handleUpdate, handleDelete, clickedItemId } = useCrudOperations(token, refreshSubCategories);
 
-    const ASPECT_RATIO = 1;
-    const MIN_DIMENSION = 100;
-    const MIN_WIDTH = 100;
 
     const {
         imageUrl,

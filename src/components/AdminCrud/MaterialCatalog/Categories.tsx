@@ -14,11 +14,17 @@ import setCanvasPreview from '@/utils/setCanvasPreview.js';
 export default function Categories({
     token,
     categories,
-    refreshCategories
+    refreshCategories,
+    ASPECT_RATIO,
+    MIN_DIMENSION,
+    MIN_WIDTH
 }: {
     token: any;
     categories: any;
     refreshCategories: any;
+    ASPECT_RATIO: number;
+    MIN_DIMENSION: number;
+    MIN_WIDTH: number;
 }) {
     const { setClickedItemId, handleCreate, handleUpdate, handleDelete, clickedItemId } =
         useCrudOperations(token, refreshCategories);
@@ -32,10 +38,6 @@ export default function Categories({
         image: null,
         imagePreview: null
     });
-
-    const ASPECT_RATIO = 1;
-    const MIN_DIMENSION = 100;
-    const MIN_WIDTH = 100;
 
     const {
         imageUrl,

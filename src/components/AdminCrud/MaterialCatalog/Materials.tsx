@@ -11,7 +11,7 @@ import DropzoneWithPreview from '@/components/DropZone';
 import { useImageCrop } from '@/hooks/useReactCrop';
 import ReactCrop from 'react-image-crop';
 
-export default function Materials({ token, subCategories, roles, materials, refreshMaterials }: { token: any, subCategories: any, roles: any, materials: any, refreshMaterials: any }) {
+export default function Materials({ token, subCategories, roles, materials, refreshMaterials, ASPECT_RATIO, MIN_DIMENSION, MIN_WIDTH }: { token: any, subCategories: any, roles: any, materials: any, refreshMaterials: any, ASPECT_RATIO : number, MIN_DIMENSION : number, MIN_WIDTH : number }) {
 
     const [searchTerm, setSearchTerm] = useState('');
     const [isCreateModalVisible, setCreateModalVisible] = useState(false);
@@ -21,10 +21,6 @@ export default function Materials({ token, subCategories, roles, materials, refr
     const [selectedMaterial, setSelectedMaterial] = useState<any>(null);
 
     const { setClickedItemId, handleCreate, handleUpdate, handleDelete, clickedItemId } = useCrudOperations(token, refreshMaterials);
-
-    const ASPECT_RATIO = 1;
-    const MIN_DIMENSION = 100;
-    const MIN_WIDTH = 100;
 
     const {
         imageUrl,

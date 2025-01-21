@@ -85,6 +85,9 @@ export default function Catalog() {
     fetchAllData();
   }, [token]);
 
+  const ASPECT_RATIO = 3/2
+  const MIN_DIMENSION = 200
+  const  MIN_WIDTH = 200
 
   return (
     <div>
@@ -94,20 +97,32 @@ export default function Catalog() {
           subCategories={subCategories}
           roles={roles} 
           materials={materials}
-          refreshMaterials={fetchMaterials} />
+          refreshMaterials={fetchMaterials}
+          ASPECT_RATIO={ASPECT_RATIO}
+          MIN_DIMENSION={MIN_DIMENSION}
+          MIN_WIDTH={MIN_WIDTH}
+          />
       </div>
       <div className='mb-6'>
         <SubCategories
           token={token}
           categories={categories}
           subCategories={subCategories}
-          refreshSubCategories={fetchSubCategories} />
+          refreshSubCategories={fetchSubCategories}
+          ASPECT_RATIO={ASPECT_RATIO}
+          MIN_DIMENSION={MIN_DIMENSION}
+          MIN_WIDTH={MIN_WIDTH} 
+          />
       </div>
       <div>
         <Categories
           token={token}
           categories={categories}
-          refreshCategories={fetchCategories} />
+          refreshCategories={fetchCategories}
+          ASPECT_RATIO={ASPECT_RATIO} 
+          MIN_DIMENSION={MIN_DIMENSION}
+          MIN_WIDTH={MIN_WIDTH}
+          />
       </div>
     </div>
   );
