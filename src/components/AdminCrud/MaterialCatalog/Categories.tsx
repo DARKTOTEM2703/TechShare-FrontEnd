@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import CrudHeader from '@/components/AdminCrud/CrudHeader';
 import CrudBody from '@/components/AdminCrud/CrudBodyWithImages';
 import ModalBase from '@/components/Modal/ModalBase';
@@ -313,7 +313,7 @@ export default function Categories({
                             header="Confirm Delete Category"
                             onSubmit={handleDeleteCategory}
                         >
-                            <p>Are you sure you want to delete this category?</p>
+                            <p>Estás seguro de que quieres borrar esta categoría?</p>
                         </ModalBase>
                     </div>
                 </div>

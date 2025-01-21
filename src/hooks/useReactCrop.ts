@@ -68,7 +68,8 @@ export const useImageCrop = ({ASPECT_RATIO, MIN_DIMENSION} : ImageCrop) => {
 
         previewImageRef.current.toBlob((blob) => {
             if (blob) {
-                const file = new File([blob], 'cropped-image.png', { type: 'image/png' });
+                const randomName = `cropped-image-${Math.random().toString(36).substring(2, 15)+Math.random().toString(36).substring(3,16)}.png`;
+                const file = new File([blob], randomName, { type: 'image/png' });
                 const dataURL = previewImageRef.current!.toDataURL('image/png');
                 onCropComplete(file, dataURL);
                 setIsImageCropping(false);
