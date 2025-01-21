@@ -23,16 +23,15 @@ export default function Categories({
     const { setClickedItemId, handleCreate, handleUpdate, handleDelete, clickedItemId } =
         useCrudOperations(token, refreshCategories);
 
-    // Agregamos imagePreview (string) para mostrar en el Dropzone
     const [formData, setFormData] = useState<{
         name: string;
         image: File | null;
-        imagePreview: string | null; // <- DataURL para previsualizar
+        imagePreview: string | null;
     }>({
         name: '',
         image: null,
         imagePreview: null
-    })
+    });
 
     const ASPECT_RATIO = 1;
     const MIN_DIMENSION = 100;
@@ -50,7 +49,7 @@ export default function Categories({
         onSelectFile,
         onImageLoad,
         setIsImageCropping
-    } = useImageCrop({ASPECT_RATIO, MIN_DIMENSION, MIN_WIDTH});
+    } = useImageCrop({ ASPECT_RATIO, MIN_DIMENSION, MIN_WIDTH });
 
     const [searchTerm, setSearchTerm] = useState('');
     const [isCreateModalVisible, setCreateModalVisible] = useState(false);
@@ -58,7 +57,6 @@ export default function Categories({
     const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState<any>(null);
 
-    // Mostrar/Cerrar modal de creación
     const showCreateModal = () => setCreateModalVisible(true);
     const hideCreateModal = () => {
         setCreateModalVisible(false);
@@ -68,7 +66,6 @@ export default function Categories({
         setCrop(undefined);
     };
 
-    // Mostrar/Cerrar modal de edición
     const showEditModal = (id: number) => {
         const selectedCategory = categories.find(
             (category: any) => category.categoryId === id
@@ -79,7 +76,6 @@ export default function Categories({
             setFormData({
                 name: selectedCategory.name,
                 image: null,
-                // Si el backend te da una URL, úsala como preview inicial
                 imagePreview: selectedCategory.imageUrl || null
             });
             setEditModalVisible(true);
@@ -89,16 +85,17 @@ export default function Categories({
     const hideEditModal = () => {
         setEditModalVisible(false);
         setFormData({ name: '', image: null, imagePreview: null });
+        setIsImageCropping(false);
+        setImageUrl('');
+        setCrop(undefined);
     };
 
-    // Mostrar/Cerrar modal de eliminación
     const showDeleteModal = (id: number) => {
         setClickedItemId(id);
         setDeleteModalVisible(true);
     };
     const hideDeleteModal = () => setDeleteModalVisible(false);
 
-    // Crear nueva categoría
     const handleCreateCategory = (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -112,7 +109,6 @@ export default function Categories({
         hideCreateModal();
     };
 
-    // Actualizar categoría existente
     const handleEditCategory = (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -128,7 +124,6 @@ export default function Categories({
         hideEditModal();
     };
 
-    // Eliminar categoría
     const handleDeleteCategory = () => {
         if (clickedItemId !== null) {
             handleDelete(endpoints.categories.delete(clickedItemId));
@@ -136,7 +131,7 @@ export default function Categories({
         hideDeleteModal();
     };
 
-    const handleSearchChange = (value: string) => setSearchTerm(value);    
+    const handleSearchChange = (value: string) => setSearchTerm(value);
 
     return (
         <div>
@@ -154,7 +149,6 @@ export default function Categories({
                 onEdit={(id) => showEditModal(id)}
             />
 
-            {/* Modal de Creación */}
             {isCreateModalVisible && (
                 <div className="modal-overlay">
                     <div className="modal-content">
@@ -174,7 +168,6 @@ export default function Categories({
                                         aspect={ASPECT_RATIO}
                                         minWidth={MIN_WIDTH}
                                     >
-                                        {/* Imagen a recortar */}
                                         <img
                                             ref={imageRef}
                                             src={imageUrl}
@@ -184,7 +177,6 @@ export default function Categories({
                                         />
                                     </ReactCrop>
 
-                                    {/* Canvas oculto donde dibujamos la imagen recortada */}
                                     <canvas
                                         ref={previewImageRef}
                                         className="mt-4"
@@ -201,7 +193,7 @@ export default function Categories({
                                         className="primary-button"
                                         type="button"
                                         onClick={() => {
-                                            applyCrop((croppedFile:any, previewUrl:any) => {
+                                            applyCrop((croppedFile: any, previewUrl: any) => {
                                                 setFormData((prev) => ({
                                                     ...prev,
                                                     image: croppedFile,
@@ -223,12 +215,6 @@ export default function Categories({
                                         }
                                         value={formData.name}
                                     />
-
-                                    {/* 
-                                      Aquí en initialPreview:
-                                      - Si ya recortaste, muestra formData.imagePreview
-                                      - Si aún no, muestra imageUrl (la imagen subida sin recortar)
-                                    */}
                                     <DropzoneWithPreview
                                         onFileChange={(file) => onSelectFile(file)}
                                         initialPreview={formData.imagePreview || imageUrl}
@@ -240,7 +226,6 @@ export default function Categories({
                 </div>
             )}
 
-            {/* Modal de Edición */}
             {isEditModalVisible && (
                 <div className="modal-overlay">
                     <div className="modal-content">
@@ -249,29 +234,77 @@ export default function Categories({
                             header="Edit Category"
                             onSubmit={handleEditCategory}
                         >
-                            <BorderTextField
-                                name="name"
-                                placeholder="Category Name"
-                                onChange={(e) =>
-                                    setFormData({ ...formData, name: e.target.value })
-                                }
-                                value={formData.name}
-                            />
-                            <DropzoneWithPreview
-                                onFileChange={(file) => setFormData({ ...formData, image: file })}
-                                // Usa la imagen del backend o la de formData si se ha recortado
-                                initialPreview={
-                                    formData.imagePreview ||
-                                    selectedCategory?.imagePath ||
-                                    ''
-                                }
-                            />
+                            {isImageCropping ? (
+                                <>
+                                    <ReactCrop
+                                        crop={crop}
+                                        onChange={(_, percentCrop) => {
+                                            setCrop(percentCrop);
+                                        }}
+                                        keepSelection
+                                        aspect={ASPECT_RATIO}
+                                        minWidth={MIN_WIDTH}
+                                    >
+                                        <img
+                                            ref={imageRef}
+                                            src={imageUrl}
+                                            alt="Upload"
+                                            style={{ maxHeight: '70vh' }}
+                                            onLoad={onImageLoad}
+                                        />
+                                    </ReactCrop>
+
+                                    <canvas
+                                        ref={previewImageRef}
+                                        className="mt-4"
+                                        style={{
+                                            display: 'none',
+                                            border: '1px solid black',
+                                            objectFit: 'contain',
+                                            width: 150,
+                                            height: 150
+                                        }}
+                                    />
+
+                                    <button
+                                        className="primary-button"
+                                        type="button"
+                                        onClick={() => {
+                                            applyCrop((croppedFile: any, previewUrl: any) => {
+                                                setFormData((prev) => ({
+                                                    ...prev,
+                                                    image: croppedFile,
+                                                    imagePreview: previewUrl
+                                                }));
+                                            });
+                                        }}
+                                    >
+                                        Aplicar
+                                    </button>
+                                </>
+                            ) : (
+                                <>
+                                    <BorderTextField
+                                        name="name"
+                                        placeholder="Category Name"
+                                        onChange={(e) =>
+                                            setFormData({ ...formData, name: e.target.value })
+                                        }
+                                        value={formData.name}
+                                    />
+                                    <DropzoneWithPreview
+                                        onFileChange={(file) => onSelectFile(file)}
+                                            initialPreview={formData.imagePreview ||
+                                                selectedCategory?.imagePath ||
+                                                ''}
+                                    />
+                                </>
+                            )}
                         </ModalBase>
                     </div>
                 </div>
             )}
 
-            {/* Modal de Eliminación */}
             {isDeleteModalVisible && (
                 <div className="modal-overlay">
                     <div className="modal-content">
