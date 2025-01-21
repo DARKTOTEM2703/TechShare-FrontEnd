@@ -22,8 +22,10 @@ export const useCrudOperations = (token: string, refreshData: () => void) => {
             body,
         }).then(response => {
             if (!response.ok) {
+                
                 return response.json().then(error => {
-                    throw new Error(`Error: ${response.status} ${response.statusText} - ${JSON.stringify(error.message)}`);
+                    alert("Error: " + JSON.stringify(error.message));
+                    throw new Error(`Error: ${response.status} ${response.statusText} - ${JSON.stringify(error.message)}`)
                 });
             }
             return response;
