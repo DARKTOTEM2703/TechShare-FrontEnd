@@ -14,12 +14,12 @@ const CardRenderer: React.FC<CardRendererProps> = ({ currentRecords, onDelete, o
                 const idValue = item[idKey];
 
                 return (
-                    <div key={`card-${idValue}-${index}`} className="bg-white rounded-lg shadow-lg w-full p-4 flex items-start space-x-4 relative">
+                    <div key={`card-${idValue}-${index}`} className="bg-white rounded-lg shadow-sm w-full p-4 flex items-start space-x-4 relative shadow-black">
                         {item.imagePath ? (
                             <img
                                 src={item.imagePath}
                                 alt={item.name}
-                                className="w-30 h-20 object-cover rounded-md border border-gray-300"
+                                className="w-30 h-20 object-cover rounded-md border border-gray-300 outline-[3px] outline -outline-offset-1 outline-tertiary shadow-md shadow-black"
                                 onError={(e) => {
                                     e.currentTarget.src = "/fallback-image.png"; // Imagen de respaldo en caso de error
                                 }}

@@ -36,7 +36,7 @@ export const useImageCrop = ({ASPECT_RATIO, MIN_DIMENSION} : ImageCrop) => {
         setImageUrl('');
         return;
     }
-    const resizedImage = resizeImage(imageElement, 1024, 1024); // Ejemplo de 1024px máx.
+    const resizedImage = resizeImage(imageElement, 720, 720); // Ejemplo de 1024px máx.
     setImageUrl(resizedImage); // Base64 optimizada
 };
 
@@ -78,7 +78,7 @@ export const useImageCrop = ({ASPECT_RATIO, MIN_DIMENSION} : ImageCrop) => {
     canvas.width = width;
     canvas.height = height;
     ctx?.drawImage(image, 0, 0, width, height);
-    return canvas.toDataURL('image/jpeg', 0.8); // Ajusta el 0.8 para cambiar la calidad
+    return canvas.toDataURL('image/jpeg', 0.4); // Ajusta el 0.8 para cambiar la calidad
 };
 
 
@@ -96,13 +96,13 @@ export const useImageCrop = ({ASPECT_RATIO, MIN_DIMENSION} : ImageCrop) => {
         if (blob) {
             const randomName = `cropped-image-${Math.random().toString(36).substring(2, 15)+Math.random().toString(36).substring(3,16)}.jpg`;
             const file = new File([blob], randomName, { type: 'image/jpg' });
-            const dataURL = previewImageRef.current!.toDataURL('image/jpg', 0.7); // Calidad 70%
+            const dataURL = previewImageRef.current!.toDataURL('image/jpg', 0.4); // Calidad 70%
             onCropComplete(file, dataURL);
             setIsImageCropping(false);
         }
     },
     'image/jpg',
-    0.7 // Calidad de la imagen comprimida
+    0.4 // Calidad de la imagen comprimida
 );
     };
 

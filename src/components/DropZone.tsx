@@ -29,7 +29,7 @@ const DropzoneWithPreview: React.FC<DropzoneWithPreviewProps> = ({ onFileChange,
             {preview ? (
                 <img src={preview} alt="Preview" style={{ width: '100%', maxHeight: '200px', objectFit: 'contain' }} />
             ) : (
-                <p>Drag & drop an image here, or click to select one</p>
+                <p>Arrastra y suelta una imagen o da click para seleccionar una</p>
             )}
         </div>
     );
