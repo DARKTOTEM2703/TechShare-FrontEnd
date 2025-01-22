@@ -12,6 +12,13 @@ export default function Footer() {
                     href="https://www.aaaimx.org/">@aaaimx
                     </a>
                 </span>
+               {" "} · {" "}
+                <span>
+                    <a
+                    className="border-b border-white" 
+                    href="https://www.aaaimx.org/privacy-policy">Software Division
+                    </a>
+                </span>
             </p>
                 <SocialIcons />   
         </footer>
