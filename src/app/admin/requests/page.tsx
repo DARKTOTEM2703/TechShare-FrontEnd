@@ -10,6 +10,7 @@ import { useCrudOperations } from "@/hooks/useCrudOperations";
 import "@/styles/modal.css";
 import { Borrow } from "@/app/admin/borrowings/interfaces/Borrow";
 import { request } from "http";
+import { Material } from "@/app/admin/catalog/interfaces/Material";
 
 export default function Page() {
 
@@ -20,20 +21,6 @@ export default function Page() {
             stock: number;
             borrowable_stock: number;
         })[];
-    }
-
-    interface Material {
-        materialsId: number;
-        imagePath: string;
-        name: string;
-        description: string;
-        price: number;
-        stock: number;
-        borrowable_stock: number;
-        subCategoryId: number;
-        subCategoryName: string;
-        roleIds: number[];
-        roleNames: string[];
     }
 
     const token = getToken() || "";

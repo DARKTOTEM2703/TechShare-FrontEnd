@@ -8,6 +8,7 @@ import endpoints from '@/app/infraestructure/config/configAPI';
 import DropzoneWithPreview from '@/components/DropZone';
 import { useImageCrop } from '@/hooks/useReactCrop';
 import ReactCrop from 'react-image-crop';
+import { Category } from '../interfaces/Category';
 
 export default function Categories({
     token,
@@ -17,9 +18,9 @@ export default function Categories({
     MIN_DIMENSION,
     MIN_WIDTH
 }: {
-    token: any;
-    categories: any;
-    refreshCategories: any;
+    token: string;
+    categories: Category[];
+    refreshCategories: () => void;
     ASPECT_RATIO: number;
     MIN_DIMENSION: number;
     MIN_WIDTH: number;

@@ -10,13 +10,9 @@ import { getToken } from '@/services/storageService'
 import { useCrudOperations } from '@/hooks/useCrudOperations'
 import endpoints from '@/app/infraestructure/config/configAPI'
 import fetchData from '@/services/fetchData'
+import { Role } from '@/app/admin/roles/interfaces/Role'
 
 export default function Roles() {
-
-  type Role = {
-    roleId: number;
-    name: string;
-  };
 
   useAuth()
   const token = getToken() || ''
