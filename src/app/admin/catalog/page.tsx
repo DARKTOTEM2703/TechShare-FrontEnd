@@ -1,39 +1,22 @@
 "use client"
 import React, { useState, useEffect } from 'react';
-import Categories from '@/components/AdminCrud/MaterialCatalog/Categories';
-import SubCategories from '@/components/AdminCrud/MaterialCatalog/SubCategories';
-import Materials from '@/components/AdminCrud/MaterialCatalog/Materials';
+import Categories from '@/app/admin/catalog/components/Categories';
+import SubCategories from '@/app/admin/catalog/components/SubCategories';
+import Materials from '@/app/admin/catalog/components/Materials';
 import { useAuth } from '@/hooks/useAuth';
 import { getToken } from '@/services/storageService';
 import endpoints from '@/app/infraestructure/config/configAPI';
 import fetchData from '@/services/fetchData';
+import {Material } from '@/app/admin/catalog/interfaces/Material';
+import {Category } from '@/app/admin/catalog/interfaces/Category';
+import {SubCategory } from '@/app/admin/catalog/interfaces/SubCategory';
 
 export default function Catalog() {
 
-  type Material = {
-    image: File;
-    name: string;
-    description: string;
-    price: number;
-    subCategoryId: number;
-    roleIds: number[];
-  };
-  type SubCategory = {
-    subCategoryId: number;
-    name: string;
-    description?: string;
-    imageUrl?: string;
-    categoryId: number;
-  };
-  type Category = {
-    categoryId: number;
-    name: string;
-    imageUrl?: string;
-  };
   type Role = {
     roleId: number;
     name: string;
-  };
+  }
 
   const [roles, setRoles] = useState<Role[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);

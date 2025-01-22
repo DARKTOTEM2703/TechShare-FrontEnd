@@ -9,8 +9,6 @@ import DropzoneWithPreview from '@/components/DropZone';
 import { useImageCrop } from '@/hooks/useReactCrop';
 import ReactCrop from 'react-image-crop';
 
-import setCanvasPreview from '@/utils/setCanvasPreview.js';
-
 export default function Categories({
     token,
     categories,
