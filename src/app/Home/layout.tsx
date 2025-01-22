@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "@/styles/globals.css";
 import NavBar from "@/components/NavBar/NavBar";
 import { inter } from "@/services/fonts"
+import Footer from "./components/Footer";
 
 export const metadata: Metadata = {
     title: "TechShare",
@@ -18,10 +19,11 @@ export default function RootLayout(
         <div>
             <div className="m-8">
                 <NavBar />
-                <div className="mt-8 rounded-lg shadow-black/20 shadow-lg">
+                <main className="mt-8 rounded-lg shadow-black/20 shadow-lg">
                     {children}
-                </div>
+                </main>
             </div>
+            <Footer />
         </div>
     );
 }
