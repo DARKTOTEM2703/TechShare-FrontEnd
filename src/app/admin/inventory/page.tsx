@@ -8,25 +8,12 @@ import { getToken } from '@/services/storageService';
 import fetchData from '@/services/fetchData';
 import endpoints from '@/app/infraestructure/config/configAPI';
 import MaterialInfo from '@/components/AdminCrud/InfoModals/MaterialInfo';
+import { Material } from '@/app/admin/catalog/interfaces/Material';
 import '@/styles/modal.css'
 
 const Inventory = () => {
   useAuth();
   const token = getToken() || '';
-
-  type Material = {
-    materialsId: number;
-    imagePath: string;
-    name: string;
-    description: string;
-    price: number;
-    stock: number;
-    borrowable_stock: number;
-    subCategoryId: number;
-    subCategoryName: string;
-    roleIds: number[];
-    roleNames: string[];
-  };
 
   const [materials, setMaterials] = useState<Material[]>([]);
   const [selectedMaterial, setSelectedMaterial] = useState<{ id: number; name: string } | null>(null);

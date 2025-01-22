@@ -8,33 +8,13 @@ import endpoints from "@/app/infraestructure/config/configAPI";
 import { getToken } from "@/services/storageService";
 import { useCrudOperations } from "@/hooks/useCrudOperations";
 import "@/styles/modal.css";
+import { Borrow } from "@/app/admin/borrowings/interfaces/Borrow";
 import { request } from "http";
 
 export default function Page() {
-    interface Request {
-        borrowId: number;
-        date: string;
-        startDate: string | null;
-        endDate: string | null;
-        returnDate: string | null;
-        status: string;
-        amount: number;
-        usuarioId: number;
-        usuarioName: string;
-        adminId: number;
-        adminName: string | null;
-        details: {
-            detailsBorrowId: number;
-            quantity: number;
-            unitPrice: number;
-            totalPrice: number;
-            materialsId: number;
-            borrowId: number;
-        }[];
-    }
 
-    interface EnrichedRequest extends Omit<Request, "details"> {
-        details: (Request["details"][number] & {
+    interface EnrichedRequest extends Omit<Borrow, "details"> {
+        details: (Borrow["details"][number] & {
             materialName: string;
             materialImage: string | null;
             stock: number;
@@ -61,7 +41,7 @@ export default function Page() {
     const fetchRequests = () => {
         fetchData(endpoints.borrowings.getAll, token).then((data) => {
             const filteredData = data.filter(
-                (request: Request) => request.status === "PROCCES"
+                (request: Borrow) => request.status === "PROCCES"
             );
             setRequests(filteredData.reverse());
         });
@@ -73,7 +53,7 @@ export default function Page() {
         });
     };
 
-    const [requests, setRequests] = useState<Request[]>([]);
+    const [requests, setRequests] = useState<Borrow[]>([]);
     const [materials, setMaterials] = useState<Material[]>([]);
     const [selectedRequest, setSelectedRequest] = useState<EnrichedRequest | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);

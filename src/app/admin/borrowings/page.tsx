@@ -9,40 +9,11 @@ import { useCrudOperations } from "@/hooks/useCrudOperations";
 import BorrowingReturn from "@/components/AdminCrud/InfoModals/BorrowingReturn";
 import BorrowingInformation from "@/components/AdminCrud/InfoModals/BorrowingInformation";
 import "@/styles/modal.css";
+import { Material } from "@/app/admin/catalog/interfaces/Material";
+import { Borrow } from "@/app/admin/borrowings/interfaces/Borrow";
 
 export default function Page() {
     const token = getToken() || "";
-
-    interface Borrow {
-        borrowId: number;
-        date: string;
-        startDate: string | null;
-        endDate: string | null;
-        returnDate: string | null;
-        status: string;
-        amount: number;
-        usuarioId: number;
-        usuarioName: string;
-        adminId: number;
-        adminName: string | null;
-        details: {
-            detailsBorrowId: number;
-            quantity: number;
-            unitPrice: number;
-            totalPrice: number;
-            materialsId: number;
-            materialName: string; // Ahora garantizamos que siempre es string
-            materialImage: string | null; // No es opcional, tendrá null o un string
-        }[];
-    }
-
-    interface Material {
-        materialsId: number;
-        imagePath: string;
-        name: string;
-        stock: number;
-        borrowable_stock: number;
-    }
 
     const [data, setData] = useState<Borrow[]>([]);
     const [materials, setMaterials] = useState<Material[]>([]);

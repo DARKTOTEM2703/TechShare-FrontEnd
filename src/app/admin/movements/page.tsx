@@ -7,19 +7,9 @@ import { getToken } from '@/services/storageService'
 import { useEffect } from 'react';
 import endpoints from '@/app/infraestructure/config/configAPI'
 import fetchData from '@/services/fetchData'
+import { Movement } from '@/app/admin/movements/interfaces/Movement'
 
 export default function movements() {
-  type Movement = {
-    movementsId: number,
-    moveType: string,
-    quantity: number,
-    date: string,
-    comment: string,
-    usuarioId: number,
-    usuarioName: string,
-    materialsId: number,
-    materialsName: string
-  }
 
   const [data, setData] = useState<Movement[]>([])
   const [searchTerm, setSearchTerm] = useState('')
