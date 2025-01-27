@@ -11,18 +11,15 @@ import { getToken } from "@/services/storageService";
 
 export default function Home() {
   const router = useRouter();
-  const handleButtonClick = () => {
-    router.push('/admin/roles');
-  };
 
   const token = getToken() || '';
 
   const [materials, setMaterials] = useState([]);
   useEffect(() => {
-    fetchData(endpoints.materials.getAll,token)
-    .then((data) => {
-      setMaterials(data);
-    });
+    fetchData(endpoints.materials.getAll, token)
+      .then((data) => {
+        setMaterials(data);
+      });
   }, []);
 
   return (
@@ -39,18 +36,18 @@ export default function Home() {
           ¡Consigue los materiales que necesitas aquí!
         </h1>
         {/* Contenedor de productos */}
-       <div
-  className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 py-4 px-12 mx-auto"
->
-  {materials.map((material: any) => (
-    <div
-      key={material.materialsId}
-      className=" mx-auto" // Dimensiones fijas para las tarjetas
-    >
-      <ProductCard material={material} />
-    </div>
-  ))}
-</div>
+        <div
+          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 py-4 px-12 mx-auto"
+        >
+          {materials.map((material: any) => (
+            <div
+              key={material.materialsId}
+              className=" mx-auto" // Dimensiones fijas para las tarjetas
+            >
+              <ProductCard material={material} />
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

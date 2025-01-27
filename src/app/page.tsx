@@ -9,28 +9,11 @@ export default function Home() {
     router.push('/admin/roles');
   };
   useEffect(() => {
-    router.push('/home'); 
+    router.push('/home');
   }, [router]);
 
   return (
     <div>
-      {/*
-      <button
-        onClick={handleButtonClick}
-        style={{
-          padding: '10px 20px',
-          backgroundColor: '#0070f3',
-          color: 'white',
-          border: 'none',
-          borderRadius: '5px',
-          cursor: 'pointer',
-          fontSize: '16px'
-        }}
-      >
-        
-        Go to Admin Page
-      </button>
-      */}
     </div>
   );
 }
