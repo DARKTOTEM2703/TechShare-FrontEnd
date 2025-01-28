@@ -7,9 +7,9 @@ import { useAuth } from '@/hooks/useAuth';
 import { getToken } from '@/services/storageService';
 import endpoints from '@/app/infraestructure/config/configAPI';
 import fetchData from '@/services/fetchData';
-import {Material } from '@/app/admin/catalog/interfaces/Material';
-import {Category } from '@/app/admin/catalog/interfaces/Category';
-import {SubCategory } from '@/app/admin/catalog/interfaces/SubCategory';
+import { Material } from '@/app/admin/catalog/interfaces/Material';
+import { Category } from '@/app/admin/catalog/interfaces/Category';
+import { SubCategory } from '@/app/admin/catalog/interfaces/SubCategory';
 
 export default function Catalog() {
 
@@ -24,7 +24,7 @@ export default function Catalog() {
   const [materials, setMaterials] = useState<Material[]>([]);
 
   useAuth();
-  const token = getToken();
+  const token = getToken() || '';
 
   const fetchCategories = () => {
     fetchData(endpoints.categories.getAll, token)
@@ -68,9 +68,9 @@ export default function Catalog() {
     fetchAllData();
   }, [token]);
 
-  const ASPECT_RATIO = 3/2
+  const ASPECT_RATIO = 3 / 2
   const MIN_DIMENSION = 200
-  const  MIN_WIDTH = 200
+  const MIN_WIDTH = 200
 
   return (
     <div>
@@ -78,13 +78,13 @@ export default function Catalog() {
         <Materials
           token={token}
           subCategories={subCategories}
-          roles={roles} 
+          roles={roles}
           materials={materials}
           refreshMaterials={fetchMaterials}
           ASPECT_RATIO={ASPECT_RATIO}
           MIN_DIMENSION={MIN_DIMENSION}
           MIN_WIDTH={MIN_WIDTH}
-          />
+        />
       </div>
       <div className='mb-6'>
         <SubCategories
@@ -94,18 +94,18 @@ export default function Catalog() {
           refreshSubCategories={fetchSubCategories}
           ASPECT_RATIO={ASPECT_RATIO}
           MIN_DIMENSION={MIN_DIMENSION}
-          MIN_WIDTH={MIN_WIDTH} 
-          />
+          MIN_WIDTH={MIN_WIDTH}
+        />
       </div>
       <div>
         <Categories
           token={token}
           categories={categories}
           refreshCategories={fetchCategories}
-          ASPECT_RATIO={ASPECT_RATIO} 
+          ASPECT_RATIO={ASPECT_RATIO}
           MIN_DIMENSION={MIN_DIMENSION}
           MIN_WIDTH={MIN_WIDTH}
-          />
+        />
       </div>
     </div>
   );

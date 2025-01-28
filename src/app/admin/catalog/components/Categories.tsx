@@ -295,9 +295,9 @@ export default function Categories({
                                     />
                                     <DropzoneWithPreview
                                         onFileChange={(file) => onSelectFile(file)}
-                                            initialPreview={formData.imagePreview ||
-                                                selectedCategory?.imagePath ||
-                                                ''}
+                                        initialPreview={formData.imagePreview ||
+                                            selectedCategory?.imagePath ||
+                                            ''}
                                     />
                                 </>
                             )}
