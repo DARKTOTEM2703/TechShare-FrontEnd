@@ -12,9 +12,11 @@ interface NewMovementFormProps {
     selectedMaterial: { id: number; name: string } | null;
     refreshData: () => void;
     token: string;
+    openConfirmModal: (action: () => void) => void;
+
 }
 
-const NewMovementForm: React.FC<NewMovementFormProps> = ({ selectedMaterial, token, refreshData }) => {
+const NewMovementForm: React.FC<NewMovementFormProps> = ({ selectedMaterial, token, refreshData, openConfirmModal }) => {
     const [quantity, setQuantity] = useState<number>(0);
     const [moveType, setMoveType] = useState<string>('');
     const [comment, setComment] = useState<string>('');
@@ -24,7 +26,6 @@ const NewMovementForm: React.FC<NewMovementFormProps> = ({ selectedMaterial, tok
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        // Validación del formulario
         if (!quantity || quantity <= 0) {
             alert('Por favor, ingrese una cantidad válida');
             return;
@@ -35,21 +36,22 @@ const NewMovementForm: React.FC<NewMovementFormProps> = ({ selectedMaterial, tok
             return;
         }
 
-        console.log(token)
+        // Crea la acción pendiente
+        const action = () => {
+            const formData = new FormData();
+            formData.append('quantity', quantity.toString());
+            formData.append('moveType', moveType.toUpperCase());
+            formData.append('id_material', selectedMaterial ? selectedMaterial.id.toString() : '');
+            formData.append('comment', comment);
 
-        // Crear FormData y agregar los datos del formulario
-        const formData = new FormData();
-        formData.append('quantity', quantity.toString());
-        formData.append('moveType', moveType.toUpperCase());
-        formData.append('id_material', selectedMaterial ? selectedMaterial.id.toString() : '');
-        formData.append('comment', comment);
+            handleCreate(endpoints.movements.create, formData);
+            refreshData();
+        };
 
-        console.log('Datos enviados:', Object.fromEntries(formData.entries()));
-
-        // Enviar datos al servidor
-        handleCreate(endpoints.movements.create, formData);
-        refreshData();
+        // Llama al modal del padre con la acción pendiente
+        openConfirmModal(action);
     };
+
     return (
         <div className="flex justify-center items-center">
             <div className="bg-white rounded-lg shadow-md p-6 w-96">

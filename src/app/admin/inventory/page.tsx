@@ -10,6 +10,7 @@ import endpoints from '@/app/infraestructure/config/configAPI';
 import MaterialInfo from '@/components/AdminCrud/InfoModals/MaterialInfo';
 import { Material } from '@/app/admin/catalog/interfaces/Material';
 import '@/styles/modal.css'
+import ModalBase from '@/components/Modal/ModalBase';
 
 const Inventory = () => {
   useAuth();
@@ -57,6 +58,27 @@ const Inventory = () => {
     return () => clearInterval(interval);
   }, []);
 
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const [pendingAction, setPendingAction] = useState<(() => void) | null>(null);
+
+  const openConfirmModal = (action: () => void) => {
+    setPendingAction(() => action); // Almacena la acción pendiente
+    setIsConfirmModalOpen(true);
+  };
+
+  const handleMovementConfirm = () => {
+    if (pendingAction) {
+      pendingAction(); // Ejecuta la acción pendiente
+      setPendingAction(null); // Limpia la acción
+    }
+    setIsConfirmModalOpen(false); // Cierra el modal
+  };
+
+  const closeConfirmModal = () => {
+    setPendingAction(null);
+    setIsConfirmModalOpen(false);
+  };
+
   return (
     <div>
       <CrudHeader
@@ -82,6 +104,7 @@ const Inventory = () => {
             token={token}
             refreshData={fetchMaterials}
             selectedMaterial={selectedMaterial}
+            openConfirmModal={openConfirmModal}
           />
         </div>
       </div>
@@ -96,8 +119,20 @@ const Inventory = () => {
           </div>
         </div>
       )}
+      {/* Confirm Modal */}
+      {isConfirmModalOpen && (
+        <div className='modal-overlay'>
+          <ModalBase
+            onClose={closeConfirmModal}
+            header='Confirmar acción'
+            onSubmit={handleMovementConfirm}>
+            <p>¿Está seguro de realizar esta acción?</p>
+          </ModalBase>
+        </div>
+      )}
     </div>
   );
 };
+
 
 export default Inventory;
