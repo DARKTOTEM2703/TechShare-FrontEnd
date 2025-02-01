@@ -61,6 +61,12 @@ export default function Users() {
     return () => clearInterval(interval);
   }, []);
 
+  const headerLabels = {
+    'firstName': 'Nombre',
+    'lastName': 'Apellido',
+    'email': 'Email'
+  }
+
   return (
     <div>
       <CrudHeader
@@ -73,10 +79,12 @@ export default function Users() {
       />
       <CrudBody
         data={users}
-        headers={['id', 'firstName', 'lastName', 'email']}
+        headerLabels={headerLabels}
+        headers={['firstName', 'lastName', 'email']}
         searchTerm={searchTerm}
         onSelected={(id: number) => alert(`Selected ${id}`)}
         onMoreInfo={handleMoreInfo}
+
       />
       {selectedUser && (
         <div className='modal-overlay'>

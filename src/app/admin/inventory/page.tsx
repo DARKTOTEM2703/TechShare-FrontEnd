@@ -79,6 +79,12 @@ const Inventory = () => {
     setIsConfirmModalOpen(false);
   };
 
+  const headerLabels = {
+    'name': 'Nombre',
+    'stock': 'Stock Total',
+    'borrowable_stock': 'Stock Prestable'
+  };
+
   return (
     <div>
       <CrudHeader
@@ -94,6 +100,7 @@ const Inventory = () => {
           <CrudBody
             data={materials}
             headers={['name', 'stock', 'borrowable_stock']}
+            headerLabels={headerLabels}
             searchTerm={searchTerm}
             onSelected={(id) => { clickedItem(id) }}
             onMoreInfo={(id) => { clickedMoreInfo(id) }}

@@ -19,7 +19,7 @@ export default function SearchBar({ onSearchChange }: SearchBarProps) {
       <input
       type="text"
       className="search-bar text-sm" 
-      placeholder="Search"
+      placeholder="Buscar"
       onChange={handleInputChange} // Manejar el cambio del input
       />
       <FaSearch className='search-bar-icon text-secondary' />

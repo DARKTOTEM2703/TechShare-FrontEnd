@@ -8,12 +8,13 @@ import Pagination from '@/components/AdminCrud/Pagination';
 interface CrudBodyProps {
     data: any;
     headers: string[];
+    headerLabels: { [key: string]: string };
     searchTerm: string;
     onDelete: (id: number) => void;
     onEdit: (id: number) => void;
 }
 
-export default function CrudBody({ data, headers, searchTerm, onDelete, onEdit }: CrudBodyProps) {
+export default function CrudBody({ data, headers, headerLabels, searchTerm, onDelete, onEdit }: CrudBodyProps) {
     const [currentPage, setCurrentPage] = useState(1);
     const [filteredData, setFilteredData] = useState(data);
 
@@ -46,7 +47,7 @@ export default function CrudBody({ data, headers, searchTerm, onDelete, onEdit }
             <div className='white-container'>
                 <table className='crud-table'>
                     <thead>
-                        <TableHeaders headers={headers} />
+                        <TableHeaders headers={headers} headerLabels={headerLabels} />
                     </thead>
                     <tbody>
                         <TableRows

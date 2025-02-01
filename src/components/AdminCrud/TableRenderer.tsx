@@ -54,13 +54,14 @@ const TableRows: React.FC<TableRowsProps> = ({ headers, currentRecords, onDelete
 
 interface TableHeadersProps {
     headers: string[];
+    headerLabels: { [key: string]: string };
 }
 
-const TableHeaders: React.FC<TableHeadersProps> = ({ headers }) => {
+const TableHeaders: React.FC<TableHeadersProps> = ({ headers, headerLabels }) => {
     return (
         <tr className='text-lg'>
             {headers.map((header: string, index: number) => (
-                <th key={`${header}-${index}`}>{header.toUpperCase()}</th>
+                <th key={`${header}-${index}`}>{headerLabels[header]}</th>
             ))}
             <th key="empty-th-1" />
             <th key="empty-th-2" />
