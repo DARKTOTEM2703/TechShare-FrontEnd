@@ -146,7 +146,6 @@ export default function Materials({ token, subCategories, roles, materials, refr
         <div>
             <CrudHeader title="Materials" dropdownOptions={[]} buttonLabel="Añadir material" buttonFunction={createButtonClicked} onSearchChange={handleSearchChange} />
             <CrudBody data={materials} searchTerm={searchTerm} onDelete={deleteButtonClicked} onEdit={editButtonClicked} />
-
             {isCreateModalVisible && (
                 <div className="modal-overlay">
                     <div className="modal-content">
@@ -269,7 +268,6 @@ export default function Materials({ token, subCategories, roles, materials, refr
                     </div>
                 </div>
             )}
-
             {isEditModalVisible && (
                 <div className="modal-overlay">
                     <div className="modal-content">

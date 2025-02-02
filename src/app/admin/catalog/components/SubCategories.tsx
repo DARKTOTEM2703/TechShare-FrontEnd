@@ -121,7 +121,12 @@ export default function SubCategories({ token, categories, subCategories, refres
             {isCreateModalVisible && (
                 <div className="modal-overlay">
                     <div className="modal-content">
-                        <ModalBase onClose={hideCreateModal} header="Añadir subcategoría" onSubmit={handleSubCategoryCreation}>
+                        <ModalBase 
+                            onClose={hideCreateModal} 
+                            header="Añadir subcategoría" 
+                            onSubmit={handleSubCategoryCreation}
+                            showButtons={!isImageCropping}
+                        >
                             {isImageCropping ? (
                                 <>
                                     <ReactCrop
@@ -172,25 +177,33 @@ export default function SubCategories({ token, categories, subCategories, refres
                                 </>
                             ) : (
                                 <>
-                                    <BorderTextField
-                                        name="name"
-                                        placeholder="Nombre de la subcategoría"
-                                        onChange={(e) =>
-                                            setFormData({ ...formData, name: e.target.value })
-                                        }
-                                        value={formData.name}
-                                    />
-                                    <DynamicDropdown
-                                        data={categories}
-                                        valueKey="categoryId"
-                                        labelKey="name"
-                                        selectedValue={formData.idCategory}
-                                        onChange={(value: number) => setFormData({ ...formData, idCategory: value })}
-                                    />
-                                    <DropzoneWithPreview
-                                        onFileChange={(file) => onSelectFile(file)}
-                                        initialPreview={formData.imagePreview || imageUrl}
-                                    />
+                                    <div className="flex gap-2">
+                                        <div className="flex items-center aspect-[3/2] h-[176px] mr-5">
+                                            <DropzoneWithPreview
+                                                onFileChange={(file) => onSelectFile(file)}
+                                                initialPreview={formData.imagePreview || imageUrl}
+                                            />
+                                        </div>
+                                        <div className="flex flex-col gap-2">
+                                            <h2>Nombre</h2>
+                                            <BorderTextField
+                                                name="name"
+                                                placeholder="Nombre de la subcategoría"
+                                                onChange={(e) =>
+                                                    setFormData({ ...formData, name: e.target.value })
+                                                }
+                                                value={formData.name}
+                                            />
+                                            <h2>Categoría</h2>
+                                            <DynamicDropdown
+                                                data={categories}
+                                                valueKey="categoryId"
+                                                labelKey="name"
+                                                selectedValue={formData.idCategory}
+                                                onChange={(value: number) => setFormData({ ...formData, idCategory: value })}
+                                            />
+                                        </div>
+                                    </div>
                                 </>
                             )}
                         </ModalBase>
@@ -200,7 +213,12 @@ export default function SubCategories({ token, categories, subCategories, refres
             {isEditModalVisible && (
                 <div className="modal-overlay">
                     <div className="modal-content">
-                        <ModalBase onClose={hideEditModal} header="Editar subcategoría" onSubmit={handleSubCategoryUpdate}>
+                        <ModalBase 
+                            onClose={hideEditModal} 
+                            header="Editar subcategoría" 
+                            onSubmit={handleSubCategoryUpdate}
+                            showButtons={!isImageCropping}
+                        >
                             {isImageCropping ? (
                                 <>
                                     <ReactCrop
@@ -249,25 +267,33 @@ export default function SubCategories({ token, categories, subCategories, refres
                                 </>
                             ) : (
                                 <>
-                                    <BorderTextField
-                                        name="name"
-                                        placeholder="Nombre de la subcategoría"
-                                        onChange={(e) =>
-                                            setFormData({ ...formData, name: e.target.value })
-                                        }
-                                        value={formData.name}
-                                    />
-                                    <DynamicDropdown
-                                        data={categories}
-                                        valueKey="categoryId"
-                                        labelKey="name"
-                                        selectedValue={formData.idCategory}
-                                        onChange={(value: number) => setFormData({ ...formData, idCategory: value })}
-                                    />
-                                    <DropzoneWithPreview
-                                        onFileChange={(file) => onSelectFile(file)}
-                                        initialPreview={formData.imagePreview || selectedSubCategory?.imagePath || ''}
-                                    />
+                                    <div className="flex gap-2">
+                                        <div className="flex items-center aspect-[3/2] h-[176px] mr-5">
+                                            <DropzoneWithPreview
+                                                onFileChange={(file) => onSelectFile(file)}
+                                                initialPreview={formData.imagePreview || selectedSubCategory?.imagePath || ''}
+                                            />
+                                        </div>
+                                        <div className="flex flex-col gap-2">
+                                            <h2>Nombre</h2>
+                                            <BorderTextField
+                                                name="name"
+                                                placeholder="Nombre de la subcategoría"
+                                                onChange={(e) =>
+                                                    setFormData({ ...formData, name: e.target.value })
+                                                }
+                                                value={formData.name}
+                                            />
+                                            <h2>Categoría</h2>
+                                            <DynamicDropdown
+                                                data={categories}
+                                                valueKey="categoryId"
+                                                labelKey="name"
+                                                selectedValue={formData.idCategory}
+                                                onChange={(value: number) => setFormData({ ...formData, idCategory: value })}
+                                            />
+                                        </div>
+                                    </div>
                                 </>
                             )}
                         </ModalBase>
