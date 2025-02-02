@@ -144,13 +144,18 @@ export default function Materials({ token, subCategories, roles, materials, refr
 
     return (
         <div>
-            <CrudHeader title="Materials" dropdownOptions={[]} buttonLabel="Add Material" buttonFunction={createButtonClicked} onSearchChange={handleSearchChange} />
+            <CrudHeader title="Materials" dropdownOptions={[]} buttonLabel="Añadir material" buttonFunction={createButtonClicked} onSearchChange={handleSearchChange} />
             <CrudBody data={materials} searchTerm={searchTerm} onDelete={deleteButtonClicked} onEdit={editButtonClicked} />
 
             {isCreateModalVisible && (
                 <div className="modal-overlay">
                     <div className="modal-content">
-                        <ModalBase onClose={hideCreateModal} header="Create New Material" onSubmit={handleMaterialCreation}>
+                        <ModalBase 
+                            onClose={hideCreateModal} 
+                            header="Nuevo material" 
+                            onSubmit={handleMaterialCreation}
+                            showButtons={!isImageCropping}
+                        >
                             {isImageCropping ? (
                                 <>
                                     <ReactCrop
@@ -199,7 +204,6 @@ export default function Materials({ token, subCategories, roles, materials, refr
                                 </>
                             ) : (
                                 <>
-                                    
                                     <div className="flex gap-2">
                                         <div className="flex items-center aspect-[3/2] h-[176px] mr-5">
                                                 <DropzoneWithPreview onFileChange={(file) => onSelectFile(file)} initialPreview={formData.imagePreview || imageUrl} />
@@ -208,7 +212,6 @@ export default function Materials({ token, subCategories, roles, materials, refr
                                                 <h2>Nombre</h2>
                                                 <BorderTextField 
                                                     name="name" 
-
                                                     placeholder="Nombre del material" 
                                                     onChange={(e) => setFormData({ ...formData, name: e.target.value })} 
                                                     value={formData.name} 
@@ -247,7 +250,6 @@ export default function Materials({ token, subCategories, roles, materials, refr
                                     <h2>Roles</h2>
                                     <AsyncSelect
                                     className='border rounded-md border-primary mb-4'
-
                                         cacheOptions
                                         defaultOptions={roleOptions}
                                         loadOptions={loadRoleOptions}
@@ -271,7 +273,12 @@ export default function Materials({ token, subCategories, roles, materials, refr
             {isEditModalVisible && (
                 <div className="modal-overlay">
                     <div className="modal-content">
-                        <ModalBase onClose={hideEditModal} header="Edit Material" onSubmit={handleMaterialUpdate}>
+                        <ModalBase 
+                            onClose={hideEditModal} 
+                            header="Editar material" 
+                            onSubmit={handleMaterialUpdate}
+                            showButtons={!isImageCropping}
+                        >
                             {isImageCropping ? (
                                 <>
                                     <ReactCrop
@@ -303,7 +310,6 @@ export default function Materials({ token, subCategories, roles, materials, refr
                                             height: 150
                                         }}
                                     />
-
                                     <button
                                         className="primary-button"
                                         type="button"
@@ -383,13 +389,12 @@ export default function Materials({ token, subCategories, roles, materials, refr
                                     />
                                     <h2>Roles</h2>
                                     <AsyncSelect
-                                    className='border rounded-md border-primary mb-4'
+                                        className='border rounded-md border-primary mb-4'
                                         cacheOptions
-
                                         defaultOptions={roleOptions}
                                         loadOptions={loadRoleOptions}
                                         isMulti
-                                        placeholder="Select Roles"
+                                        placeholder="Selecciona los roles"
                                         value={roleOptions.filter((role: any) => formData.roleIds.includes(role.value))}
                                         onChange={(selectedOptions) =>
                                             setFormData({
@@ -404,12 +409,11 @@ export default function Materials({ token, subCategories, roles, materials, refr
                     </div>
                 </div>
             )}
-
             {isDeleteModalVisible && (
                 <div className="modal-overlay">
                     <div className="modal-content">
-                        <ModalBase onClose={hideDeleteModal} header="Confirm Delete Material" onSubmit={handleMaterialDeletion}>
-                            <p>Are you sure you want to delete this material?</p>
+                        <ModalBase onClose={hideDeleteModal} header="Confirmar eliminación de material" onSubmit={handleMaterialDeletion}>
+                            <p>¿Estás seguro de querer eliminar este material?</p>
                         </ModalBase>
                     </div>
                 </div>

@@ -116,13 +116,12 @@ export default function SubCategories({ token, categories, subCategories, refres
 
     return (
         <div>
-            <CrudHeader title="SubCategories" dropdownOptions={[]} buttonLabel="Add SubCategory" buttonFunction={createButtonClicked} onSearchChange={handleSearchChange} />
+            <CrudHeader title="Subcategorías" dropdownOptions={[]} buttonLabel="Añadir subcategoría" buttonFunction={createButtonClicked} onSearchChange={handleSearchChange} />
             <CrudBody data={subCategories} searchTerm={searchTerm} onDelete={deleteButtonClicked} onEdit={editButtonClicked} />
-
             {isCreateModalVisible && (
                 <div className="modal-overlay">
                     <div className="modal-content">
-                        <ModalBase onClose={hideCreateModal} header="Create New SubCategory" onSubmit={handleSubCategoryCreation}>
+                        <ModalBase onClose={hideCreateModal} header="Añadir subcategoría" onSubmit={handleSubCategoryCreation}>
                             {isImageCropping ? (
                                 <>
                                     <ReactCrop
@@ -175,7 +174,7 @@ export default function SubCategories({ token, categories, subCategories, refres
                                 <>
                                     <BorderTextField
                                         name="name"
-                                        placeholder="SubCategory Name"
+                                        placeholder="Nombre de la subcategoría"
                                         onChange={(e) =>
                                             setFormData({ ...formData, name: e.target.value })
                                         }
@@ -198,11 +197,10 @@ export default function SubCategories({ token, categories, subCategories, refres
                     </div>
                 </div>
             )}
-
             {isEditModalVisible && (
                 <div className="modal-overlay">
                     <div className="modal-content">
-                        <ModalBase onClose={hideEditModal} header="Edit SubCategory" onSubmit={handleSubCategoryUpdate}>
+                        <ModalBase onClose={hideEditModal} header="Editar subcategoría" onSubmit={handleSubCategoryUpdate}>
                             {isImageCropping ? (
                                 <>
                                     <ReactCrop
@@ -222,7 +220,6 @@ export default function SubCategories({ token, categories, subCategories, refres
                                             onLoad={onImageLoad}
                                         />
                                     </ReactCrop>
-
                                     <canvas
                                         ref={previewImageRef}
                                         className="mt-4"
@@ -234,7 +231,6 @@ export default function SubCategories({ token, categories, subCategories, refres
                                             height: 150
                                         }}
                                     />
-
                                     <button
                                         className="primary-button"
                                         type="button"
@@ -255,7 +251,7 @@ export default function SubCategories({ token, categories, subCategories, refres
                                 <>
                                     <BorderTextField
                                         name="name"
-                                        placeholder="SubCategory Name"
+                                        placeholder="Nombre de la subcategoría"
                                         onChange={(e) =>
                                             setFormData({ ...formData, name: e.target.value })
                                         }
@@ -278,12 +274,11 @@ export default function SubCategories({ token, categories, subCategories, refres
                     </div>
                 </div>
             )}
-
             {isDeleteModalVisible && (
                 <div className="modal-overlay">
                     <div className="modal-content">
-                        <ModalBase onClose={hideDeleteModal} header="Confirm Delete SubCategory" onSubmit={handleSubCategoryDeletion}>
-                            <p>Are you sure you want to delete this subcategory?</p>
+                        <ModalBase onClose={hideDeleteModal} header="Confirmar eliminación de subcategoría" onSubmit={handleSubCategoryDeletion}>
+                            <p>¿Estás seguro de querer eliminar esta subcategoría?</p>
                         </ModalBase>
                     </div>
                 </div>
