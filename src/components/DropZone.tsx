@@ -24,12 +24,12 @@ const DropzoneWithPreview: React.FC<DropzoneWithPreviewProps> = ({ onFileChange,
     });
 
     return (
-        <div {...getRootProps()} style={{ border: '2px dashed #ccc', padding: '20px', textAlign: 'center', cursor: 'pointer' }}>
+        <div {...getRootProps()} className="border-2 border-dashed rounded-lg border-gray-300 text-center cursor-pointer h-full">
             <input {...getInputProps()} />
             {preview ? (
-                <img src={preview} alt="Preview" style={{ width: '100%', maxHeight: '200px', objectFit: 'contain' }} />
+                <img src={preview} alt="Preview" className="w-full h-full object-cover rounded-lg" />
             ) : (
-                <p>Arrastra y suelta una imagen o da click para seleccionar una</p>
+                <p className="flex items-center justify-center h-full px-4">Arrastra y suelta una imagen o da click para seleccionar una</p>
             )}
         </div>
     );
