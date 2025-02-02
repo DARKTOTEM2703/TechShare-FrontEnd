@@ -33,7 +33,9 @@ const TableRows: React.FC<TableRowsProps> = ({ headers, currentRecords, onDelete
                 return (
                     <tr key={`row-${idValue}-${rowIndex}`}>
                         {headers.map((header: string, headerIndex: number) => (
-                            <td key={`${header}-${idValue}-${headerIndex}`}>{row[header]}</td>
+                            <td key={`${header}-${idValue}-${headerIndex}`} className="truncate max-w-[200px]">
+                                {row[header]}
+                            </td>
                         ))}
                         <td key={`empty-td-${idValue}`} />
                         <td key={`actions-td-${idValue}`}>

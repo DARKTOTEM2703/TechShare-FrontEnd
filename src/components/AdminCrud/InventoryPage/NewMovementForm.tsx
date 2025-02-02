@@ -1,8 +1,5 @@
-import React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import '@/styles/form.css';
-import '@/components/Inputs/BorderTextField';
-import BorderTextField from '@/components/Inputs/BorderTextField';
 import BorderRichTextBox from '@/components/Inputs/BorderRichTextBox';
 import Dropdown from '../../Dropdowns/Dropdown';
 import { useCrudOperations } from '@/hooks/useCrudOperations';
@@ -13,15 +10,25 @@ interface NewMovementFormProps {
     refreshData: () => void;
     token: string;
     openConfirmModal: (action: () => void) => void;
-
 }
 
-const NewMovementForm: React.FC<NewMovementFormProps> = ({ selectedMaterial, token, refreshData, openConfirmModal }) => {
+const NewMovementForm: React.FC<NewMovementFormProps> = ({ 
+    selectedMaterial, 
+    token, 
+    refreshData, 
+    openConfirmModal 
+}) => {
     const [quantity, setQuantity] = useState<number>();
     const [moveType, setMoveType] = useState<string>('');
     const [comment, setComment] = useState<string>('');
 
     const { handleCreate } = useCrudOperations(token, refreshData);
+
+    const movementOptions = [
+        { value: 'IN', label: 'Entrada' },
+        { value: 'OUT', label: 'Salida' },
+        { value: 'ADJUSTMENT', label: 'Ajuste' }
+    ];
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -36,7 +43,6 @@ const NewMovementForm: React.FC<NewMovementFormProps> = ({ selectedMaterial, tok
             return;
         }
 
-        // Crea la acción pendiente
         const action = () => {
             const formData = new FormData();
             formData.append('quantity', quantity.toString());
@@ -48,84 +54,82 @@ const NewMovementForm: React.FC<NewMovementFormProps> = ({ selectedMaterial, tok
             refreshData();
         };
 
-        // Llama al modal del padre con la acción pendiente
         openConfirmModal(action);
     };
 
-    const movementOptions = [
-        { value: 'IN', label: 'Entrada' },
-        { value: 'OUT', label: 'Salida' },
-        { value: 'ADJUSTMENT', label: 'Ajuste' }
-    ];
-
     return (
         <div className="flex justify-center items-center">
-            <div className="bg-white rounded-lg shadow-md p-6 w-96">
+            <div className="bg-white rounded-lg shadow-md p-6 w-[28rem]">
+                {/* Encabezado */}
                 <h2 className="text-primary text-center font-semibold text-lg">Nuevo movimiento</h2>
                 <div className="w-full h-px bg-primary my-4" />
-                <form onSubmit={handleSubmit}>
-                    <h2 className="font-bold text-base text-primary mb-4 text-center">
+                
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    {/* Nombre del material */}
+                    <h2 className="font-bold text-base text-primary text-center truncate px-4">
                         {selectedMaterial ? selectedMaterial.name : 'Seleccione un material'}
                     </h2>
-                    {/* Contenedor del Dropdown y Quantity */}
-                    <div className="flex mb-4 space-x-4">
+
+                    {/* Tipo de movimiento y Cantidad */}
+                    <div className="flex gap-4">
                         <div className="flex-1">
-                            <label className="block text-sm font-semibold mb-3">Tipo de movimiento</label>
-                            <div>
-                                <Dropdown
-                                    options={movementOptions}
-                                    value={moveType}
-                                    onChange={(value: string) => setMoveType(value)}
-                                />
-                            </div>
+                            <label className="block text-sm font-semibold mb-2">
+                                Tipo de movimiento
+                            </label>
+                            <Dropdown
+                                options={movementOptions}
+                                value={moveType}
+                                onChange={(value: string) => setMoveType(value)}
+                            />
                         </div>
                         <div className="w-1/3">
-                            <label className="block text-sm font-semibold mb-3">Cantidad</label>
-                            <div>
-                                <input
-                                    type="number"
-                                    min="1"
-                                    step="1"
-                                    placeholder="Ingrese la cantidad"
-                                    name="quantity"
-                                    value={quantity}
-                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                        const value = Math.floor(Number(e.target.value));
-                                        if (value > 0) {
-                                            setQuantity(value);
-                                        }
-                                    }}
-                                    className="border rounded-md border-primary p-2 w-full text-sm"
-                                />
-                            </div>
-                        </div>
-                    </div>
-                    {/* Contenedor del RichTextBox */}
-                    <div className="">
-                        <label className="block text-sm font-semibold mb-3">Comentarios:</label>
-                        <div>
-                            <BorderRichTextBox
-                                placeholder="Ingrese un comentario"
-                                name="comment"
-                                value={comment}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                    setComment(e.target.value)
-                                }
+                            <label className="block text-sm font-semibold mb-2">
+                                Cantidad
+                            </label>
+                            <input
+                                type="number"
+                                min="1"
+                                step="1"
+                                placeholder="Cantidad"
+                                name="quantity"
+                                value={quantity || ''}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                    const value = Math.floor(Number(e.target.value));
+                                    if (value > 0) {
+                                        setQuantity(value);
+                                    }
+                                }}
+                                className="border rounded-md border-primary p-2 w-full text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                             />
                         </div>
                     </div>
-                    {/* Botón */}
+
+                    {/* Comentarios */}
+                    <div>
+                        <label className="block text-sm font-semibold mb-2">
+                            Comentarios
+                        </label>
+                        <BorderRichTextBox
+                            placeholder="Ingrese un comentario"
+                            name="comment"
+                            value={comment}
+                            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setComment(e.target.value)}
+                            className="min-h-[100px]"
+                        />
+                    </div>
+
+                    {/* Botón de submit */}
                     <button
                         type="submit"
-                        className="w-full bg-primary text-white font-bold py-2 rounded-md hover:bg-primary-dark transition-colors"
+                        className="w-full bg-primary text-white font-bold py-2 px-4 rounded-md hover:bg-primary-dark transition-colors duration-200"
+                        disabled={!selectedMaterial}
                     >
-                        INSERTAR
+                        REGISTRAR MOVIMIENTO
                     </button>
                 </form>
             </div>
         </div>
     );
-
 };
 
 export default NewMovementForm;

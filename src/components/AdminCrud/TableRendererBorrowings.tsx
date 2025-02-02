@@ -36,7 +36,7 @@ const TableRows: React.FC<TableRowsProps> = ({ headers, currentRecords, onConfir
                 return (
                     <tr key={`row-${idValue}-${rowIndex}`}>
                         {headers.map((header: string, headerIndex: number) => (
-                            <td key={`${header}-${idValue}-${headerIndex}`}>
+                            <td key={`${header}-${idValue}-${headerIndex}`} className="truncate max-w-[200px]">
                                 {row[header]}
                             </td>
                         ))}

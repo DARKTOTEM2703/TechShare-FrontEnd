@@ -67,13 +67,13 @@ const RequestDetails: React.FC<RequestDetailsProps> = ({ request, onClose }) => 
                     <div className="mb-4">
                         <h4 className="font-semibold text-sm text-primary">Nombre</h4>
                         <div className="border border-primary px-4 py-2 rounded-lg mt-1 text-sm">
-                            {request.usuarioName}
+                            <p className="truncate max-w-[200px]">{request.usuarioName}</p>
                         </div>
                     </div>
                     <div>
                         <h4 className="font-semibold text-sm text-primary">E-mail</h4>
                         <div className="border border-primary px-4 py-2 rounded-lg mt-1 text-sm">
-                            {request.usuarioId ? `user${request.usuarioId}@example.com` : "N/A"}
+                            <p className="truncate">{request.usuarioId ? `user${request.usuarioId}@example.com` : "N/A"}</p>
                         </div>
                     </div>
                 </div>
@@ -114,7 +114,9 @@ const RequestDetails: React.FC<RequestDetailsProps> = ({ request, onClose }) => 
                                             "N/A"
                                         )}
                                     </td>
-                                    <td className="px-4 py-2 text-sm border-b">{detail.materialName}</td>
+                                    <td className="px-4 py-2 text-sm border-b">
+                                        <p className="truncate max-w-[200px]">{detail.materialName}</p>
+                                    </td>
                                     <td className="px-4 py-2 text-sm border-b text-center">
                                         {detail.stock}
                                     </td>
