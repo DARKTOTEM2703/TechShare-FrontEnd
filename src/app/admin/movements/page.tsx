@@ -35,19 +35,27 @@ export default function movements() {
         return () => clearInterval(interval);
   }, []);
 
+  const headerLabels = {
+    'moveType': 'Tipo',
+    'quantity': 'Cantidad',
+    'date': 'Fecha',
+    'materialsName': 'Material'
+  };
+
   return (
     <div>
       <CrudHeader
         title='Movimientos'
         dropdownOptions={['dummy']}
-        buttonLabel=' '
+        buttonLabel=''
         buttonFunction={() => alert('')}
         buttonDisabled={true}
         onSearchChange={handleSearchChange}
       />
       <CrudBody
         data={data}
-        headers={['movementsId', 'moveType', 'quantity', 'date', 'materialsName']}
+        headerLabels={headerLabels}
+        headers={['moveType', 'quantity', 'date', 'materialsName']}
         onSelected={() => { }}
         onMoreInfo={() => alert('')}
         searchTerm={searchTerm} />

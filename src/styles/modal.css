@@ -14,7 +14,7 @@
 
 .modal {
   width: none;
-  padding: 20px;
+  padding: 30px;
   background-color: #fff;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -25,7 +25,6 @@
   text-align: left;
   color: #1e2a5e;
   font-weight: bold;
-  margin-bottom: 16px;
 }
 
 /* Input del modal */

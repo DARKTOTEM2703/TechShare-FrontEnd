@@ -137,12 +137,13 @@ export default function Categories({
     return (
         <div>
             <CrudHeader
-                title="Categories"
+                title="Categorías"
                 dropdownOptions={[]}
-                buttonLabel="Add Category"
+                buttonLabel="Añadir categoría"
                 buttonFunction={showCreateModal}
                 onSearchChange={handleSearchChange}
             />
+
             <CrudBody
                 data={categories}
                 searchTerm={searchTerm}
@@ -155,9 +156,10 @@ export default function Categories({
                     <div className="modal-content">
                         <ModalBase
                             onClose={hideCreateModal}
-                            header="Create New Category"
+                            header="Crear nueva categoría"
                             onSubmit={handleCreateCategory}
                         >
+
                             {isImageCropping ? (
                                 <>
                                     <ReactCrop
@@ -208,18 +210,26 @@ export default function Categories({
                                 </>
                             ) : (
                                 <>
-                                    <BorderTextField
-                                        name="name"
-                                        placeholder="Category Name"
-                                        onChange={(e) =>
-                                            setFormData({ ...formData, name: e.target.value })
-                                        }
-                                        value={formData.name}
-                                    />
-                                    <DropzoneWithPreview
-                                        onFileChange={(file) => onSelectFile(file)}
-                                        initialPreview={formData.imagePreview || imageUrl}
-                                    />
+                                    <div className="flex gap-2">
+                                        <div className="flex items-center aspect-[3/2] h-[176px] mr-5">
+                                            <DropzoneWithPreview
+                                                onFileChange={(file) => onSelectFile(file)}
+                                                initialPreview={formData.imagePreview || imageUrl}
+                                            />
+                                        </div>
+                                        <div className="flex flex-col gap-2 justify-center h-full">
+                                            <h2>Nombre</h2>
+                                            <BorderTextField
+                                                name="name"
+
+                                                placeholder="Nombre de la categoría"
+                                                onChange={(e) =>
+                                                    setFormData({ ...formData, name: e.target.value })
+                                                }
+                                                value={formData.name}
+                                            />
+                                        </div>
+                                    </div>
                                 </>
                             )}
                         </ModalBase>
@@ -232,7 +242,7 @@ export default function Categories({
                     <div className="modal-content">
                         <ModalBase
                             onClose={hideEditModal}
-                            header="Edit Category"
+                            header="Editar categoría"
                             onSubmit={handleEditCategory}
                         >
                             {isImageCropping ? (
@@ -285,20 +295,27 @@ export default function Categories({
                                 </>
                             ) : (
                                 <>
-                                    <BorderTextField
-                                        name="name"
-                                        placeholder="Category Name"
-                                        onChange={(e) =>
-                                            setFormData({ ...formData, name: e.target.value })
-                                        }
-                                        value={formData.name}
-                                    />
-                                    <DropzoneWithPreview
-                                        onFileChange={(file) => onSelectFile(file)}
-                                            initialPreview={formData.imagePreview ||
-                                                selectedCategory?.imagePath ||
-                                                ''}
-                                    />
+                                    <div className="flex gap-2">
+                                        <div className="flex items-center aspect-[3/2] h-[176px] mr-5">
+                                            <DropzoneWithPreview
+                                                onFileChange={(file) => onSelectFile(file)}
+                                                initialPreview={formData.imagePreview ||
+                                                    selectedCategory?.imagePath ||
+                                                    ''}
+                                            />
+                                        </div>
+                                            <div className="flex flex-col gap-2 justify-center h-full">
+                                            <h2>Nombre</h2>
+                                            <BorderTextField
+                                                name="name"
+                                                placeholder="Nombre de la categoría"
+                                                onChange={(e) =>
+                                                    setFormData({ ...formData, name: e.target.value })
+                                                }
+                                                value={formData.name}
+                                            />
+                                        </div>
+                                    </div>
                                 </>
                             )}
                         </ModalBase>
@@ -311,10 +328,10 @@ export default function Categories({
                     <div className="modal-content">
                         <ModalBase
                             onClose={hideDeleteModal}
-                            header="Confirm Delete Category"
+                            header="Confirmar eliminación de categoría"
                             onSubmit={handleDeleteCategory}
                         >
-                            <p>Estás seguro de que quieres borrar esta categoría?</p>
+                            <p>¿Estás seguro de que quieres eliminar esta categoría?</p>
                         </ModalBase>
                     </div>
                 </div>

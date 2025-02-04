@@ -33,7 +33,9 @@ const TableRows: React.FC<TableRowsProps> = ({ headers, currentRecords, onDelete
                 return (
                     <tr key={`row-${idValue}-${rowIndex}`}>
                         {headers.map((header: string, headerIndex: number) => (
-                            <td key={`${header}-${idValue}-${headerIndex}`}>{row[header]}</td>
+                            <td key={`${header}-${idValue}-${headerIndex}`} className="truncate max-w-[200px]">
+                                {row[header]}
+                            </td>
                         ))}
                         <td key={`empty-td-${idValue}`} />
                         <td key={`actions-td-${idValue}`}>
@@ -54,13 +56,14 @@ const TableRows: React.FC<TableRowsProps> = ({ headers, currentRecords, onDelete
 
 interface TableHeadersProps {
     headers: string[];
+    headerLabels: { [key: string]: string };
 }
 
-const TableHeaders: React.FC<TableHeadersProps> = ({ headers }) => {
+const TableHeaders: React.FC<TableHeadersProps> = ({ headers, headerLabels }) => {
     return (
         <tr className='text-lg'>
             {headers.map((header: string, index: number) => (
-                <th key={`${header}-${index}`}>{header.toUpperCase()}</th>
+                <th key={`${header}-${index}`}>{headerLabels[header]}</th>
             ))}
             <th key="empty-th-1" />
             <th key="empty-th-2" />

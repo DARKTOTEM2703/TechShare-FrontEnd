@@ -34,7 +34,7 @@ const TableRows: React.FC<TableRowsProps> = ({ headers, currentRecords, onSelect
                 return (
                     <tr key={`row-${idValue}-${rowIndex}`}>
                         {headers.map((header: string, headerIndex: number) => (
-                            <td key={`${header}-${idValue}-${headerIndex}`} onClick={() => onSelected(idValue)}>
+                            <td key={`${header}-${idValue}-${headerIndex}`} onClick={() => onSelected(idValue)} className="truncate max-w-[200px]">
                                 {row[header]}
                             </td>
                         ))}
@@ -52,13 +52,16 @@ const TableRows: React.FC<TableRowsProps> = ({ headers, currentRecords, onSelect
 
 interface TableHeadersProps {
     headers: string[];
+    headerLabels?: { [key: string]: string };
 }
 
-const TableHeaders: React.FC<TableHeadersProps> = ({ headers }) => {
+const TableHeaders: React.FC<TableHeadersProps> = ({ headers, headerLabels = {} }) => {
     return (
         <tr className="text-lg">
             {headers.map((header: string, index: number) => (
-                <th key={`${header}-${index}`}>{header.toUpperCase()}</th>
+                <th key={`${header}-${index}`}>
+                    {(headerLabels[header] || header)}
+                </th>
             ))}
             <th key="actions-th"></th>
         </tr>

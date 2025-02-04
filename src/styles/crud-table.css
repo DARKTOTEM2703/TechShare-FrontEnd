@@ -25,6 +25,7 @@
 
 .crud-table tbody tr:hover {
     background-color: #f2f2f2;
+    cursor: pointer;
 }
 
 .action-button {

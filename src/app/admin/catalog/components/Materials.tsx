@@ -4,6 +4,7 @@ import CrudHeader from '@/components/AdminCrud/CrudHeader';
 import CrudBody from '@/components/AdminCrud/CrudBodyWithImages';
 import ModalBase from '@/components/Modal/ModalBase';
 import BorderTextField from '@/components/Inputs/BorderTextField';
+import RichTextBox from '@/components/Inputs/BorderRichTextBox';
 import { useCrudOperations } from '@/hooks/useCrudOperations';
 import endpoints from '@/app/infraestructure/config/configAPI';
 import DynamicDropdown from '@/components/Dropdowns/DynamicDropdown';
@@ -143,13 +144,17 @@ export default function Materials({ token, subCategories, roles, materials, refr
 
     return (
         <div>
-            <CrudHeader title="Materials" dropdownOptions={[]} buttonLabel="Add Material" buttonFunction={createButtonClicked} onSearchChange={handleSearchChange} />
+            <CrudHeader title="Materials" dropdownOptions={[]} buttonLabel="Añadir material" buttonFunction={createButtonClicked} onSearchChange={handleSearchChange} />
             <CrudBody data={materials} searchTerm={searchTerm} onDelete={deleteButtonClicked} onEdit={editButtonClicked} />
-
             {isCreateModalVisible && (
                 <div className="modal-overlay">
                     <div className="modal-content">
-                        <ModalBase onClose={hideCreateModal} header="Create New Material" onSubmit={handleMaterialCreation}>
+                        <ModalBase 
+                            onClose={hideCreateModal} 
+                            header="Nuevo material" 
+                            onSubmit={handleMaterialCreation}
+                            showButtons={!isImageCropping}
+                        >
                             {isImageCropping ? (
                                 <>
                                     <ReactCrop
@@ -169,7 +174,6 @@ export default function Materials({ token, subCategories, roles, materials, refr
                                             onLoad={onImageLoad}
                                         />
                                     </ReactCrop>
-
                                     <canvas
                                         ref={previewImageRef}
                                         className="mt-4"
@@ -181,7 +185,6 @@ export default function Materials({ token, subCategories, roles, materials, refr
                                             height: 150
                                         }}
                                     />
-
                                     <button
                                         className="primary-button"
                                         type="button"
@@ -200,16 +203,57 @@ export default function Materials({ token, subCategories, roles, materials, refr
                                 </>
                             ) : (
                                 <>
-                                    <BorderTextField name="name" placeholder="Material Name" onChange={(e) => setFormData({ ...formData, name: e.target.value })} value={formData.name} />
-                                    <BorderTextField name="description" placeholder="Material Description" onChange={(e) => setFormData({ ...formData, description: e.target.value })} value={formData.description} />
-                                    <BorderTextField name="price" placeholder="Material Price" onChange={(e) => setFormData({ ...formData, price: parseFloat(e.target.value) })} value={formData.price} />
-                                    <DynamicDropdown data={subCategories} valueKey="subCategoriesId" labelKey="name" selectedValue={formData.subCategoryId} onChange={(value: number) => setFormData({ ...formData, subCategoryId: value })} />
+                                    <div className="flex gap-2">
+                                        <div className="flex items-center aspect-[3/2] h-[176px] mr-5">
+                                                <DropzoneWithPreview onFileChange={(file) => onSelectFile(file)} initialPreview={formData.imagePreview || imageUrl} />
+                                        </div>
+                                            <div className="flex flex-col gap-2">
+                                                <h2>Nombre</h2>
+                                                <BorderTextField 
+                                                    name="name" 
+                                                    placeholder="Nombre del material" 
+                                                    onChange={(e) => setFormData({ ...formData, name: e.target.value })} 
+                                                    value={formData.name} 
+                                                />
+                                                <h2>Precio</h2>
+                                                <BorderTextField 
+                                                    name="price" 
+                                                    placeholder="Precio del material" 
+                                                    onChange={(e) => setFormData({ ...formData, price: e.target.value })} 
+                                                    value={formData.price}
+                                                    isCurrency={true} 
+                                                />
+                                            </div>
+                                    </div>
+                                    <h2>Descripción</h2>
+                                    <RichTextBox name="description" placeholder="Añade una descripción para el material" onChange={(e) => setFormData({ ...formData, description: e.target.value })} value={formData.description} />              
+                                    <h2>Subcategoría</h2>
                                     <AsyncSelect
+                                        className='border rounded-md border-primary mb-4'
+                                        cacheOptions
+                                        defaultOptions={subCategories.map(subCategory => ({
+                                            value: subCategory.subCategoriesId,
+                                            label: subCategory.name
+                                        }))}
+                                        value={subCategories
+                                            .filter(subCategory => subCategory.subCategoriesId === formData.subCategoryId)
+                                            .map(subCategory => ({
+                                                value: subCategory.subCategoriesId,
+                                                label: subCategory.name
+                                            }))[0]}
+                                        onChange={(selectedOption: any) => 
+                                            setFormData({ ...formData, subCategoryId: selectedOption.value })
+                                        }
+                                        placeholder="Selecciona una subcategoría"
+                                    />
+                                    <h2>Roles</h2>
+                                    <AsyncSelect
+                                    className='border rounded-md border-primary mb-4'
                                         cacheOptions
                                         defaultOptions={roleOptions}
                                         loadOptions={loadRoleOptions}
                                         isMulti
-                                        placeholder="Select Roles"
+                                        placeholder="Selecciona los roles"
                                         value={roleOptions.filter((role: any) => formData.roleIds.includes(role.value))}
                                         onChange={(selectedOptions) =>
                                             setFormData({
@@ -218,18 +262,21 @@ export default function Materials({ token, subCategories, roles, materials, refr
                                             })
                                         }
                                     />
-                                    <DropzoneWithPreview onFileChange={(file) => onSelectFile(file)} initialPreview={formData.imagePreview || imageUrl} />
                                 </>
                             )}
                         </ModalBase>
                     </div>
                 </div>
             )}
-
             {isEditModalVisible && (
                 <div className="modal-overlay">
                     <div className="modal-content">
-                        <ModalBase onClose={hideEditModal} header="Edit Material" onSubmit={handleMaterialUpdate}>
+                        <ModalBase 
+                            onClose={hideEditModal} 
+                            header="Editar material" 
+                            onSubmit={handleMaterialUpdate}
+                            showButtons={!isImageCropping}
+                        >
                             {isImageCropping ? (
                                 <>
                                     <ReactCrop
@@ -261,7 +308,6 @@ export default function Materials({ token, subCategories, roles, materials, refr
                                             height: 150
                                         }}
                                     />
-
                                     <button
                                         className="primary-button"
                                         type="button"
@@ -280,16 +326,73 @@ export default function Materials({ token, subCategories, roles, materials, refr
                                 </>
                             ) : (
                                 <>
-                                    <BorderTextField name="name" placeholder="Material Name" onChange={(e) => setFormData({ ...formData, name: e.target.value })} value={formData.name} />
-                                    <BorderTextField name="description" placeholder="Material Description" onChange={(e) => setFormData({ ...formData, description: e.target.value })} value={formData.description} />
-                                    <BorderTextField name="price" placeholder="Material Price" onChange={(e) => setFormData({ ...formData, price: parseFloat(e.target.value) })} value={formData.price} />
-                                    <DynamicDropdown data={subCategories} valueKey="subCategoriesId" labelKey="name" selectedValue={formData.subCategoryId} onChange={(value: number) => setFormData({ ...formData, subCategoryId: value })} />
+                                    <div className="flex gap-2">
+                                        <div className="flex items-center aspect-[3/2] h-[176px] mr-5">
+                                            <DropzoneWithPreview onFileChange={(file) => onSelectFile(file)} initialPreview={formData.imagePreview || selectedMaterial?.imagePath || ''} />
+                                        </div>
+                                        <div className="flex flex-col gap-2">
+                                            <h2>Nombre</h2>
+                                            <BorderTextField 
+                                                name="name" 
+                                                placeholder="Nombre del material" 
+                                                onChange={(e) => setFormData({ ...formData, name: e.target.value })} 
+                                                value={formData.name} 
+                                            />
+                                            <h2>Precio</h2>
+                                            <BorderTextField 
+                                                name="price" 
+                                                placeholder="Precio del material" 
+                                                onChange={(e) => setFormData({ ...formData, price: e.target.value })} 
+                                                value={formData.price}
+                                                isCurrency={true} 
+                                            />
+                                        </div>
+                                    </div>
+                                    <h2>Descripción</h2>
+                                    <RichTextBox 
+                                        name="description" 
+                                        placeholder="Añade una descripción para el material" 
+                                        onChange={(e) => setFormData({ ...formData, description: e.target.value })} 
+                                        value={formData.description} 
+                                    />
+                                    <h2>Subcategoría</h2> 
                                     <AsyncSelect
+                                        className='border rounded-md border-primary mb-4'
+                                        cacheOptions
+                                        defaultOptions={subCategories.map(sub => ({
+                                            value: sub.subCategoriesId,
+                                            label: sub.name
+                                        }))}
+                                        loadOptions={(inputValue) => 
+                                            Promise.resolve(
+                                                subCategories
+                                                    .filter(sub => sub.name.toLowerCase().includes(inputValue.toLowerCase()))
+                                                    .map(sub => ({
+                                                        value: sub.subCategoriesId,
+                                                        label: sub.name
+                                                    }))
+                                            )
+                                        }
+                                        value={subCategories
+                                            .filter(sub => sub.subCategoriesId === formData.subCategoryId)
+                                            .map(sub => ({
+                                                value: sub.subCategoriesId,
+                                                label: sub.name
+                                            }))[0]
+                                        }
+                                        onChange={(option: any) => 
+                                            setFormData({ ...formData, subCategoryId: option.value })
+                                        }
+                                        placeholder="Selecciona una subcategoría"
+                                    />
+                                    <h2>Roles</h2>
+                                    <AsyncSelect
+                                        className='border rounded-md border-primary mb-4'
                                         cacheOptions
                                         defaultOptions={roleOptions}
                                         loadOptions={loadRoleOptions}
                                         isMulti
-                                        placeholder="Select Roles"
+                                        placeholder="Selecciona los roles"
                                         value={roleOptions.filter((role: any) => formData.roleIds.includes(role.value))}
                                         onChange={(selectedOptions) =>
                                             setFormData({
@@ -298,19 +401,17 @@ export default function Materials({ token, subCategories, roles, materials, refr
                                             })
                                         }
                                     />
-                                    <DropzoneWithPreview onFileChange={(file) => onSelectFile(file)} initialPreview={formData.imagePreview || selectedMaterial?.imagePath || ''} />
                                 </>
                             )}
                         </ModalBase>
                     </div>
                 </div>
             )}
-
             {isDeleteModalVisible && (
                 <div className="modal-overlay">
                     <div className="modal-content">
-                        <ModalBase onClose={hideDeleteModal} header="Confirm Delete Material" onSubmit={handleMaterialDeletion}>
-                            <p>Are you sure you want to delete this material?</p>
+                        <ModalBase onClose={hideDeleteModal} header="Confirmar eliminación de material" onSubmit={handleMaterialDeletion}>
+                            <p>¿Estás seguro de querer eliminar este material?</p>
                         </ModalBase>
                     </div>
                 </div>

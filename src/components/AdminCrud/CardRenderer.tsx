@@ -14,7 +14,7 @@ const CardRenderer: React.FC<CardRendererProps> = ({ currentRecords, onDelete, o
                 const idValue = item[idKey];
 
                 return (
-                    <div key={`card-${idValue}-${index}`} className="bg-white rounded-lg shadow-sm w-full p-4 flex items-start space-x-4 relative shadow-black">
+                    <div key={`card-${idValue}-${index}`} className="bg-white rounded-lg shadow-sm w-full p-4 flex items-start space-x-4 relative shadow-black min-h-[120px]">
                         {item.imagePath ? (
                             <img
                                 src={item.imagePath}
@@ -29,9 +29,21 @@ const CardRenderer: React.FC<CardRendererProps> = ({ currentRecords, onDelete, o
                                 <span className="text-gray-500">No Image</span>
                             </div>
                         )}
-                        <div className="flex-1">
-                            <h3 className="text-lg font-semibold text-gray-800 truncate">{item.name}</h3>
-                            <p className="text-sm text-gray-600 line-clamp-2">{item.description}</p>
+                        <div className="flex-1 h-20 flex items-center overflow-hidden">
+                            {item.description ? (
+                                <div className="w-full">
+                                    <h3 className="text-lg font-semibold text-gray-800 overflow-hidden text-ellipsis whitespace-nowrap">
+                                        {item.name}
+                                    </h3>
+                                    <p className="text-sm text-gray-600 overflow-hidden text-ellipsis line-clamp-2">
+                                        {item.description}
+                                    </p>
+                                </div>
+                            ) : (
+                                <h3 className="text-lg font-semibold text-gray-800 overflow-hidden text-ellipsis whitespace-nowrap">
+                                    {item.name}
+                                </h3>
+                            )}
                         </div>
                         <div className="absolute top-2 right-2 flex space-x-2">
                             <button

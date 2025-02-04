@@ -1,4 +1,5 @@
 import React from "react";
+import BorderRichTextBox from "@/components/Inputs/BorderRichTextBox";
 
 interface MaterialInfoProps {
     material: {
@@ -42,7 +43,7 @@ const MaterialInfo: React.FC<MaterialInfoProps> = ({ material, onClose }) => {
                 </svg>
             </button>
 
-            <h2 className="text-lg font-bold mb-4 text-primary">Material Info</h2>
+            <h2 className="text-lg font-bold mb-4 text-primary">Información del Material</h2>
             <hr className="my-4 border-gray-300" />
 
             {/* Imagen, Nombre y Stocks */}
@@ -54,20 +55,20 @@ const MaterialInfo: React.FC<MaterialInfoProps> = ({ material, onClose }) => {
                         className="rounded w-full h-full object-contain"
                     />
                 </div>
-                <div className="flex-1">
+                <div className="flex-1 min-w-0">
                     {/* Nombre */}
                     <h3 className="font-semibold text-lg text-primary mb-2">Nombre del material</h3>
                     <div className="border border-primary px-4 py-2 rounded-lg mb-4 text-sm">
-                        {material.name}
+                        <p className="truncate w-full">{material.name}</p>
                     </div>
                     {/* Stocks */}
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <h4 className="font-semibold text-sm text-primary">Available Stock</h4>
+                            <h4 className="font-semibold text-sm text-primary">Stock Disponible</h4>
                             <p className="text-gray-800 mt-1 text-sm">{material.borrowable_stock}</p>
                         </div>
                         <div>
-                            <h4 className="font-semibold text-sm text-primary">Real Stock</h4>
+                            <h4 className="font-semibold text-sm text-primary">Stock Real</h4>
                             <p className="text-gray-800 mt-1 text-sm">{material.stock}</p>
                         </div>
                     </div>
@@ -77,25 +78,30 @@ const MaterialInfo: React.FC<MaterialInfoProps> = ({ material, onClose }) => {
             {/* Descripción */}
             <div className="mb-4">
                 <h4 className="font-semibold text-lg text-primary">Descripción</h4>
-                <div className="border border-primary px-4 py-2 rounded-lg mt-1 text-sm">
-                    {material.description}
-                </div>
+                <BorderRichTextBox
+                    placeholder="Descripción del material"
+                    name="description"
+                    value={material.description}
+                    onChange={() => {}}
+                    className="bg-gray-50"
+                    readOnly={true}
+                />
             </div>
 
             {/* Subcategoría */}
             <div className="mb-4">
                 <h4 className="font-semibold text-lg text-primary">Subcategoría</h4>
                 <div className="border border-primary px-4 py-2 rounded-lg mt-1 text-sm">
-                    {material.subCategoryName}
+                    <p className="truncate">{material.subCategoryName}</p>
                 </div>
             </div>
 
             {/* Roles */}
             <div className="mb-4">
-                <h4 className="font-semibold text-lg text-primary">Roles de material</h4>
+                <h4 className="font-semibold text-lg text-primary">Roles asignados</h4>
                 <div className="border border-primary px-4 py-2 rounded-lg mt-1 text-sm">
                     <div className="flex flex-wrap gap-2">
-                        {Array.isArray(material.roleNames) &&
+                        {Array.isArray(material.roleNames) && material.roleNames.length > 0 ? (
                             material.roleNames.map((role: string, index: number) => (
                                 <span
                                     key={index}
@@ -103,7 +109,10 @@ const MaterialInfo: React.FC<MaterialInfoProps> = ({ material, onClose }) => {
                                 >
                                     {role}
                                 </span>
-                            ))}
+                            ))
+                        ) : (
+                            <span className="text-gray-500">Sin roles asignados</span>
+                        )}
                     </div>
                 </div>
             </div>

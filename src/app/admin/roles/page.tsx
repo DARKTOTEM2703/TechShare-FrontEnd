@@ -87,6 +87,11 @@ export default function Roles() {
     }
     hideDeleteModal()
   }
+
+  const headerLabels = {
+    name: 'Nombre'
+  }
+
   return (
     <div>
       <CrudHeader
@@ -99,7 +104,8 @@ export default function Roles() {
       />
       <CrudBody
         data={data}
-        headers={['roleId', 'name']}
+        headerLabels={headerLabels}
+        headers={['name']}
         searchTerm={searchTerm}
         onDelete={(id) => showDeleteModal(id)}
         onEdit={(id) => showEditModal(id)}

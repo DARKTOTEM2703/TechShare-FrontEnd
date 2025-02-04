@@ -7,6 +7,7 @@ interface DynamicDropdownProps<T> {
     selectedValue: T[keyof T];
     onChange: (value: T[keyof T]) => void;
     placeholder?: string;
+    className?: string;
 }
 
 const DynamicDropdown = <T,>({
@@ -15,13 +16,15 @@ const DynamicDropdown = <T,>({
     labelKey,
     selectedValue,
     onChange,
-    placeholder = "Select an option",
+    placeholder = "Selecciona una opción",
+    className,
 }: DynamicDropdownProps<T>) => {
     return (
         <select
             value={Number(selectedValue) || ""}
             onChange={(e) => onChange(e.target.value as T[keyof T])}
             required
+            className={`text-sm p-[10px] mb-[15px] border-[1px] border-primary rounded-md ${className}`}
         >
             <option value="" disabled>
                 {placeholder}

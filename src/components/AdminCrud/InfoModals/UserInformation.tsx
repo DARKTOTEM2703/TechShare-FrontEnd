@@ -33,13 +33,13 @@ const UserInformation: React.FC<UserInformationProps> = ({ user, onClose, onSave
                             <div className="mb-4">
                                 <h4 className="font-semibold text-sm text-primary">First Name</h4>
                                 <div className="border border-primary px-4 py-2 rounded-lg mt-1 text-sm">
-                                    {user.firstName}
+                                    <p className="truncate">{user.firstName}</p>
                                 </div>
                             </div>
                             <div>
                                 <h4 className="font-semibold text-sm text-primary">Last Name</h4>
                                 <div className="border border-primary px-4 py-2 rounded-lg mt-1 text-sm">
-                                    {user.lastName}
+                                    <p className="truncate">{user.lastName}</p>
                                 </div>
                             </div>
                         </div>
@@ -50,13 +50,13 @@ const UserInformation: React.FC<UserInformationProps> = ({ user, onClose, onSave
                         <div>
                             <h4 className="font-semibold text-sm text-primary">Email</h4>
                             <div className="border border-primary px-4 py-2 rounded-lg mt-1 text-sm">
-                                {user.email}
+                                <p className="truncate">{user.email}</p>
                             </div>
                         </div>
                         <div>
                             <h4 className="font-semibold text-sm text-primary">Phone Number</h4>
                             <div className="border border-primary px-4 py-2 rounded-lg mt-1 text-sm">
-                                {user.phoneNumber || "N/A"}
+                                <p className="truncate">{user.phoneNumber || "N/A"}</p>
                             </div>
                         </div>
                     </div>

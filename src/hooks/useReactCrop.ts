@@ -28,6 +28,7 @@ export const useImageCrop = ({ASPECT_RATIO, MIN_DIMENSION} : ImageCrop) => {
             const imageElement = new Image();
             imageElement.src = resultUrl;
             imageElement.onload = () => {
+                /*
     if (
         imageElement.naturalWidth < MIN_DIMENSION ||
         imageElement.naturalHeight < MIN_DIMENSION
@@ -35,7 +36,7 @@ export const useImageCrop = ({ASPECT_RATIO, MIN_DIMENSION} : ImageCrop) => {
         setError('La imagen es muy pequeña.');
         setImageUrl('');
         return;
-    }
+    }*/
     const resizedImage = resizeImage(imageElement, 720, 720); // Ejemplo de 1024px máx.
     setImageUrl(resizedImage); // Base64 optimizada
 };

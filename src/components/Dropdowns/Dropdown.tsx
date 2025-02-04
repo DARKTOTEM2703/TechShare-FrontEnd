@@ -7,10 +7,10 @@ import { IoMdArrowDropdown } from "react-icons/io";
 import { FaFilter } from 'react-icons/fa';
 
 interface DropdownProps {
-    options: string[];
+    options: { value: string; label: string }[];
     value: string;
     onChange: (value: string) => void;
-    className?: string; // Nueva prop para className
+    className?: string;
 }
 
 export default function Dropdown({ options, value, onChange, className }: DropdownProps) {
@@ -22,10 +22,10 @@ export default function Dropdown({ options, value, onChange, className }: Dropdo
                     value={value}
                     onChange={(e) => onChange(e.target.value)}
                 >
-                    <option value="" disabled>Select an option</option>
+                    <option value="" disabled>Seleccione una opción</option>
                     {options.map((option, index) => (
-                        <option key={index} value={option.toLowerCase()}>
-                            {option}
+                        <option key={index} value={option.value.toLowerCase()}>
+                            {option.label}
                         </option>
                     ))}
                 </select>

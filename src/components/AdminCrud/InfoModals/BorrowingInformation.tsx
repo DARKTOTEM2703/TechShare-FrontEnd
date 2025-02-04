@@ -68,13 +68,13 @@ const BorrowDetails: React.FC<BorrowDetailsProps> = ({ borrow, onClose }) => {
                             <div className="mb-4">
                                 <h4 className="font-semibold text-sm text-primary">Nombre</h4>
                                 <div className="border border-primary px-4 py-2 rounded-lg mt-1 text-sm">
-                                    {borrow.usuarioName}
+                                    <p className="truncate">{borrow.usuarioName}</p>
                                 </div>
                             </div>
                             <div>
                                 <h4 className="font-semibold text-sm text-primary">E-mail</h4>
                                 <div className="border border-primary px-4 py-2 rounded-lg mt-1 text-sm">
-                                    {`user${borrow.usuarioId}@example.com`}
+                                    <p className="truncate">{`user${borrow.usuarioId}@example.com`}</p>
                                 </div>
                             </div>
                         </div>
@@ -128,7 +128,9 @@ const BorrowDetails: React.FC<BorrowDetailsProps> = ({ borrow, onClose }) => {
                             <tbody>
                                 {borrow.details.map((detail) => (
                                     <tr key={detail.detailsBorrowId}>
-                                        <td className="px-4 py-2 text-sm border-b">{detail.materialName}</td>
+                                        <td className="px-4 py-2 text-sm border-b">
+                                            <p className="truncate max-w-[200px]">{detail.materialName}</p>
+                                        </td>
                                         <td className="px-4 py-2 text-sm border-b">{detail.quantity}</td>
                                     </tr>
                                 ))}
