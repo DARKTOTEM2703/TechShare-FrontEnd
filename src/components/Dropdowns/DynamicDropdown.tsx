@@ -5,7 +5,7 @@ interface DynamicDropdownProps<T> {
     valueKey: keyof T;
     labelKey: keyof T;
     selectedValue: T[keyof T];
-    onChange: (value: T[keyof T]) => void;
+    onChange: any;
     placeholder?: string;
     className?: string;
 }
