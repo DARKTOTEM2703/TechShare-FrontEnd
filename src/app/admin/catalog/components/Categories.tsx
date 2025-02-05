@@ -11,6 +11,7 @@ import ReactCrop from 'react-image-crop';
 import { Category } from '../interfaces/Category';
 import CreateCategoryModal from './modals/CreateCategoryModal';
 import EditCategoryModal from './modals/EditCategoryModal';
+import DeleteCategoryModal from './modals/DeleteCategoryModal';
 
 export default function Categories({
     token,
@@ -192,19 +193,11 @@ export default function Categories({
                 MIN_WIDTH={MIN_WIDTH}
             />
 
-            {isDeleteModalVisible && (
-                <div className="modal-overlay">
-                    <div className="modal-content">
-                        <ModalBase
-                            onClose={hideDeleteModal}
-                            header="Confirmar eliminación de categoría"
-                            onSubmit={handleDeleteCategory}
-                        >
-                            <p>¿Estás seguro de que quieres eliminar esta categoría?</p>
-                        </ModalBase>
-                    </div>
-                </div>
-            )}
+            <DeleteCategoryModal
+                isVisible={isDeleteModalVisible}
+                onClose={hideDeleteModal}
+                onSubmit={handleDeleteCategory}
+            />
         </div>
     );
 }
