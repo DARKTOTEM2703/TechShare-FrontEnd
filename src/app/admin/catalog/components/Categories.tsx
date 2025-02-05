@@ -9,6 +9,7 @@ import DropzoneWithPreview from '@/components/DropZone';
 import { useImageCrop } from '@/hooks/useReactCrop';
 import ReactCrop from 'react-image-crop';
 import { Category } from '../interfaces/Category';
+import CreateCategoryModal from './modals/CreateCategoryModal';
 
 export default function Categories({
     token,
@@ -151,91 +152,24 @@ export default function Categories({
                 onEdit={(id) => showEditModal(id)}
             />
 
-            {isCreateModalVisible && (
-                <div className="modal-overlay">
-                    <div className="modal-content">
-                        <ModalBase
-                            onClose={hideCreateModal}
-                            header="Crear nueva categoría"
-                            onSubmit={handleCreateCategory}
-                        >
-
-                            {isImageCropping ? (
-                                <>
-                                    <ReactCrop
-                                        crop={crop}
-                                        onChange={(_, percentCrop) => {
-                                            setCrop(percentCrop);
-                                        }}
-                                        keepSelection
-                                        aspect={ASPECT_RATIO}
-                                        minWidth={MIN_WIDTH}
-                                    >
-                                        <img
-                                            ref={imageRef}
-                                            src={imageUrl}
-                                            alt="Upload"
-                                            style={{ maxHeight: '70vh' }}
-                                            onLoad={onImageLoad}
-                                        />
-                                    </ReactCrop>
-
-                                    <canvas
-                                        ref={previewImageRef}
-                                        className="mt-4"
-                                        style={{
-                                            display: 'none',
-                                            border: '1px solid black',
-                                            objectFit: 'contain',
-                                            width: 150,
-                                            height: 150
-                                        }}
-                                    />
-
-                                    <button
-                                        className="primary-button"
-                                        type="button"
-                                        onClick={() => {
-                                            applyCrop((croppedFile: any, previewUrl: any) => {
-                                                setFormData((prev) => ({
-                                                    ...prev,
-                                                    image: croppedFile,
-                                                    imagePreview: previewUrl
-                                                }));
-                                            });
-                                        }}
-                                    >
-                                        Aplicar
-                                    </button>
-                                </>
-                            ) : (
-                                <>
-                                    <div className="flex gap-2">
-                                        <div className="flex items-center aspect-[3/2] h-[176px] mr-5">
-                                            <DropzoneWithPreview
-                                                onFileChange={(file) => onSelectFile(file)}
-                                                initialPreview={formData.imagePreview || imageUrl}
-                                            />
-                                        </div>
-                                        <div className="flex flex-col gap-2 justify-center h-full">
-                                            <h2>Nombre</h2>
-                                            <BorderTextField
-                                                name="name"
-
-                                                placeholder="Nombre de la categoría"
-                                                onChange={(e) =>
-                                                    setFormData({ ...formData, name: e.target.value })
-                                                }
-                                                value={formData.name}
-                                            />
-                                        </div>
-                                    </div>
-                                </>
-                            )}
-                        </ModalBase>
-                    </div>
-                </div>
-            )}
+            <CreateCategoryModal
+                isVisible={isCreateModalVisible}
+                onClose={hideCreateModal}
+                onSubmit={handleCreateCategory}
+                formData={formData}
+                setFormData={setFormData}
+                isImageCropping={isImageCropping}
+                imageUrl={imageUrl}
+                crop={crop}
+                setCrop={setCrop}
+                imageRef={imageRef}
+                previewImageRef={previewImageRef}
+                onSelectFile={onSelectFile}
+                onImageLoad={onImageLoad}
+                applyCrop={applyCrop}
+                ASPECT_RATIO={ASPECT_RATIO}
+                MIN_WIDTH={MIN_WIDTH}
+            />
 
             {isEditModalVisible && (
                 <div className="modal-overlay">
@@ -304,7 +238,7 @@ export default function Categories({
                                                     ''}
                                             />
                                         </div>
-                                            <div className="flex flex-col gap-2 justify-center h-full">
+                                        <div className="flex flex-col gap-2 justify-center h-full">
                                             <h2>Nombre</h2>
                                             <BorderTextField
                                                 name="name"

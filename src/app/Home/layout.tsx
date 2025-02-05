@@ -18,10 +18,10 @@ export default function RootLayout(
     return (
         <div className="h-screen flex flex-col justify-between overflow-y-scroll scrollbar-hide">
             <div className="m-8">
-            <NavBar />
-            <div className="mt-8 rounded-lg shadow-black/20 shadow-lg">
-                {children}
-            </div>
+                <NavBar />
+                <div className="mt-8 rounded-lg shadow-black/20 shadow-lg">
+                    {children}
+                </div>
             </div>
             <Footer />
         </div>
