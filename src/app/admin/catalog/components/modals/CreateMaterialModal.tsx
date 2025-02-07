@@ -123,14 +123,30 @@ export default function CreateMaterialModal({
                                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                                         value={formData.name}
                                     />
-                                    <h2>Precio</h2>
-                                    <BorderTextField
-                                        name="price"
-                                        placeholder="Precio del material"
-                                        onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                                        value={formData.price}
-                                        isCurrency={true}
-                                    />
+                                    <div className="flex gap-4">
+                                        <div>
+                                            <h2>Precio</h2>
+                                            <BorderTextField
+                                                name="price"
+                                                placeholder="Precio del material"
+                                                onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                                                value={formData.price}
+                                                isCurrency={true}
+                                            />
+                                        </div>
+                                        <div>
+                                            <h2>Stock Inicial</h2>
+                                            <BorderTextField
+                                                name="stock"
+                                                placeholder="Cantidad disponible"
+                                                onChange={(e) => {
+                                                    const value = Math.max(0, Math.floor(Number(e.target.value)));
+                                                    setFormData({ ...formData, stock: value });
+                                                }}
+                                                value={formData.stock}
+                                            />
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <h2>Descripción</h2>

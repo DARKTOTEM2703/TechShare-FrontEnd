@@ -15,7 +15,25 @@ export default function Materials({ token, subCategories, roles, materials, refr
     const [isCreateModalVisible, setCreateModalVisible] = useState(false);
     const [isEditModalVisible, setEditModalVisible] = useState(false);
     const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
-    const [formData, setFormData] = useState<{ name: string; description: string; price: number; image?: File | null; imagePreview?: string | null; subCategoryId: number; roleIds: number[] }>({ name: '', description: '', price: 0, image: null, imagePreview: null, subCategoryId: 0, roleIds: [] });
+    const [formData, setFormData] = useState<{
+        name: string;
+        description: string;
+        price: number;
+        stock: number;
+        image?: File | null;
+        imagePreview?: string | null;
+        subCategoryId: number;
+        roleIds: number[];
+    }>({
+        name: '',
+        description: '',
+        price: 0,
+        stock: 0,
+        image: null,
+        imagePreview: null,
+        subCategoryId: 0,
+        roleIds: []
+    });
     const [selectedMaterial, setSelectedMaterial] = useState<any>(null);
 
     const { setClickedItemId, handleCreate, handleUpdate, handleDelete, clickedItemId } = useCrudOperations(token, refreshMaterials);
@@ -44,7 +62,7 @@ export default function Materials({ token, subCategories, roles, materials, refr
     const showCreateModal = () => setCreateModalVisible(true);
     const hideCreateModal = () => {
         setCreateModalVisible(false);
-        setFormData({ name: '', description: '', price: 0, image: null, imagePreview: null, subCategoryId: 0, roleIds: [] });
+        setFormData({ name: '', description: '', price: 0, stock: 0, image: null, imagePreview: null, subCategoryId: 0, roleIds: [] });
         setIsImageCropping(false);
         setImageUrl('');
         setCrop(undefined);
@@ -53,7 +71,7 @@ export default function Materials({ token, subCategories, roles, materials, refr
     const showEditModal = () => setEditModalVisible(true);
     const hideEditModal = () => {
         setEditModalVisible(false);
-        setFormData({ name: '', description: '', price: 0, image: null, imagePreview: null, subCategoryId: 0, roleIds: [] });
+        setFormData({ name: '', description: '', price: 0, stock: 0, image: null, imagePreview: null, subCategoryId: 0, roleIds: [] });
         setIsImageCropping(false);
         setImageUrl('');
         setCrop(undefined);
@@ -63,7 +81,7 @@ export default function Materials({ token, subCategories, roles, materials, refr
     const hideDeleteModal = () => setDeleteModalVisible(false);
 
     const createButtonClicked = () => {
-        setFormData({ name: '', description: '', price: 0, image: null, imagePreview: null, subCategoryId: 0, roleIds: [] });
+        setFormData({ name: '', description: '', price: 0, stock: 0, image: null, imagePreview: null, subCategoryId: 0, roleIds: [] });
         showCreateModal();
     };
 
@@ -76,6 +94,7 @@ export default function Materials({ token, subCategories, roles, materials, refr
                 name: selectedMaterial.name,
                 description: selectedMaterial.description,
                 price: selectedMaterial.price,
+                stock: selectedMaterial.stock,
                 image: null,
                 imagePreview: selectedMaterial.imagePath,
                 subCategoryId: selectedMaterial.subCategoryId,
@@ -96,6 +115,7 @@ export default function Materials({ token, subCategories, roles, materials, refr
         formDataToSend.append('name', formData.name);
         formDataToSend.append('description', formData.description);
         formDataToSend.append('price', formData.price.toString());
+        formDataToSend.append('stock', formData.stock.toString());
         formDataToSend.append('subCategoryId', formData.subCategoryId.toString());
         formDataToSend.append('roleIds', formData.roleIds.toString());
 
@@ -112,6 +132,7 @@ export default function Materials({ token, subCategories, roles, materials, refr
         formDataToSend.append('name', formData.name);
         formDataToSend.append('description', formData.description);
         formDataToSend.append('price', formData.price.toString());
+        formDataToSend.append('stock', formData.stock.toString());
         formDataToSend.append('subCategoryId', formData.subCategoryId.toString());
         formDataToSend.append('roleIds', formData.roleIds.toString());
 
