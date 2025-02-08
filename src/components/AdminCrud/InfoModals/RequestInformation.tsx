@@ -98,6 +98,9 @@ const RequestDetails: React.FC<RequestDetailsProps> = ({ request, onClose }) => 
                                 <th className="px-4 py-2 text-sm font-semibold text-primary border-b">
                                     Stock Prest.
                                 </th>
+                                <th className="px-4 py-2 text-sm font-semibold text-primary border-b">
+                                    Cantidad
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -122,6 +125,9 @@ const RequestDetails: React.FC<RequestDetailsProps> = ({ request, onClose }) => 
                                     </td>
                                     <td className="px-4 py-2 text-sm border-b text-center">
                                         {detail.borrowable_stock}
+                                    </td>
+                                    <td className="px-4 py-2 text-sm border-b text-center">
+                                        {detail.quantity}
                                     </td>
                                 </tr>
                             ))}

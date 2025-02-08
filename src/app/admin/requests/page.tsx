@@ -88,8 +88,11 @@ export default function Page() {
         }
     }, [token]);
 
+    useEffect(() => {
+        console.log(requests);
+    }, [requests]);
 
-    return (
+    return (    
         <div>
             <CrudHeader
                 title="Solicitudes"
