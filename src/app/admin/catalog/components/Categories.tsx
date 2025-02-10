@@ -19,7 +19,8 @@ export default function Categories({
     refreshCategories,
     ASPECT_RATIO,
     MIN_DIMENSION,
-    MIN_WIDTH
+    MIN_WIDTH,
+    isLoading
 }: {
     token: string;
     categories: Category[];
@@ -27,6 +28,7 @@ export default function Categories({
     ASPECT_RATIO: number;
     MIN_DIMENSION: number;
     MIN_WIDTH: number;
+    isLoading: boolean;
 }) {
     const { setClickedItemId, handleCreate, handleUpdate, handleDelete, clickedItemId } =
         useCrudOperations(token, refreshCategories);
@@ -152,6 +154,7 @@ export default function Categories({
                 searchTerm={searchTerm}
                 onDelete={(id) => showDeleteModal(id)}
                 onEdit={(id) => showEditModal(id)}
+                isLoading={isLoading}
             />
 
             <CreateCategoryModal

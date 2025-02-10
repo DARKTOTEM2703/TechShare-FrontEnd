@@ -10,9 +10,10 @@ interface CrudBodyProps {
     searchTerm: string;
     onDelete: (id: number) => void;
     onEdit: (id: number) => void;
+    isLoading: boolean;
 }
 
-export default function CrudBody({ data, searchTerm, onDelete, onEdit }: CrudBodyProps) {
+export default function CrudBody({ data, searchTerm, onDelete, onEdit, isLoading }: CrudBodyProps) {
     const [currentPage, setCurrentPage] = useState(1);
     const [filteredData, setFilteredData] = useState(data);
 
@@ -42,13 +43,16 @@ export default function CrudBody({ data, searchTerm, onDelete, onEdit }: CrudBod
                     currentRecords={currentRecords}
                     onDelete={onDelete}
                     onEdit={onEdit}
+                    isLoading={isLoading}
                 />
             </div>
-            <Pagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPageChange={(pageNumber) => setCurrentPage(pageNumber)}
-            />
+            {!isLoading && (
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={(pageNumber) => setCurrentPage(pageNumber)}
+                />
+            )}
         </div>
     );
 }

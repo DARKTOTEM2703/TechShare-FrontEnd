@@ -1,12 +1,37 @@
 import { FaEdit, FaTrash } from 'react-icons/fa';
+import RollingSpinner from '@/assets/animations/rolling-spinner.svg';
 
 interface CardRendererProps {
     currentRecords: any[];
     onDelete: (id: number) => void;
     onEdit: (id: number) => void;
+    isLoading: boolean;
 }
 
-const CardRenderer: React.FC<CardRendererProps> = ({ currentRecords, onDelete, onEdit }) => {
+const CardRenderer: React.FC<CardRendererProps> = ({ currentRecords, onDelete, onEdit, isLoading }) => {
+    if (isLoading) {
+        return (
+            <div className="flex flex-col items-center justify-center w-full min-h-[200px]">
+                <div className="flex justify-center items-center pt-6">
+                    <RollingSpinner width={80} height={80} />
+                </div>
+                <h1 className="flex justify-center items-center pt-6 font-semibold text-lg">
+                    Cargando contenido ...
+                </h1>
+            </div>
+        );
+    }
+
+    if (currentRecords.length === 0) {
+        return (
+            <div className="flex items-center justify-center w-full min-h-[200px]">
+                <h1 className="font-semibold text-lg text-primary">
+                    No hay elementos para mostrar
+                </h1>
+            </div>
+        );
+    }
+
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-6">
             {currentRecords.map((item, index) => {

@@ -22,6 +22,7 @@ export default function Catalog() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [subCategories, setSubCategories] = useState<SubCategory[]>([]);
   const [materials, setMaterials] = useState<Material[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useAuth();
   const token = getToken() || '';
@@ -48,6 +49,7 @@ export default function Catalog() {
 
   useEffect(() => {
     const fetchAllData = async () => {
+      setIsLoading(true);
       try {
         const [categoriesData, subCategoriesData, materialsData, rolesData] = await Promise.all([
           fetchData(endpoints.categories.getAll, token),
@@ -62,6 +64,8 @@ export default function Catalog() {
         setRoles(rolesData);
       } catch (error) {
         console.error("Error fetching data:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -84,6 +88,7 @@ export default function Catalog() {
           ASPECT_RATIO={ASPECT_RATIO}
           MIN_DIMENSION={MIN_DIMENSION}
           MIN_WIDTH={MIN_WIDTH}
+          isLoading={isLoading}
         />
       </div>
       <div className='mb-6'>
@@ -95,6 +100,7 @@ export default function Catalog() {
           ASPECT_RATIO={ASPECT_RATIO}
           MIN_DIMENSION={MIN_DIMENSION}
           MIN_WIDTH={MIN_WIDTH}
+          isLoading={isLoading}
         />
       </div>
       <div>
@@ -105,6 +111,7 @@ export default function Catalog() {
           ASPECT_RATIO={ASPECT_RATIO}
           MIN_DIMENSION={MIN_DIMENSION}
           MIN_WIDTH={MIN_WIDTH}
+          isLoading={isLoading}
         />
       </div>
     </div>

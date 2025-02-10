@@ -15,7 +15,8 @@ export default function SubCategories({
     refreshSubCategories,
     ASPECT_RATIO,
     MIN_DIMENSION,
-    MIN_WIDTH
+    MIN_WIDTH,
+    isLoading
 }: {
     token: string;
     categories: any[];
@@ -24,6 +25,7 @@ export default function SubCategories({
     ASPECT_RATIO: number;
     MIN_DIMENSION: number;
     MIN_WIDTH: number;
+    isLoading: boolean;
 }) {
     const [searchTerm, setSearchTerm] = useState('');
     const [isCreateModalVisible, setCreateModalVisible] = useState(false);
@@ -152,6 +154,7 @@ export default function SubCategories({
                 searchTerm={searchTerm}
                 onDelete={deleteButtonClicked}
                 onEdit={editButtonClicked}
+                isLoading={isLoading}
             />
 
             <CreateSubCategoryModal

@@ -9,7 +9,7 @@ import CreateMaterialModal from './modals/CreateMaterialModal';
 import EditMaterialModal from './modals/EditMaterialModal';
 import DeleteMaterialModal from './modals/DeleteMaterialModal';
 
-export default function Materials({ token, subCategories = [], roles = [], materials = [], refreshMaterials, ASPECT_RATIO, MIN_DIMENSION, MIN_WIDTH }: { token: string, subCategories: any[], roles: any[], materials: any[], refreshMaterials: () => void, ASPECT_RATIO: number, MIN_DIMENSION: number, MIN_WIDTH: number }) {
+export default function Materials({ token, subCategories = [], roles = [], materials = [], refreshMaterials, ASPECT_RATIO, MIN_DIMENSION, MIN_WIDTH, isLoading }: { token: string, subCategories: any[], roles: any[], materials: any[], refreshMaterials: () => void, ASPECT_RATIO: number, MIN_DIMENSION: number, MIN_WIDTH: number, isLoading: boolean }) {
 
     const [searchTerm, setSearchTerm] = useState('');
     const [isCreateModalVisible, setCreateModalVisible] = useState(false);
@@ -165,7 +165,7 @@ export default function Materials({ token, subCategories = [], roles = [], mater
     return (
         <div>
             <CrudHeader title="Materials" dropdownOptions={[]} buttonLabel="Añadir material" buttonFunction={createButtonClicked} onSearchChange={handleSearchChange} />
-            <CrudBody data={materials} searchTerm={searchTerm} onDelete={deleteButtonClicked} onEdit={editButtonClicked} />
+            <CrudBody data={materials} searchTerm={searchTerm} onDelete={deleteButtonClicked} onEdit={editButtonClicked} isLoading={isLoading} />
             <CreateMaterialModal
                 isVisible={isCreateModalVisible}
                 onClose={hideCreateModal}
