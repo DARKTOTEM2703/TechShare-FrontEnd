@@ -19,12 +19,13 @@ export default function Page() {
     const [materials, setMaterials] = useState<Material[]>([]);
     const [selectedBorrow, setSelectedBorrow] = useState<Borrow | null>(null);
     const [searchTerm, setSearchTerm] = useState("");
-
     const [selectedBorrowDetails, setSelectedBorrowDetails] = useState<Borrow | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
 
     const handleSearchChange = (value: string) => setSearchTerm(value);
 
     const fetchBorrowings = async () => {
+        setIsLoading(true);
         try {
             const data = await fetchData(endpoints.borrowings.getAll, token);
             const filteredData = data.filter(
@@ -32,8 +33,10 @@ export default function Page() {
                     !borrowing.status.includes("PROCCES")
             );
             setData(filteredData);
+            setIsLoading(false);
         } catch (error) {
             console.error("Error fetching borrowings:", error);
+            setIsLoading(false);
         }
     };
 
@@ -120,6 +123,7 @@ export default function Page() {
                 searchTerm={searchTerm}
                 onMoreInfo={handleMoreInfo}
                 onConfirmReturn={handleConfirmReturn}
+                isLoading={isLoading}
             />
             {selectedBorrow && (
                 <div className="modal-overlay">
