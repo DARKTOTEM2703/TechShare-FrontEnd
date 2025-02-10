@@ -28,10 +28,10 @@ const Page = () => {
                 alert('Inicio de sesión exitoso');
                 router.push('/admin/');
             } else {
-                console.warn('Login failed, no token received.');
+                alert('Error: No se recibió el token de autenticación');
             }
         } catch (error) {
-            console.error('Error during login:', error);
+            alert(error instanceof Error ? error.message : 'Error durante el inicio de sesión');
         }
     };
 
