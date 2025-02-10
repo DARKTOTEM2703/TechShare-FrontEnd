@@ -7,11 +7,11 @@ interface TableRowsProps {
     onApproval: (id: number) => void;
     onDenial: (id: number) => void;
     onMoreInfo: (id: number) => void;
+    isLoading: boolean;  // Nuevo prop
 }
 
-const TableRows: React.FC<TableRowsProps> = ({ headers, currentRecords, onApproval, onDenial, onMoreInfo }) => {
-    // Si currentRecords está vacío, mostramos el spinner
-    if (currentRecords.length === 0) {
+const TableRows: React.FC<TableRowsProps> = ({ headers, currentRecords, onApproval, onDenial, onMoreInfo, isLoading }) => {
+    if (isLoading) {
         return (
             <tr>
                 <td rowSpan={6} colSpan={6} className="text-center">
@@ -20,6 +20,18 @@ const TableRows: React.FC<TableRowsProps> = ({ headers, currentRecords, onApprov
                     </div>
                     <h1 className="flex justify-center items-center pt-6 font-semibold text-lg">
                         Cargando contenido ...
+                    </h1>
+                </td>
+            </tr>
+        );
+    }
+
+    if (currentRecords.length === 0) {
+        return (
+            <tr>
+                <td rowSpan={6} colSpan={6} className="text-center">
+                    <h1 className="flex justify-center items-center pt-6 font-semibold text-lg">
+                        No hay solicitudes pendientes
                     </h1>
                 </td>
             </tr>

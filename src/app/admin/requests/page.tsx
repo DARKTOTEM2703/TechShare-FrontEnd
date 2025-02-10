@@ -25,7 +25,10 @@ export default function Page() {
 
     const token = getToken() || "";
 
+    const [isLoading, setIsLoading] = useState(true);
+
     const fetchRequests = () => {
+        setIsLoading(true);
         fetchData(endpoints.borrowings.getAll, token).then((data) => {
             if (Array.isArray(data)) {
                 const filteredData = data.filter(
@@ -33,8 +36,12 @@ export default function Page() {
                 );
                 setRequests(filteredData.reverse());
             } else {
-                setRequests([]); // Si data no es un array, establecemos un array vacío
+                setRequests([]);
             }
+            setIsLoading(false);
+        }).catch(() => {
+            setRequests([]);
+            setIsLoading(false);
         });
     };
 
@@ -112,7 +119,8 @@ export default function Page() {
                 searchTerm=""
                 onMoreInfo={handleMoreInfo}
                 onDenial={(id: number) => handleStatusUpdate(id, "REJECETD")}
-                onApproval={(id: number) => handleStatusUpdate(id, "BORROWED")} // Maneja la aprobación
+                onApproval={(id: number) => handleStatusUpdate(id, "BORROWED")}
+                isLoading={isLoading}
             />
             {/* Modal de Detalles */}
             {isModalOpen && selectedRequest && (
