@@ -27,7 +27,7 @@ const endpoints = {
     },
     users: {
         getAll: `${BASE_URL}/admin/user/all`,
-        update: (id: number) => `${BASE_URL}/admin/user/update/${id}`,
+        update: (id: number) => `${BASE_URL}/admin/user/${id}`,
         getUserDetails: `${BASE_URL}/user/details`,
     },
     movements: {

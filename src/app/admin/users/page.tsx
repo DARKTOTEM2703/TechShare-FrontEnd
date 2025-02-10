@@ -8,6 +8,7 @@ import endpoints from '@/app/infraestructure/config/configAPI';
 import UserInformation from '@/components/AdminCrud/InfoModals/UserInformation';
 import { useState, useEffect } from 'react';
 import "@/styles/modal.css";
+import { useCrudOperations } from '@/hooks/useCrudOperations';
 
 export default function Users() {
   interface User {
@@ -20,13 +21,24 @@ export default function Users() {
     roles: string[];
   }
 
-  useAuth();
-  const token = getToken();
+  interface Role {
+    roleId: number;
+    name: string;
+  }
 
   const [searchTerm, setSearchTerm] = useState('');
   const [users, setUsers] = useState<User[]>([]);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [roles, setRoles] = useState<Role[]>([]);
+  const [formData, setFormData] = useState<{
+    roles: string[];
+  }>({
+    roles: []
+  });
+
+  useAuth();
+  const token = getToken() || '';
 
   const fetchUsers = () => {
     setIsLoading(true);
@@ -40,24 +52,43 @@ export default function Users() {
       });
   };
 
+  const { handleUpdate } = useCrudOperations(token, fetchUsers);
+
+  const loadRoleOptions = (inputValue: string, callback: (options: any[]) => void) => {
+    fetchData(endpoints.roles.getAll, token)
+      .then((data: Role[]) => {
+        const options = data.map(role => ({
+          value: role.name,
+          label: role.name
+        }));
+        callback(options);
+      });
+  };
+
   const handleSearchChange = (value: string) => {
     setSearchTerm(value);
+  };
+
+  const handleUserUpdate = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (selectedUser) {
+      const payload = {
+        roles: formData.roles
+      };
+
+      console.log('Payload being sent:', JSON.stringify(payload, null, 2));
+
+      handleUpdate(endpoints.users.update(selectedUser.id), payload);
+      setSelectedUser(null);
+    }
   };
 
   const handleMoreInfo = (id: number) => {
     const user = users.find((user) => user.id === id);
     if (user) {
       setSelectedUser(user);
+      setFormData({ roles: user.roles });
     }
-  };
-
-  const closeModal = () => {
-    setSelectedUser(null);
-  };
-
-  const saveChanges = () => {
-    console.log("Save changes for:", selectedUser);
-    closeModal();
   };
 
   useEffect(() => {
@@ -97,8 +128,11 @@ export default function Users() {
         <div className='modal-overlay'>
           <UserInformation
             user={selectedUser}
-            onClose={closeModal}
-            onSave={saveChanges}
+            onClose={() => setSelectedUser(null)}
+            onSave={handleUserUpdate}
+            loadRoleOptions={loadRoleOptions}
+            formData={formData}
+            setFormData={setFormData}
           />
         </div>
       )}
