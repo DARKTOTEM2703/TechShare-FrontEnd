@@ -15,12 +15,15 @@ export default function Home() {
   const token = getToken() || '';
 
   const [materials, setMaterials] = useState([]);
+
   useEffect(() => {
-    fetchData(endpoints.materials.getAll, token)
-      .then((data) => {
-        setMaterials(data);
-      });
-  }, []);
+    if (token) {
+      fetchData(endpoints.materials.getAll, token)
+        .then((data) => {
+          setMaterials(data || []);
+        });
+    }
+  }, [token]);
 
   return (
     <div className="min-h-screen rounded-lg bg-gray-100 flex flex-col items-center">
@@ -39,10 +42,10 @@ export default function Home() {
         <div
           className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 py-4 px-12 mx-auto"
         >
-          {materials.map((material: any) => (
+          {Array.isArray(materials) && materials.map((material: any) => (
             <div
               key={material.materialsId}
-              className=" mx-auto" // Dimensiones fijas para las tarjetas
+              className=" mx-auto"
             >
               <ProductCard material={material} />
             </div>
