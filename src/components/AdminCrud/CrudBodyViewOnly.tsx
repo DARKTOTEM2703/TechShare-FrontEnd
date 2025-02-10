@@ -12,9 +12,10 @@ interface CrudBodyProps {
     searchTerm: string;
     onSelected: (id: number) => void;
     onMoreInfo: (id: number) => void;
+    isLoading: boolean;
 }
 
-export default function CrudBody({ data, headers, headerLabels = {}, searchTerm, onSelected, onMoreInfo }: CrudBodyProps) {
+export default function CrudBody({ data, headers, headerLabels = {}, searchTerm, onSelected, onMoreInfo, isLoading }: CrudBodyProps) {
     const [currentPage, setCurrentPage] = useState(1);
     const [filteredData, setFilteredData] = useState(data);
 
@@ -52,15 +53,18 @@ export default function CrudBody({ data, headers, headerLabels = {}, searchTerm,
                             onMoreInfo={onMoreInfo}
                             headers={headers}
                             currentRecords={currentRecords}
+                            isLoading={isLoading}
                         />
                     </tbody>
                 </table>
             </div>
-            <Pagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPageChange={(pageNumber) => setCurrentPage(pageNumber)}
-            />
+            {!isLoading && (
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={(pageNumber) => setCurrentPage(pageNumber)}
+                />
+            )}
         </div>
     );
 }

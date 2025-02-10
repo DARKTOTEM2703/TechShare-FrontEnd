@@ -26,10 +26,18 @@ export default function Users() {
   const [searchTerm, setSearchTerm] = useState('');
   const [users, setUsers] = useState<User[]>([]);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchUsers = () => {
+    setIsLoading(true);
     fetchData(endpoints.users.getAll, token)
-      .then((data: User[]) => setUsers(data));
+      .then((data: User[]) => {
+        setUsers(data);
+        setIsLoading(false);
+      })
+      .catch(() => {
+        setIsLoading(false);
+      });
   };
 
   const handleSearchChange = (value: string) => {
@@ -56,8 +64,7 @@ export default function Users() {
     fetchUsers();
     const interval = setInterval(() => {
       fetchUsers();
-    }
-      , 5000);
+    }, 5000);
     return () => clearInterval(interval);
   }, []);
 
@@ -84,7 +91,7 @@ export default function Users() {
         searchTerm={searchTerm}
         onSelected={(id: number) => alert(`Selected ${id}`)}
         onMoreInfo={handleMoreInfo}
-
+        isLoading={isLoading}
       />
       {selectedUser && (
         <div className='modal-overlay'>

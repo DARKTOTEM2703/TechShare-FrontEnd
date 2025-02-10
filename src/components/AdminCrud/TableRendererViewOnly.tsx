@@ -5,20 +5,31 @@ interface TableRowsProps {
     currentRecords: any[];
     onSelected: (id: number) => void;
     onMoreInfo: (id: number) => void;
+    isLoading: boolean;
 }
 
-const TableRows: React.FC<TableRowsProps> = ({ headers, currentRecords, onSelected, onMoreInfo }) => {
-    // Si currentRecords está vacío, mostramos el spinner
-    if (currentRecords.length === 0) {
+const TableRows: React.FC<TableRowsProps> = ({ headers, currentRecords, onSelected, onMoreInfo, isLoading }) => {
+    if (isLoading) {
         return (
-            <tr >
+            <tr>
                 <td rowSpan={6} colSpan={6} className="text-center">
                     <div className="flex justify-center items-center pt-6">
                         <RollingSpinner width={80} height={80} />
-
                     </div>
                     <h1 className="flex justify-center items-center pt-6 font-semibold text-lg">
                         Cargando contenido ...
+                    </h1>
+                </td>
+            </tr>
+        );
+    }
+
+    if (currentRecords.length === 0) {
+        return (
+            <tr>
+                <td rowSpan={6} colSpan={6} className="text-center">
+                    <h1 className="flex justify-center items-center pt-6 font-semibold text-lg">
+                        No hay elementos para mostrar
                     </h1>
                 </td>
             </tr>
