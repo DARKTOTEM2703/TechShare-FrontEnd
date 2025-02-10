@@ -9,7 +9,7 @@ import CreateMaterialModal from './modals/CreateMaterialModal';
 import EditMaterialModal from './modals/EditMaterialModal';
 import DeleteMaterialModal from './modals/DeleteMaterialModal';
 
-export default function Materials({ token, subCategories, roles, materials, refreshMaterials, ASPECT_RATIO, MIN_DIMENSION, MIN_WIDTH }: { token: string, subCategories: any[], roles: any[], materials: any[], refreshMaterials: () => void, ASPECT_RATIO: number, MIN_DIMENSION: number, MIN_WIDTH: number }) {
+export default function Materials({ token, subCategories = [], roles = [], materials = [], refreshMaterials, ASPECT_RATIO, MIN_DIMENSION, MIN_WIDTH }: { token: string, subCategories: any[], roles: any[], materials: any[], refreshMaterials: () => void, ASPECT_RATIO: number, MIN_DIMENSION: number, MIN_WIDTH: number }) {
 
     const [searchTerm, setSearchTerm] = useState('');
     const [isCreateModalVisible, setCreateModalVisible] = useState(false);
@@ -52,10 +52,12 @@ export default function Materials({ token, subCategories, roles, materials, refr
         setIsImageCropping
     } = useImageCrop({ ASPECT_RATIO, MIN_DIMENSION, MIN_WIDTH });
 
-    const roleOptions = roles.map((role: any) => ({
-        value: role.roleId,
-        label: role.name,
-    }));
+    const roleOptions = Array.isArray(roles) && roles.length > 0
+        ? roles.map((role: any) => ({
+            value: role.roleId,
+            label: role.name,
+        }))
+        : [];
 
     const handleSearchChange = (value: string) => setSearchTerm(value);
 

@@ -27,10 +27,14 @@ export default function Page() {
 
     const fetchRequests = () => {
         fetchData(endpoints.borrowings.getAll, token).then((data) => {
-            const filteredData = data.filter(
-                (request: Borrow) => request.status === "PROCCES"
-            );
-            setRequests(filteredData.reverse());
+            if (Array.isArray(data)) {
+                const filteredData = data.filter(
+                    (request: Borrow) => request.status === "PROCCES"
+                );
+                setRequests(filteredData.reverse());
+            } else {
+                setRequests([]); // Si data no es un array, establecemos un array vacío
+            }
         });
     };
 
@@ -92,7 +96,7 @@ export default function Page() {
         console.log(requests);
     }, [requests]);
 
-    return (    
+    return (
         <div>
             <CrudHeader
                 title="Solicitudes"

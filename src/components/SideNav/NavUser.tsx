@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { getToken } from '@/services/storageService';
 
-export default function NavUser({hamburgerButton}: {hamburgerButton: any}) {
+export default function NavUser({ hamburgerButton }: { hamburgerButton: any }) {
     useAuth();
     const token = getToken();
     const [userName, setUserName] = useState('User Name');
@@ -16,8 +16,15 @@ export default function NavUser({hamburgerButton}: {hamburgerButton: any}) {
     const fetchUserDetails = () => {
         fetchData(endpoints.users.getUserDetails, token)
             .then((user) => {
-                setUserName(`${user.firstName} ${user.lastName}`);
-                setUserRole(user.roles[0]);
+                if (user && user.firstName && user.lastName) {
+                    setUserName(`${user.firstName} ${user.lastName}`);
+                    if (user.roles && user.roles.length > 0) {
+                        setUserRole(user.roles[0]);
+                    }
+                }
+            })
+            .catch((error) => {
+                console.error('Error fetching user details:', error);
             });
     };
 
