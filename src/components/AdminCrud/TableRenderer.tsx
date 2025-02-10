@@ -6,10 +6,11 @@ interface TableRowsProps {
     currentRecords: any[];
     onDelete: (id: number) => void;
     onEdit: (id: number) => void;
+    isLoading: boolean;
 }
 
-const TableRows: React.FC<TableRowsProps> = ({ headers, currentRecords, onDelete ,onEdit}) => {
-    if (currentRecords.length === 0) {
+const TableRows: React.FC<TableRowsProps> = ({ headers, currentRecords, onDelete, onEdit, isLoading }) => {
+    if (isLoading) {
         return (
             <tr>
                 <td rowSpan={6} colSpan={6} className="text-center">
@@ -23,11 +24,24 @@ const TableRows: React.FC<TableRowsProps> = ({ headers, currentRecords, onDelete
             </tr>
         );
     }
+
+    if (currentRecords.length === 0) {
+        return (
+            <tr>
+                <td rowSpan={6} colSpan={6} className="text-center">
+                    <h1 className="flex justify-center items-center pt-6 font-semibold text-lg">
+                        No hay elementos para mostrar
+                    </h1>
+                </td>
+            </tr>
+        );
+    }
+
     return (
         <>
             {currentRecords.map((row: any, rowIndex: number) => {
                 // Obtiene el nombre del primer atributo de cada objeto
-                const idKey = Object.keys(row)[0]; 
+                const idKey = Object.keys(row)[0];
                 const idValue = row[idKey]; // Toma el valor del primer atributo como ID
 
                 return (

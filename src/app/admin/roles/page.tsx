@@ -16,10 +16,18 @@ export default function Roles() {
 
   useAuth()
   const token = getToken() || ''
+  const [isLoading, setIsLoading] = useState(true);  // Nuevo estado
 
   const fetchRoles = () => {
+    setIsLoading(true);  // Activar loading
     fetchData(endpoints.roles.getAll, token)
-      .then((data) => setData(data))
+      .then((data) => {
+        setData(data);
+        setIsLoading(false);  // Desactivar loading
+      })
+      .catch(() => {
+        setIsLoading(false);  // Desactivar loading en caso de error
+      });
   }
 
   useEffect(() => {
@@ -27,8 +35,7 @@ export default function Roles() {
 
     const interval = setInterval(() => {
       fetchRoles()
-    }
-      , 5000)
+    }, 5000)
     return () => clearInterval(interval)
   }, [])
 
@@ -109,6 +116,7 @@ export default function Roles() {
         searchTerm={searchTerm}
         onDelete={(id) => showDeleteModal(id)}
         onEdit={(id) => showEditModal(id)}
+        isLoading={isLoading}  // Nueva prop
       />
       {isCreateModalVisible && (
         <div className="modal-overlay">
