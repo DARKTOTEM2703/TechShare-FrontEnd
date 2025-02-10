@@ -21,6 +21,12 @@
   height: 100vh;
   overflow-y: auto;
   width: 100%;
+  scrollbar-width: none; /* Para Firefox */
+  -ms-overflow-style: none; /* Para Internet Explorer y Edge */
+}
+
+.content::-webkit-scrollbar {
+  display: none; /* Para Chrome, Safari y Opera */
 }
 
 /* Media query para pantallas pequeñas */
