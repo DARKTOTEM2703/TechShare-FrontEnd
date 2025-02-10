@@ -21,12 +21,20 @@ const Inventory = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [materialInfo, setMaterialInfo] = useState<Material | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleSearchChange = (value: string) => setSearchTerm(value);
 
   const fetchMaterials = () => {
+    setIsLoading(true);
     fetchData(endpoints.materials.getAll, token)
-      .then((data) => setMaterials(data));
+      .then((data) => {
+        setMaterials(data);
+        setIsLoading(false);
+      })
+      .catch(() => {
+        setIsLoading(false);
+      });
   };
 
   const clickedItem = (id: number) => {
@@ -62,16 +70,16 @@ const Inventory = () => {
   const [pendingAction, setPendingAction] = useState<(() => void) | null>(null);
 
   const openConfirmModal = (action: () => void) => {
-    setPendingAction(() => action); // Almacena la acción pendiente
+    setPendingAction(() => action);
     setIsConfirmModalOpen(true);
   };
 
   const handleMovementConfirm = () => {
     if (pendingAction) {
-      pendingAction(); // Ejecuta la acción pendiente
-      setPendingAction(null); // Limpia la acción
+      pendingAction();
+      setPendingAction(null);
     }
-    setIsConfirmModalOpen(false); // Cierra el modal
+    setIsConfirmModalOpen(false);
   };
 
   const closeConfirmModal = () => {
@@ -104,6 +112,7 @@ const Inventory = () => {
             searchTerm={searchTerm}
             onSelected={(id) => { clickedItem(id) }}
             onMoreInfo={(id) => { clickedMoreInfo(id) }}
+            isLoading={isLoading}
           />
         </div>
         <div className="min-w-[50vh]">
@@ -115,7 +124,6 @@ const Inventory = () => {
           />
         </div>
       </div>
-      {/* Modal */}
       {isModalOpen && materialInfo && (
         <div className='modal-overlay'>
           <div className="fixed inset-0 flex items-center justify-center z-60">
@@ -126,7 +134,6 @@ const Inventory = () => {
           </div>
         </div>
       )}
-      {/* Confirm Modal */}
       {isConfirmModalOpen && (
         <div className='modal-overlay'>
           <ModalBase
@@ -140,6 +147,5 @@ const Inventory = () => {
     </div>
   );
 };
-
 
 export default Inventory;
