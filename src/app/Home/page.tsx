@@ -47,7 +47,7 @@ export default function Home() {
               key={material.materialsId}
               className=" mx-auto"
             >
-              <ProductCard material={material} />
+              <ProductCard item={material} />
             </div>
           ))}
         </div>

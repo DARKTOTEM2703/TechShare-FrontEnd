@@ -4,6 +4,7 @@ export default function Products() {
   return (
           <div className='bg-white rounded-md p-4'>
               <h1>Esta es la products page</h1>
+              <h1>holsadasffd</h1>
           </div>
   )
 }
