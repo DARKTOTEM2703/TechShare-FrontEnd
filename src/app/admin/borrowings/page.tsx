@@ -95,12 +95,6 @@ export default function Page() {
     useEffect(() => {
         fetchBorrowings();
         fetchMaterials();
-
-        const interval = setInterval(() => {
-            fetchBorrowings();
-            fetchMaterials();
-        }, 5000);
-        return () => clearInterval(interval);
     }, []);
 
     const filteredData = data.filter((borrow) =>

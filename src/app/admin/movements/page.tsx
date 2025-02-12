@@ -35,11 +35,6 @@ export default function movements() {
 
   useEffect(() => {
     fetchMovements(token);
-
-    const interval = setInterval(() => {
-      fetchMovements(token);
-    }, 5000);
-    return () => clearInterval(interval);
   }, [token]);  // Agregar token como dependencia
 
   const headerLabels = {

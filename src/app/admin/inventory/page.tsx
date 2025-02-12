@@ -58,12 +58,7 @@ const Inventory = () => {
   };
 
   useEffect(() => {
-    fetchMaterials();
-    const interval = setInterval(() => {
-      fetchMaterials();
-    }
-      , 5000);
-    return () => clearInterval(interval);
+    fetchMaterials()
   }, []);
 
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);

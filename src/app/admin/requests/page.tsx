@@ -99,10 +99,6 @@ export default function Page() {
         }
     }, [token]);
 
-    useEffect(() => {
-        console.log(requests);
-    }, [requests]);
-
     return (
         <div>
             <CrudHeader
