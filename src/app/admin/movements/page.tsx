@@ -7,11 +7,16 @@ import { getToken } from '@/services/storageService'
 import endpoints from '@/app/infraestructure/config/configAPI'
 import fetchData from '@/services/fetchData'
 import { Movement } from '@/app/admin/movements/interfaces/Movement'
+import ModalBase from '@/components/Modal/ModalBase'
+import '@/styles/modal.css'
+import MovementInfo from '@/components/AdminCrud/InfoModals/MovementInfo'
 
 export default function movements() {
   const [data, setData] = useState<Movement[]>([])
   const [searchTerm, setSearchTerm] = useState('')
   const [isLoading, setIsLoading] = useState(true);  // Nuevo estado
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedMovement, setSelectedMovement] = useState<Movement | null>(null);
 
   useAuth()
   const token = getToken() || ''
@@ -44,6 +49,19 @@ export default function movements() {
     'materialsName': 'Material'
   };
 
+  const handleMoreInfo = (id: number) => {
+    const movement = data.find(m => m.movementsId === id);
+    if (movement) {
+      setSelectedMovement(movement);
+      setIsModalOpen(true);
+    }
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedMovement(null);
+  };
+
   return (
     <div>
       <CrudHeader
@@ -59,10 +77,20 @@ export default function movements() {
         headerLabels={headerLabels}
         headers={['moveType', 'quantity', 'date', 'materialsName']}
         onSelected={() => { }}
-        onMoreInfo={() => alert('')}
+        onMoreInfo={handleMoreInfo}
         searchTerm={searchTerm}
-        isLoading={isLoading}  // Nueva prop
+        isLoading={isLoading}
       />
+      {isModalOpen && selectedMovement && (
+        <div className='modal-overlay'>
+          <div className="fixed inset-0 flex items-center justify-center z-60">
+            <MovementInfo
+              movement={selectedMovement}
+              onClose={closeModal}
+            />
+          </div>
+        </div>
+      )}
     </div>
   )
 }
