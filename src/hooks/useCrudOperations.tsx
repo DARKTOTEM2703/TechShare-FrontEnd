@@ -52,7 +52,7 @@ export const useCrudOperations = (token: string, refreshData: () => void) => {
                 console.log("Updated successfully.");
                 refreshData();
             })
-            .catch((error) => alert(error.message));
+            .catch((error) => alert(JSON.stringify(error.message)));
     };
 
     const handleDelete = (url: string) => {
