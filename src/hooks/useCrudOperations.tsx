@@ -20,13 +20,16 @@ export const useCrudOperations = (token: string, refreshData: () => void) => {
             method,
             headers,
             body,
-        }).then(response => {
+        }).then(async response => {
             if (!response.ok) {
-                
-                return response.json().then(error => {
-                    alert("Error: " + JSON.stringify(error.message));
-                    throw new Error(`Error: ${response.status} ${response.statusText} - ${JSON.stringify(error.message)}`)
-                });
+                const contentType = response.headers.get("content-type");
+                if (contentType && contentType.includes("application/json")) {
+                    const error = await response.json();
+                    throw new Error(error.message);
+                } else {
+                    const text = await response.text();
+                    throw new Error(text);
+                }
             }
             return response;
         });
@@ -39,7 +42,7 @@ export const useCrudOperations = (token: string, refreshData: () => void) => {
                 console.log("Created:", data);
                 refreshData();
             })
-            .catch((error) => console.error(error));
+            .catch((error) => alert(JSON.stringify(error.message)));
     };
 
     const handleUpdate = (url: string, data: any) => {
@@ -49,6 +52,7 @@ export const useCrudOperations = (token: string, refreshData: () => void) => {
                 console.log("Updated successfully.");
                 refreshData();
             })
+            .catch((error) => alert(error.message));
     };
 
     const handleDelete = (url: string) => {
@@ -60,7 +64,7 @@ export const useCrudOperations = (token: string, refreshData: () => void) => {
                 console.log("Deleted successfully.");
                 refreshData();
             })
-            .catch((error) => console.error("Error:", error));
+            .catch((error) => alert(JSON.stringify(error.message)));
     };
 
     return {
