@@ -27,7 +27,7 @@ const NewMovementForm: React.FC<NewMovementFormProps> = ({
     const movementOptions = [
         { value: 'IN', label: 'Entrada' },
         { value: 'OUT', label: 'Salida' },
-        { value: 'ADJUSTMENT', label: 'Ajuste' }
+        { value: 'ADJUST', label: 'Ajuste' }
     ];
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {

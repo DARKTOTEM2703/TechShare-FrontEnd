@@ -51,7 +51,7 @@ const TableRows: React.FC<TableRowsProps> = ({ headers, currentRecords, onSelect
                         ))}
                         <td key={`actions-td-${idValue}`}>
                             <button className="text-secondary" onClick={() => onMoreInfo(idValue)}>
-                                <FaCircleInfo />
+                                <FaCircleInfo size={20}/>
                             </button>
                         </td>
                     </tr>
