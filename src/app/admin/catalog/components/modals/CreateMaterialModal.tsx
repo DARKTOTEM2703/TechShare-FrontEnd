@@ -155,6 +155,7 @@ export default function CreateMaterialModal({
                                 placeholder="Añade una descripción para el material"
                                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                                 value={formData.description}
+                                required={true}
                             />
                             <h2>Subcategoría</h2>
                             <AsyncSelect
@@ -174,6 +175,7 @@ export default function CreateMaterialModal({
                                     setFormData({ ...formData, subCategoryId: selectedOption.value })
                                 }
                                 placeholder="Selecciona una subcategoría"
+                                required={true}
                             />
                             <h2>Roles</h2>
                             <AsyncSelect

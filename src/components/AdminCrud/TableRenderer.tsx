@@ -53,10 +53,10 @@ const TableRows: React.FC<TableRowsProps> = ({ headers, currentRecords, onDelete
                         ))}
                         <td key={`empty-td-${idValue}`} />
                         <td key={`actions-td-${idValue}`}>
-                            <button className="action-button" onClick={() => onEdit(idValue)}>
+                            <button className="action-button transition-transform hover:scale-125" onClick={() => onEdit(idValue)}>
                                 <FaEdit />
                             </button>
-                            <button className="action-button" onClick={() => onDelete(idValue)}>
+                            <button className="action-button transition-transform hover:scale-125" onClick={() => onDelete(idValue)}>
                                 <FaTrash />
                             </button>
                         </td>
