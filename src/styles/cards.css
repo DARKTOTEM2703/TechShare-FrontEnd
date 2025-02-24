@@ -1,59 +1,68 @@
+/* Contenedor principal de las tarjetas */
 .card-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: space-around;
+    display: flex; /* Usa flexbox para organizar las tarjetas */
+    flex-wrap: wrap; /* Permite que las tarjetas se acomoden en varias filas si no caben en una sola */
+    gap: 20px; /* Espaciado entre las tarjetas */
+    justify-content: space-around; /* Distribuye las tarjetas de manera uniforme */
 }
 
+/* Estilos generales para cada tarjeta */
 .card {
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    width: 250px;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    background-color: white; /* Fondo blanco */
+    border-radius: 8px; /* Bordes redondeados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para dar efecto de elevación */
+    width: 250px; /* Ancho fijo de la tarjeta */
+    overflow: hidden; /* Evita que el contenido sobresalga */
+    display: flex; /* Usa flexbox para organizar el contenido */
+    flex-direction: column; /* Acomoda los elementos en columna */
+    align-items: center; /* Centra los elementos horizontalmente */
 }
 
+/* Imagen de la tarjeta */
 .card-image {
-    width: 100%;
-    height: auto;
-    object-fit: cover;
+    width: 100%; /* Hace que la imagen ocupe todo el ancho de la tarjeta */
+    height: auto; /* Mantiene la proporción de la imagen */
+    object-fit: cover; /* Asegura que la imagen se recorte correctamente si es necesario */
 }
 
+/* Contenedor del contenido textual de la tarjeta */
 .card-content {
-    padding: 16px;
-    text-align: center;
+    padding: 16px; /* Espaciado interno */
+    text-align: center; /* Centra el texto */
 }
 
+/* Título de la tarjeta */
 .card-title {
-    font-size: 1.2em;
-    font-weight: bold;
-    margin: 8px 0;
+    font-size: 1.2em; /* Tamaño de fuente más grande */
+    font-weight: bold; /* Negrita */
+    margin: 8px 0; /* Espaciado vertical */
 }
 
+/* Descripción de la tarjeta */
 .card-description {
-    font-size: 0.9em;
-    color: #555;
-    margin: 0;
+    font-size: 0.9em; /* Tamaño de fuente más pequeño */
+    color: #555; /* Color de texto gris oscuro */
+    margin: 0; /* Elimina márgenes por defecto */
 }
 
+/* Contenedor de los botones de acción */
 .card-actions {
-    display: flex;
-    justify-content: space-around;
-    padding: 10px;
-    width: 100%;
+    display: flex; /* Usa flexbox para organizar los botones */
+    justify-content: space-around; /* Distribuye los botones de manera uniforme */
+    padding: 10px; /* Espaciado interno */
+    width: 100%; /* Asegura que ocupe todo el ancho de la tarjeta */
 }
 
+/* Estilos de los botones de acción */
 .action-button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 1.2em;
-    color: #333;
+    background: none; /* Elimina el fondo */
+    border: none; /* Elimina el borde */
+    cursor: pointer; /* Cambia el cursor a un puntero */
+    font-size: 1.2em; /* Tamaño de fuente más grande */
+    color: #333; /* Color de texto oscuro */
 }
 
+/* Cambio de color al pasar el mouse sobre los botones de acción */
 .action-button:hover {
-    color: #007bff;
+    color: #007bff; /* Azul brillante para destacar */
 }
