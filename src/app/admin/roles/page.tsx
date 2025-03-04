@@ -96,6 +96,7 @@ export default function Roles() {
 
   return (
     <div>
+      {/*
       <CrudHeader
         title='Roles'
         dropdownOptions={[]}
@@ -154,6 +155,7 @@ export default function Roles() {
             <p>¿Estás seguro de que deseas borrar este rol?</p>
           </ModalBase>
         </div>)}
+      */}
     </div>
   )
 }

@@ -103,6 +103,7 @@ export default function Page() {
 
     return (
         <div>
+            {/*
             <CrudHeader
                 dropdownOptions={["null"]}
                 title="Préstamos"
@@ -136,6 +137,7 @@ export default function Page() {
                     onClose={() => setSelectedBorrowDetails(null)}
                 />
             )}
+            */}
         </div>
     );
 }

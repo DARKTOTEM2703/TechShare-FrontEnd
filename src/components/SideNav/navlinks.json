@@ -1,20 +1,5 @@
 [
     {
-      "name": "Panel de control",
-      "href": "/admin",
-      "icon": "FaTachometerAlt"
-    },
-    {
-      "name": "Roles",
-      "href": "/admin/roles",
-      "icon": "FaUserEdit"
-    },
-    {
-      "name": "Usuarios",
-      "href": "/admin/users",
-      "icon": "FaUsers"
-    },
-    {
       "name": "Catálogo",
       "href": "/admin/catalog",
       "icon": "FaFileAlt"
@@ -28,15 +13,5 @@
       "name": "Movimientos",
       "href": "/admin/movements",
       "icon": "FaExchangeAlt"
-    },
-    {
-      "name": "Préstamos",
-      "href": "/admin/borrowings",
-      "icon": "FaBox"
-    },
-    {
-      "name": "Solicitudes",
-      "href": "/admin/requests",
-      "icon": "FaEnvelope"
     }
 ]

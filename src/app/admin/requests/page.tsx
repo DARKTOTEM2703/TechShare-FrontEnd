@@ -101,6 +101,7 @@ export default function Page() {
 
     return (
         <div>
+            {/*
             <CrudHeader
                 title="Solicitudes"
                 dropdownOptions={["dummy"]}
@@ -118,7 +119,6 @@ export default function Page() {
                 onApproval={(id: number) => handleStatusUpdate(id, "BORROWED")}
                 isLoading={isLoading}
             />
-            {/* Modal de Detalles */}
             {isModalOpen && selectedRequest && (
                 <div className="modal-overlay">
                     <div >
@@ -126,6 +126,7 @@ export default function Page() {
                     </div>
                 </div>
             )}
+            */}
         </div>
     );
 }
