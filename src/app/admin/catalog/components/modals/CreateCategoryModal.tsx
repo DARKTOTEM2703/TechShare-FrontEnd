@@ -58,6 +58,7 @@ export default function CreateCategoryModal({
                     onClose={onClose}
                     header="Crear nueva categoría"
                     onSubmit={onSubmit}
+                    showButtons={!isImageCropping}
                 >
                     {isImageCropping ? (
                         <>

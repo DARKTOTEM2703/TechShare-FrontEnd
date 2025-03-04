@@ -93,10 +93,6 @@ export default function Users() {
 
   useEffect(() => {
     fetchUsers();
-    const interval = setInterval(() => {
-      fetchUsers();
-    }, 5000);
-    return () => clearInterval(interval);
   }, []);
 
   const headerLabels = {

@@ -4,8 +4,8 @@ export type Movement = {
     quantity: number,
     date: string,
     comment: string,
-    usuarioId: number,
-    usuarioName: string,
+    adminId: number,
+    adminName: string,
     materialsId: number,
     materialsName: string
-  }
+}

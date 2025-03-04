@@ -72,6 +72,7 @@ export default function Catalog() {
     fetchAllData();
   }, [token]);
 
+  //React Image Crop parameters
   const ASPECT_RATIO = 3 / 2
   const MIN_DIMENSION = 200
   const MIN_WIDTH = 200

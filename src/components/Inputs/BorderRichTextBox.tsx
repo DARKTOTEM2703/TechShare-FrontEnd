@@ -7,6 +7,7 @@ interface TextFieldProps {
     onChange: (e: any) => void;
     className?: string;
     readOnly?: boolean;
+    required?: boolean;
 }
 
 const TextField: React.FC<TextFieldProps> = ({ 
@@ -15,7 +16,8 @@ const TextField: React.FC<TextFieldProps> = ({
     value, 
     onChange, 
     className,
-    readOnly = false 
+    readOnly = false,
+    required = false
 }) => {
     return (
         <textarea
@@ -27,6 +29,7 @@ const TextField: React.FC<TextFieldProps> = ({
             onChange={onChange}
             rows={3} // Opcional: filas iniciales visibles
             readOnly={readOnly}
+            required={required}
         />
     );
 };

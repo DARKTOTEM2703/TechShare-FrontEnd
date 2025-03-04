@@ -72,13 +72,13 @@ const CardRenderer: React.FC<CardRendererProps> = ({ currentRecords, onDelete, o
                         </div>
                         <div className="absolute top-2 right-2 flex space-x-2">
                             <button
-                                className="action-button" // Color original azul
+                                className="action-button transition-transform hover:scale-125" 
                                 onClick={() => onEdit(idValue)}
                             >
                                 <FaEdit />
                             </button>
                             <button
-                                className="action-button"
+                                className="action-button transition-transform hover:scale-125"
                                 onClick={() => onDelete(idValue)}
                             >
                                 <FaTrash />

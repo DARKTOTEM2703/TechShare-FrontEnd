@@ -32,11 +32,6 @@ export default function Roles() {
 
   useEffect(() => {
     fetchRoles()
-
-    const interval = setInterval(() => {
-      fetchRoles()
-    }, 5000)
-    return () => clearInterval(interval)
   }, [])
 
   const { setClickedItemId, handleCreate, handleUpdate, handleDelete, clickedItemId } = useCrudOperations(token, fetchRoles);

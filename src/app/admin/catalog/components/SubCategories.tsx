@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import CrudHeader from '@/components/AdminCrud/CrudHeader';
 import CrudBody from '@/components/AdminCrud/CrudBodyWithImages';
 import { useCrudOperations } from '@/hooks/useCrudOperations';
@@ -139,6 +139,8 @@ export default function SubCategories({
         hideDeleteModal();
     };
 
+    const filteredSubCategories = subCategories.filter((subCategory: any) => subCategory.name !== "Sin subcategoría");
+
     return (
         <div>
             <CrudHeader
@@ -150,7 +152,7 @@ export default function SubCategories({
             />
 
             <CrudBody
-                data={subCategories}
+                data={filteredSubCategories}
                 searchTerm={searchTerm}
                 onDelete={deleteButtonClicked}
                 onEdit={editButtonClicked}
