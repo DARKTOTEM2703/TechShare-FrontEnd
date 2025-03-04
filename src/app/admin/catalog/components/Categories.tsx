@@ -63,6 +63,8 @@ export default function Categories({
     const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState<any>(null);
 
+    const filteredCategories = categories.filter((category: Category) => category.name !== "Sin categoría");
+
     const showCreateModal = () => setCreateModalVisible(true);
     const hideCreateModal = () => {
         setCreateModalVisible(false);
@@ -150,7 +152,7 @@ export default function Categories({
             />
 
             <CrudBody
-                data={categories}
+                data={filteredCategories}
                 searchTerm={searchTerm}
                 onDelete={(id) => showDeleteModal(id)}
                 onEdit={(id) => showEditModal(id)}
