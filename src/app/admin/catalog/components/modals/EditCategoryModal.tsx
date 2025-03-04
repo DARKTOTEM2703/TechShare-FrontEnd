@@ -61,6 +61,7 @@ export default function EditCategoryModal({
                     onClose={onClose}
                     header="Editar categoría"
                     onSubmit={onSubmit}
+                    showButtons={!isImageCropping}
                 >
                     {isImageCropping ? (
                         <>
