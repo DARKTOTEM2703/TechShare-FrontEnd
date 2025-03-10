@@ -5,19 +5,19 @@ import SubCategories from '@/app/admin/catalog/components/SubCategories';
 import Materials from '@/app/admin/catalog/components/Materials';
 import { useAuth } from '@/hooks/useAuth';
 import { getToken } from '@/services/storageService';
-import endpoints from '@/app/infraestructure/config/configAPI';
-import fetchData from '@/services/fetchData';
 import { Material } from '@/app/admin/catalog/interfaces/Material';
 import { Category } from '@/app/admin/catalog/interfaces/Category';
 import { SubCategory } from '@/app/admin/catalog/interfaces/SubCategory';
+import {
+  fetchCategories,
+  fetchSubCategories,
+  fetchMaterials,
+  fetchRoles,
+  fetchAllCatalogData,
+  Role
+} from '@/services/catalogService';
 
 export default function Catalog() {
-
-  type Role = {
-    roleId: number;
-    name: string;
-  }
-
   const [roles, setRoles] = useState<Role[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [subCategories, setSubCategories] = useState<SubCategory[]>([]);
@@ -27,41 +27,30 @@ export default function Catalog() {
   useAuth();
   const token = getToken() || '';
 
-  const fetchCategories = () => {
-    fetchData(endpoints.categories.getAll, token)
+  const refreshCategories = () => {
+    fetchCategories(token)
       .then((data) => setCategories(data))
   }
 
-  const fetchSubCategories = () => {
-    fetchData(endpoints.subcategories.getAll, token)
+  const refreshSubCategories = () => {
+    fetchSubCategories(token)
       .then((data) => setSubCategories(data))
   }
 
-  const fetchMaterials = () => {
-    fetchData(endpoints.materials.getAll, token)
+  const refreshMaterials = () => {
+    fetchMaterials(token)
       .then((data) => setMaterials(data))
   }
 
-  const fetchRoles = () => {
-    fetchData(endpoints.roles.getAll, token)
-      .then((data) => setRoles(data))
-  }
-
   useEffect(() => {
-    const fetchAllData = async () => {
+    const loadAllData = async () => {
       setIsLoading(true);
       try {
-        const [categoriesData, subCategoriesData, materialsData, rolesData] = await Promise.all([
-          fetchData(endpoints.categories.getAll, token),
-          fetchData(endpoints.subcategories.getAll, token),
-          fetchData(endpoints.materials.getAll, token),
-          fetchData(endpoints.roles.getAll, token),
-        ]);
-
-        setCategories(categoriesData);
-        setSubCategories(subCategoriesData);
-        setMaterials(materialsData);
-        setRoles(rolesData);
+        const data = await fetchAllCatalogData(token);
+        setCategories(data.categories);
+        setSubCategories(data.subCategories);
+        setMaterials(data.materials);
+        setRoles(data.roles);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -69,7 +58,7 @@ export default function Catalog() {
       }
     };
 
-    fetchAllData();
+    loadAllData();
   }, [token]);
 
   //React Image Crop parameters
@@ -85,7 +74,7 @@ export default function Catalog() {
           subCategories={subCategories}
           roles={roles}
           materials={materials}
-          refreshMaterials={fetchMaterials}
+          refreshMaterials={refreshMaterials}
           ASPECT_RATIO={ASPECT_RATIO}
           MIN_DIMENSION={MIN_DIMENSION}
           MIN_WIDTH={MIN_WIDTH}
@@ -97,7 +86,7 @@ export default function Catalog() {
           token={token}
           categories={categories}
           subCategories={subCategories}
-          refreshSubCategories={fetchSubCategories}
+          refreshSubCategories={refreshSubCategories}
           ASPECT_RATIO={ASPECT_RATIO}
           MIN_DIMENSION={MIN_DIMENSION}
           MIN_WIDTH={MIN_WIDTH}
@@ -108,7 +97,7 @@ export default function Catalog() {
         <Categories
           token={token}
           categories={categories}
-          refreshCategories={fetchCategories}
+          refreshCategories={refreshCategories}
           ASPECT_RATIO={ASPECT_RATIO}
           MIN_DIMENSION={MIN_DIMENSION}
           MIN_WIDTH={MIN_WIDTH}

@@ -2,6 +2,7 @@ version: '3'
 services:
   frontend:
     build: .
+    image: techshare-frontend
     ports:
       - "3000:3000"
     volumes:
