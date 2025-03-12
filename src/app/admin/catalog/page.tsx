@@ -15,7 +15,7 @@ import {
   fetchRoles,
   fetchAllCatalogData,
   Role
-} from '@/services/catalogService';
+} from '@/services/catalogService'; 
 
 export default function Catalog() {
   const [roles, setRoles] = useState<Role[]>([]);
