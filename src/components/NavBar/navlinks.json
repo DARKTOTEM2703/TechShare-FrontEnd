@@ -1,14 +1,14 @@
 [
     {
       "name": "Inicio",
-      "href": "/home"
+      "href": "/Home"
     },
     {
       "name": "Productos",
-      "href": "/home/Products"
+      "href": "/Home/Products"
     },
     {
       "name": "Contacto",
-      "href": "/home/Contact"
+      "href": "/Home/Contact"
     }
 ]
