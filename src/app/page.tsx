@@ -9,7 +9,7 @@ export default function Home() {
     router.push('/admin/roles');
   };
   useEffect(() => {
-    router.push('/home');
+    router.push('/Home');
   }, [router]);
 
   return (
