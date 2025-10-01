@@ -9,6 +9,44 @@ export const setToken = (token: string) => {
   }
 };
 
+// Store token and also extract common claims (id, user_name) and save them
+export const setTokenWithClaims = (token: string) => {
+  if (typeof window === "undefined") return;
+
+  try {
+    localStorage.setItem(TOKEN_KEY, token);
+
+    const parts = token.split('.');
+    if (parts.length < 2) return;
+    let payload = parts[1];
+    const pad = (4 - (payload.length % 4)) % 4;
+    payload += '='.repeat(pad);
+    payload = payload.replace(/-/g, '+').replace(/_/g, '/');
+    const bytes = atob(payload);
+    // atob returns a binary string; decode to UTF-8
+    try {
+      const arr = Array.prototype.map.call(bytes, function(c: string) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      }).join('');
+      const json = decodeURIComponent(arr);
+      const claims = JSON.parse(json);
+      if (claims.id) setUserId(String(claims.id));
+      if (claims.user_name) setUserName(String(claims.user_name));
+  } catch {
+      // fallback: try direct JSON parse
+      try {
+        const claims = JSON.parse(bytes as unknown as string);
+        if (claims.id) setUserId(String(claims.id));
+        if (claims.user_name) setUserName(String(claims.user_name));
+      } catch {
+        // ignore
+      }
+    }
+  } catch {
+    // ignore decode errors
+  }
+};
+
 export const setUserId = (userId: string) => {
   if (typeof window !== "undefined") {
     localStorage.setItem(USER_ID_KEY, userId);

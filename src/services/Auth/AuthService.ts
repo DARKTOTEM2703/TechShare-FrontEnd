@@ -1,33 +1,32 @@
-import endpoints from "@/app/infraestructure/config/configAPI";
-import { error } from "console";
+import { setTokenWithClaims, setUserEmail } from "@/services/storageService";
 
 export const loginUser = async (email: string, password: string): Promise<string | null> => {
     try {
-        const response = await fetch(endpoints.login, {
+    const baseEnv = process.env.NEXT_PUBLIC_API_URL?.trim();
+    // Si no hay variable de entorno en desarrollo, usar backend en localhost:8080
+    const fallbackApi = 'http://localhost:8080';
+    const loginUrl = baseEnv && baseEnv.length > 0 ? `${baseEnv.replace(/\/$/, '')}/login` : `${fallbackApi}/login`;
+
+        const response = await fetch(loginUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password }),
         });
 
         if (!response.ok) {
-            // Primero intentamos obtener el texto del error
-            const errorText = await response.text();
-            
-            try {
-                // Intentamos parsearlo como JSON
-                const errorData = JSON.parse(errorText);
-                throw new Error(errorData.message || `Error de autenticación: ${response.status}`);
-            } catch (parseError) {
-                // Si no es JSON, usamos el texto directamente
-                throw new Error(errorText || `Error de autenticación: ${response.statusText}`);
-            }
+            const text = await response.text();
+            throw new Error(text || 'Login failed');
         }
 
-        const token = response.headers.get('Authorization');
-        if (!token) {
-            console.warn('Token no encontrado en el header "Authorization".');
-            return null;
+        const authHeader = response.headers.get('Authorization');
+        if (!authHeader || !authHeader.startsWith('Bearer ')) {
+            throw new Error('No token in response');
         }
+        const token = authHeader.replace('Bearer ', '');
+
+    // Store token and extract claims (id, user_name)
+    setTokenWithClaims(token);
+    setUserEmail(email);
 
         return token;
     } catch (error) {

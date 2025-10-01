@@ -3,6 +3,14 @@ const nextConfig = {
   images: {
     domains: ['localhost'], // Agrega 'localhost' para permitir imágenes desde este dominio
   },
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        destination: 'http://localhost:8080/:path*', // Proxy hacia el backend
+      },
+    ];
+  },
   eslint: {
     ignoreDuringBuilds: true, // Ignorar errores de ESLint durante la construcción
   },

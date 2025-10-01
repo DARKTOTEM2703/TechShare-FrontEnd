@@ -7,7 +7,6 @@ import PasswordField from '@/components/Inputs/PasswordField';
 import '@/styles/form.css';
 import '@/styles/buttons.css';
 import { useForm } from '@/hooks/useForm';
-import { setToken } from '@/services/storageService';
 import { loginUser } from '@/services/Auth/AuthService';
 
 const Page = () => {
@@ -24,7 +23,6 @@ const Page = () => {
         try {
             const token = await loginUser(formData.email, formData.password);
             if (token) {
-                setToken(token);
                 alert('Inicio de sesión exitoso');
                 router.push('/admin/');
             } else {
