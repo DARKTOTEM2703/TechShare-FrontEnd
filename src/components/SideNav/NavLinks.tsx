@@ -1,13 +1,25 @@
+'use client';
 import Link from 'next/link';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import links from './navlinks.json';
 import * as FaIcons from 'react-icons/fa';
+import { removeToken } from '@/services/storageService';
+import '@/styles/side-nav.css';
 
 export default function NavLinks() {
   const [selectedLink, setSelectedLink] = useState<string | null>(null);
+  const router = useRouter();
 
   const handleLinkClick = (name: string) => {
     setSelectedLink(name);
+  };
+
+  const handleLogout = () => {
+    if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
+      removeToken();
+      router.push('/login');
+    }
   };
 
   return (
@@ -26,19 +38,26 @@ export default function NavLinks() {
                 onClick={() => handleLinkClick(link.name)}
               >
                 {LinkIcon && <LinkIcon />}
-                <h2
-                  className="font-medium text-xl"
-                  style={{
-                    color: isSelected ? '#FFFFFF' : '#1E2A5E',
-                    transition: 'color 0.3s, transform 0.3s',
-                  }}
-                >
+                <h2 className={`font-medium text-xl ${isSelected ? 'nav-link-text-selected' : 'nav-link-text'}`}>
                   {link.name}
                 </h2>
               </Link>
             </div>
           );
         })}
+        
+        {/* Botón de Cerrar Sesión - Pantallas pequeñas */}
+        <div className="flex justify-center w-full mt-4 pt-4 border-t border-gray-200">
+          <button
+            onClick={handleLogout}
+            className="flex h-[48px] items-center justify-center gap-2 w-full rounded-md p-3 text-sm font-medium logout-btn hover:bg-red-50 hover:text-red-600 transition-all duration-300 ease-in-out"
+          >
+            <FaIcons.FaSignOutAlt />
+            <h2 className="font-medium text-xl">
+              Cerrar Sesión
+            </h2>
+          </button>
+        </div>
       </div>
 
       {/* Contenedor para pantallas grandes */}
@@ -55,19 +74,26 @@ export default function NavLinks() {
                 onClick={() => handleLinkClick(link.name)}
               >
                 {LinkIcon && <LinkIcon />}
-                <h2
-                  className="font-medium text-xl"
-                  style={{
-                    color: isSelected ? '#FFFFFF' : '#1E2A5E',
-                    transition: 'color 0.3s, transform 0.3s',
-                  }}
-                >
+                <h2 className={`font-medium text-xl ${isSelected ? 'nav-link-text-selected' : 'nav-link-text'}`}>
                   {link.name}
                 </h2>
               </Link>
             </div>
           );
         })}
+        
+        {/* Botón de Cerrar Sesión - Pantallas grandes */}
+        <div className="flex justify-center md:justify-start md:mr-4 mt-4 pt-4 border-t border-gray-200">
+          <button
+            onClick={handleLogout}
+            className="flex h-[48px] w-full items-center justify-center gap-2 rounded-md p-3 text-sm font-medium logout-btn hover:bg-red-50 hover:text-red-600 transition-all duration-300 ease-in-out md:flex-none md:justify-start md:p-2 md:px-3"
+          >
+            <FaIcons.FaSignOutAlt />
+            <h2 className="font-medium text-xl">
+              Cerrar Sesión
+            </h2>
+          </button>
+        </div>
       </div>
     </div>
   );

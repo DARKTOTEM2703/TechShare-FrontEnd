@@ -101,3 +101,12 @@ export const clearStorage = () => {
     localStorage.removeItem(USER_NAME_KEY);
   }
 };
+
+export const removeToken = () => {
+  if (typeof window !== "undefined") {
+    localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(USER_ID_KEY);
+    localStorage.removeItem(USER_EMAIL_KEY);
+    localStorage.removeItem(USER_NAME_KEY);
+  }
+};

@@ -29,6 +29,25 @@
   display: none; /* Para Chrome, Safari y Opera */
 }
 
+/* Estilos para NavLinks */
+.nav-link-text {
+  color: #1E2A5E;
+  transition: color 0.3s, transform 0.3s;
+}
+
+.nav-link-text-selected {
+  color: #FFFFFF;
+}
+
+.logout-btn {
+  color: #1E2A5E;
+}
+
+.logout-btn:hover {
+  background-color: #fee2e2;
+  color: #dc2626;
+}
+
 /* Media query para pantallas pequeñas */
 @media (max-width: 768px) {
   .horizontal-flex {

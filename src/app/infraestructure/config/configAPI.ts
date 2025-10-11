@@ -1,6 +1,11 @@
 const BASE_URL = 'http://localhost:8080'
 
 const endpoints = {
+    auth: {
+        signUp: `${BASE_URL}/register`,
+        login: `${BASE_URL}/login`,
+        verify: `${BASE_URL}/auth/verify`
+    },
     categories: {
         getAll: `${BASE_URL}/admin/categories/all`,
         create: `${BASE_URL}/admin/categories/create`,
@@ -43,6 +48,7 @@ const endpoints = {
         update: (id: number) => `${BASE_URL}/admin/borrow/update/${id}`
     },
 
+    // Deprecated - use auth.signUp and auth.login instead
     signUp: `${BASE_URL}/register`,
     login: `${BASE_URL}/login`
 }

@@ -1,0 +1,26 @@
+/* Estilos para la página de verificación */
+
+.verify-title {
+  color: #1E2A5E;
+}
+
+.verify-btn-primary {
+  background-color: #1E2A5E;
+  color: white;
+}
+
+.verify-btn-primary:hover {
+  background-color: #152142;
+}
+
+.verify-btn-secondary {
+  color: #1E2A5E;
+}
+
+.verify-link {
+  color: #1E2A5E;
+}
+
+.verify-link:hover {
+  text-decoration: underline;
+}
