@@ -91,7 +91,9 @@ export default function SubCategories({
     }
 
     const editButtonClicked = (id: number) => {
-        const selectedSubCategory = subCategories.find((subCategory: any) => subCategory.subCategoriesId === id);
+        const selectedSubCategory = Array.isArray(subCategories)
+            ? subCategories.find((subCategory: any) => subCategory.subCategoriesId === id)
+            : undefined;
         setSelectedSubCategory(selectedSubCategory);
         if (selectedSubCategory) {
             setClickedItemId(id);
@@ -139,7 +141,14 @@ export default function SubCategories({
         hideDeleteModal();
     };
 
-    const filteredSubCategories = subCategories.filter((subCategory: any) => subCategory.name !== "Sin subcategoría");
+    // DEBUG: log incoming subCategories to inspect shape (remove in production)
+    if (process.env.NODE_ENV === 'development') {
+        console.log('DEBUG subCategories shape:', subCategories);
+    }
+
+    const filteredSubCategories = Array.isArray(subCategories)
+        ? subCategories.filter((subCategory: any) => subCategory && subCategory.name !== "Sin subcategoría")
+        : [];
 
     return (
         <div>

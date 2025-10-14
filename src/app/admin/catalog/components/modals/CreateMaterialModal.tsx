@@ -161,11 +161,11 @@ export default function CreateMaterialModal({
                             <AsyncSelect
                                 className='border rounded-md border-primary mb-4'
                                 cacheOptions
-                                defaultOptions={subCategories.map(subCategory => ({
+                                defaultOptions={(Array.isArray(subCategories) ? subCategories : []).map(subCategory => ({
                                     value: subCategory.subCategoriesId,
                                     label: subCategory.name
                                 }))}
-                                value={subCategories
+                                value={(Array.isArray(subCategories) ? subCategories : [])
                                     .filter(subCategory => subCategory.subCategoriesId === formData.subCategoryId)
                                     .map(subCategory => ({
                                         value: subCategory.subCategoriesId,

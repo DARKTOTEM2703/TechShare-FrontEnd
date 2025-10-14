@@ -148,11 +148,11 @@ export default function EditMaterialModal({
                             <AsyncSelect
                                 className='border rounded-md border-primary mb-4'
                                 cacheOptions
-                                defaultOptions={subCategories.map(sub => ({
+                                defaultOptions={(Array.isArray(subCategories) ? subCategories : []).map(sub => ({
                                     value: sub.subCategoriesId,
                                     label: sub.name
                                 }))}
-                                value={subCategories
+                                value={(Array.isArray(subCategories) ? subCategories : [])
                                     .filter(sub => sub.subCategoriesId === formData.subCategoryId)
                                     .map(sub => ({
                                         value: sub.subCategoriesId,

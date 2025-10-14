@@ -1,4 +1,5 @@
-const BASE_URL = 'http://localhost:8080'
+// Usar variable de entorno o fallback a localhost
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'
 
 const endpoints = {
     auth: {

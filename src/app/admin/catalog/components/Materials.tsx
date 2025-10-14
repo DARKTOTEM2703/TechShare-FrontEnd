@@ -53,7 +53,7 @@ export default function Materials({ token, subCategories = [], roles = [], mater
     } = useImageCrop({ ASPECT_RATIO, MIN_DIMENSION, MIN_WIDTH });
 
     const roleOptions = Array.isArray(roles) && roles.length > 0
-        ? roles.map((role: any) => ({
+        ? (roles as any[]).map((role: any) => ({
             value: role.roleId,
             label: role.name,
         }))

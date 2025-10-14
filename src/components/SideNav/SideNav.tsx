@@ -1,7 +1,7 @@
 "use client"; // This directive marks the file as a Client Component
 
 import React, { useState, useEffect } from 'react';
-import '@/styles/side-nav.css'; // Asegúrate de tener este archivo CSS correctamente
+import '@/styles/side-nav.css';
 import NavLinks from '@/components/SideNav/NavLinks';
 import NavUser from '@/components/SideNav/NavUser';
 
@@ -9,6 +9,7 @@ const SideBar = () => {
     // Estado para controlar la visibilidad de los enlaces
     const [isNavVisible, setNavVisible] = useState(false);
     const [isSmallScreen, setIsSmallScreen] = useState(false);
+    const [isCollapsed, setIsCollapsed] = useState(false);
 
     // Efecto para detectar cambios en el tamaño de la pantalla
     useEffect(() => {
@@ -40,6 +41,13 @@ const SideBar = () => {
                     <NavUser hamburgerButton={toggleNav} />
                 </div>
 
+                {/* Botón para colapsar/expandir el sidebar en pantallas pequeñas */}
+                {isSmallScreen && (
+                    <button className="toggle-sidebar" onClick={() => setIsCollapsed(!isCollapsed)}>
+                        {isCollapsed ? 'Expandir' : 'Colapsar'}
+                    </button>
+                )}
+
                 {/* Mostrar siempre los NavLinks en pantallas grandes */}
                 {!isSmallScreen && (
                     <div>
@@ -52,6 +60,13 @@ const SideBar = () => {
                     <div>
                         <NavLinks />
                     </div>
+                )}
+
+                {/* Navegación lateral colapsable */}
+                {isSmallScreen && isCollapsed && (
+                    <nav className={`side-nav ${isCollapsed ? 'collapsed' : ''}`}>
+                        <NavLinks />
+                    </nav>
                 )}
             </div>
         </div>

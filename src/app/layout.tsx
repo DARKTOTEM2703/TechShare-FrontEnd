@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import "@/styles/globals.css";
 import NavBar from "@/components/NavBar/NavBar";
-import { inter } from "@/services/fonts"
+import { inter } from "@/services/fonts";
+import React from "react";
+import { ToastProvider } from "@/components/Ui/ToastContext";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -13,13 +15,12 @@ export default function RootLayout(
     children,
   }: Readonly<{
     children: React.ReactNode;
-  }>) {
+  }>
+) {
   return (
-    <html>
+    <html lang="es">
       <body className={`${inter.className}`}>
-        <div>
-          {children}
-        </div>
+        <ToastProvider>{children}</ToastProvider>
       </body>
     </html>
   );

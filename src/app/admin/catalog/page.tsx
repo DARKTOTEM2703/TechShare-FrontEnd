@@ -29,23 +29,20 @@ export default function Catalog() {
 
   const fetchCategories = () => {
     fetchData(endpoints.categories.getAll, token)
-      .then((data) => setCategories(data))
+      .then((data) => setCategories(Array.isArray(data) ? data : []))
   }
 
   const fetchSubCategories = () => {
     fetchData(endpoints.subcategories.getAll, token)
-      .then((data) => setSubCategories(data))
+      .then((data) => setSubCategories(Array.isArray(data) ? data : []))
   }
 
   const fetchMaterials = () => {
     fetchData(endpoints.materials.getAll, token)
-      .then((data) => setMaterials(data))
+      .then((data) => setMaterials(Array.isArray(data) ? data : []))
   }
 
-  const fetchRoles = () => {
-    fetchData(endpoints.roles.getAll, token)
-      .then((data) => setRoles(data))
-  }
+  // Roles are fetched as part of fetchAllData on mount; individual fetchRoles not required.
 
   useEffect(() => {
     const fetchAllData = async () => {
@@ -58,10 +55,10 @@ export default function Catalog() {
           fetchData(endpoints.roles.getAll, token),
         ]);
 
-        setCategories(categoriesData);
-        setSubCategories(subCategoriesData);
-        setMaterials(materialsData);
-        setRoles(rolesData);
+        setCategories(Array.isArray(categoriesData) ? categoriesData : []);
+        setSubCategories(Array.isArray(subCategoriesData) ? subCategoriesData : []);
+        setMaterials(Array.isArray(materialsData) ? materialsData : []);
+        setRoles(Array.isArray(rolesData) ? rolesData : []);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {

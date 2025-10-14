@@ -7,6 +7,12 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { getToken } from '@/services/storageService';
 
+interface UserDetails {
+    firstName?: string;
+    lastName?: string;
+    roles?: string[];
+}
+
 export default function NavUser({ hamburgerButton }: { hamburgerButton: any }) {
     useAuth();
     const token = getToken();
@@ -15,10 +21,13 @@ export default function NavUser({ hamburgerButton }: { hamburgerButton: any }) {
 
     const fetchUserDetails = () => {
         fetchData(endpoints.users.getUserDetails, token)
-            .then((user) => {
-                if (user && user.firstName && user.lastName) {
+            .then((response) => {
+                // Manejar tanto objetos como arrays (defensive)
+                const user: UserDetails = Array.isArray(response) ? response[0] : response;
+                
+                if (user && typeof user === 'object' && user.firstName && user.lastName) {
                     setUserName(`${user.firstName} ${user.lastName}`);
-                    if (user.roles && user.roles.length > 0) {
+                    if (user.roles && Array.isArray(user.roles) && user.roles.length > 0) {
                         setUserRole(user.roles[0]);
                     }
                 }

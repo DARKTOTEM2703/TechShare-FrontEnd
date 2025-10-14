@@ -2,6 +2,92 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Variables de diseño */
+:root{
+  --hover-scale: 1.02;
+  --hover-shadow: 0 10px 30px rgba(14,22,57,0.10);
+  --hover-transition: 180ms;
+}
+
+/* Aplicar transiciones y efectos coherentes a elementos interactivos */
+@layer base {
+  /* Elementos interactivos comunes */
+  a,
+  button,
+  .primary-button,
+  .secondary-button,
+  .card,
+  .nav-link,
+  .sidebar-item,
+  .toast,
+  .icon-btn {
+    @apply transition-all ease-in-out;
+    transition-duration: var(--hover-transition);
+    will-change: transform, box-shadow, color;
+  }
+
+  /* Efecto general on-hover (suave escalado + sombra) solo en dispositivos con pointer */
+  @media (hover: hover) and (pointer: fine) {
+    a:hover,
+    button:hover,
+    .primary-button:hover,
+    .secondary-button:hover,
+    .card:hover,
+    .nav-link:hover,
+    .sidebar-item:hover,
+    .toast:hover,
+    .icon-btn:hover {
+      transform: scale(var(--hover-scale));
+      box-shadow: var(--hover-shadow);
+    }
+  }
+
+  /* Estilos de color para botones y links (ajusta colores según tu paleta) */
+  .primary-button {
+    @apply bg-indigo-800 text-white;
+  }
+  .primary-button:hover {
+    @apply bg-indigo-700;
+  }
+
+  .secondary-button {
+    @apply bg-white text-gray-800 border;
+  }
+  .secondary-button:hover {
+    @apply bg-gray-50;
+  }
+
+  a, .nav-link, .sidebar-item {
+    @apply text-gray-700;
+  }
+  a:hover, .nav-link:hover, .sidebar-item:hover {
+    @apply text-indigo-600;
+  }
+
+  /* Tarjetas (cards) */
+  .card {
+    @apply bg-white rounded-lg overflow-hidden;
+    box-shadow: 0 4px 12px rgba(10,20,40,0.04);
+  }
+  .card:hover {
+    box-shadow: 0 12px 36px rgba(10,20,40,0.10);
+  }
+
+  /* Ajustes en móvil: evitar escalado que rompa layout */
+  @media (max-width: 640px) {
+    a:hover,
+    button:hover,
+    .primary-button:hover,
+    .secondary-button:hover,
+    .card:hover,
+    .nav-link:hover,
+    .sidebar-item:hover {
+      transform: none;
+      box-shadow: none;
+    }
+  }
+}
+
 :root {
   --background: #7C93C3;
 }

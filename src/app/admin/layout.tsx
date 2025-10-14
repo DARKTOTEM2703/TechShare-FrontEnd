@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import SideNav from "@/components/SideNav/SideNav";
 import 'react-image-crop/dist/ReactCrop.css'
+import { ToastProvider } from '@/components/Ui/ToastContext';
 
 export const metadata: Metadata = {
   title: "TechShare | Panel de administración",
@@ -14,13 +15,15 @@ export default function AdminLayout(
     children: React.ReactNode;
   }>) {
   return (
-    <div className={`horizontal-flex`}>
-      <div className="side-nav">
-        <SideNav />
+    <ToastProvider>
+      <div className={`horizontal-flex`}>
+        <div className="side-nav">
+          <SideNav />
+        </div>
+        <div className="content">
+          {children}
+        </div>
       </div>
-      <div className="content">
-        {children}
-      </div>
-    </div>
+    </ToastProvider>
   );
 }

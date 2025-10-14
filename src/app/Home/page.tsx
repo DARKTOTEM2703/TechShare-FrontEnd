@@ -14,7 +14,7 @@ export default function Home() {
 
   const token = getToken() || '';
 
-  const [materials, setMaterials] = useState([]);
+  const [materials, setMaterials] = useState<any[]>([]);
 
   useEffect(() => {
     if (token) {
