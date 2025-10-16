@@ -53,7 +53,7 @@ export default function NavBar() {
           </div>
 
           {/* Botón de Login */}
-          <Link href="/login">
+          <Link href="/login" target="_blank" rel="noopener noreferrer">
             <h2 className="bg-primary text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-600 transition">
               Iniciar Sesión
             </h2>

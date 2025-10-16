@@ -27,12 +27,23 @@ export default function Register() {
     const [birthMonth, setBirthMonth] = useState('');
     const [birthYear, setBirthYear] = useState('');
     const [gender, setGender] = useState('');
+    
+    // Estado de loading para prevenir múltiples envíos
+    const [isLoading, setIsLoading] = useState(false);
 
     const toast = useToast();
+
+    // NOTA: /register es público, no redirigir usuarios autenticados
+    // Permitir que los usuarios autenticados puedan registrar nuevas cuentas si es necesario
 
     // Manejo del registro
     const handleRegister = async (e: any) => {
         e.preventDefault(); // Evitar que el formulario se envíe por defecto
+        
+        // Prevenir múltiples envíos si ya está procesando
+        if (isLoading) {
+            return;
+        }
         
         // Validación de contraseñas
         if (formData.password !== formData.confirmPassword) {
@@ -65,6 +76,9 @@ export default function Register() {
         if (birthDay && birthMonth && birthYear) {
             birthDate = `${birthYear}-${birthMonth.padStart(2, '0')}-${birthDay.padStart(2, '0')}`;
         }
+
+        // Activar estado de loading
+        setIsLoading(true);
 
         try {
             const requestBody: any = {
@@ -103,10 +117,17 @@ export default function Register() {
             formData.email = '';
             formData.password = '';
             formData.confirmPassword = '';
+            setBirthDay('');
+            setBirthMonth('');
+            setBirthYear('');
+            setGender('');
             
         } catch (error) {
             const message = error instanceof Error ? error.message : String(error);
             toast.addToast('error', message || 'Error desconocido');
+        } finally {
+            // Desactivar estado de loading siempre (éxito o error)
+            setIsLoading(false);
         }
     };
 
@@ -239,9 +260,21 @@ export default function Register() {
                     </div>
 
                     <button
-                        className="primary-button font-bold w-full"
-                        type="submit">
-                        REGÍSTRARSE
+                        className={`primary-button font-bold w-full ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
+                        type="submit"
+                        disabled={isLoading}
+                    >
+                        {isLoading ? (
+                            <span className="flex items-center justify-center gap-2">
+                                <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                Cargando...
+                            </span>
+                        ) : (
+                            'REGÍSTRARSE'
+                        )}
                     </button>
                 </form>
                 <p>¿Ya tienes una cuenta? <Link href="/login">Iniciar sesión</Link></p>

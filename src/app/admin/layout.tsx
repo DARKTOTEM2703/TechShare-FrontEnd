@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import SideNav from "@/components/SideNav/SideNav";
 import 'react-image-crop/dist/ReactCrop.css'
 import { ToastProvider } from '@/components/Ui/ToastContext';
+import RoleGuard from '@/components/Auth/RoleGuard';
 
 export const metadata: Metadata = {
   title: "TechShare | Panel de administración",
@@ -16,14 +17,16 @@ export default function AdminLayout(
   }>) {
   return (
     <ToastProvider>
-      <div className={`horizontal-flex`}>
-        <div className="side-nav">
-          <SideNav />
+      <RoleGuard requiredRole="ADMIN">
+        <div className={`horizontal-flex`}>
+          <div className="side-nav">
+            <SideNav />
+          </div>
+          <div className="content">
+            {children}
+          </div>
         </div>
-        <div className="content">
-          {children}
-        </div>
-      </div>
+      </RoleGuard>
     </ToastProvider>
   );
 }

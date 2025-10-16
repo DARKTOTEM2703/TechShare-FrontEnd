@@ -6,6 +6,7 @@ import endpoints from '@/app/infraestructure/config/configAPI';
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { getToken } from '@/services/storageService';
+import { cleanRoleName } from '@/utils/roleFormatter';
 
 interface UserDetails {
     firstName?: string;
@@ -28,7 +29,7 @@ export default function NavUser({ hamburgerButton }: { hamburgerButton: any }) {
                 if (user && typeof user === 'object' && user.firstName && user.lastName) {
                     setUserName(`${user.firstName} ${user.lastName}`);
                     if (user.roles && Array.isArray(user.roles) && user.roles.length > 0) {
-                        setUserRole(user.roles[0]);
+                        setUserRole(cleanRoleName(user.roles[0]));
                     }
                 }
             })

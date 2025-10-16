@@ -14,7 +14,11 @@ export const setTokenWithClaims = (token: string) => {
   if (typeof window === "undefined") return;
 
   try {
+    // Guardar en localStorage
     localStorage.setItem(TOKEN_KEY, token);
+    
+    // También guardar en cookies para que el middleware pueda acceder
+    document.cookie = `token=${token}; path=/; max-age=86400; SameSite=Lax`;
 
     const parts = token.split('.');
     if (parts.length < 2) return;
@@ -108,5 +112,7 @@ export const removeToken = () => {
     localStorage.removeItem(USER_ID_KEY);
     localStorage.removeItem(USER_EMAIL_KEY);
     localStorage.removeItem(USER_NAME_KEY);
+    // También eliminar la cookie
+    document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
   }
 };

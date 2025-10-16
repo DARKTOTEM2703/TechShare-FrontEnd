@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import TextField from "@/components/Inputs/TextField";
@@ -9,6 +9,7 @@ import "@/styles/buttons.css";
 import { useForm } from "@/hooks/useForm";
 import { loginUser } from "@/services/Auth/AuthService";
 import { useToast } from "@/components/Ui/ToastContext";
+import { getToken } from "@/services/storageService";
 
 const Page = () => {
   const [formData, handleChange] = useForm({
@@ -19,6 +20,15 @@ const Page = () => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const toast = useToast();
+
+  // Verificar si ya está autenticado al cargar la página
+  useEffect(() => {
+    const token = getToken();
+    if (token) {
+      // Si ya tiene token, redirigir al dashboard
+      router.push("/admin");
+    }
+  }, [router]);
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -60,8 +70,22 @@ const Page = () => {
             value={formData.password}
             handleChange={handleChange}
           />
-          <button className="primary-button font-bold w-full" type="submit" disabled={loading}>
-            {loading ? "Cargando..." : "INICIAR SESIÓN"}
+          <button 
+            className={`primary-button font-bold w-full ${loading ? 'opacity-70 cursor-not-allowed' : ''}`} 
+            type="submit" 
+            disabled={loading}
+          >
+            {loading ? (
+              <span className="flex items-center justify-center gap-2">
+                <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Iniciando sesión...
+              </span>
+            ) : (
+              "INICIAR SESIÓN"
+            )}
           </button>
         </form>
         <p className="mt-4 text-center text-sm">

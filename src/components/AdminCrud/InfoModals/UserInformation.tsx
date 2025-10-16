@@ -1,6 +1,7 @@
 import ModalBase from "@/components/Modal/ModalBase";
 import React from "react";
 import AsyncSelect from "react-select/async";
+import { cleanRoleName } from "@/utils/roleFormatter";
 
 interface UserInformationProps {
     user: {
@@ -63,7 +64,7 @@ const UserInformation: React.FC<UserInformationProps> = ({
                                 loadOptions={loadRoleOptions}
                                 isMulti
                                 placeholder="Selecciona los roles"
-                                value={formData.roles.map(role => ({ value: role, label: role }))}
+                                value={formData.roles.map(role => ({ value: role, label: cleanRoleName(role) }))}
                                 onChange={(selectedOptions) => {
                                     setFormData({
                                         ...formData,
