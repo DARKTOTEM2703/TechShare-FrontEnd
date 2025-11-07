@@ -1,7 +1,9 @@
 import { useState } from 'react';
+import { useToast } from '@/components/Ui/ToastContext';
 
 export const useCrudOperations = (token: string, refreshData: () => void) => {
     const [clickedItemId, setClickedItemId] = useState<number | null>(null);
+    const toast = useToast();
 
     const fetchWithDynamicHeaders = (
         url: string,
@@ -40,9 +42,13 @@ export const useCrudOperations = (token: string, refreshData: () => void) => {
             .then((response) => response.json())
             .then((data) => {
                 console.log("Created:", data);
+                toast.addToast('success', 'Elemento creado exitosamente');
                 refreshData();
             })
-            .catch((error) => alert(JSON.stringify(error.message)));
+            .catch((error) => {
+                console.error("Error creating:", error);
+                toast.addToast('error', `Error al crear: ${error.message || 'Error desconocido'}`);
+            });
     };
 
     const handleUpdate = (url: string, data: any) => {
@@ -50,9 +56,13 @@ export const useCrudOperations = (token: string, refreshData: () => void) => {
             .then((response) => response.text())
             .then(() => {
                 console.log("Updated successfully.");
+                toast.addToast('success', 'Elemento actualizado exitosamente');
                 refreshData();
             })
-            .catch((error) => alert(JSON.stringify(error.message)));
+            .catch((error) => {
+                console.error("Error updating:", error);
+                toast.addToast('error', `Error al actualizar: ${error.message || 'Error desconocido'}`);
+            });
     };
 
     const handleDelete = (url: string) => {
@@ -62,9 +72,13 @@ export const useCrudOperations = (token: string, refreshData: () => void) => {
         })
             .then(() => {
                 console.log("Deleted successfully.");
+                toast.addToast('success', 'Elemento eliminado exitosamente');
                 refreshData();
             })
-            .catch((error) => alert(JSON.stringify(error.message)));
+            .catch((error) => {
+                console.error("Error deleting:", error);
+                toast.addToast('error', `Error al eliminar: ${error.message || 'Error desconocido'}`);
+            });
     };
 
     return {

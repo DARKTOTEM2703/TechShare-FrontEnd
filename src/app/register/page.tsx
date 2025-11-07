@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import Image from "next/image";
 import { FaEye } from "react-icons/fa";
+import { useRouter } from 'next/navigation';
 import TextField from "@/components/Inputs/TextField";
 import PasswordField from "@/components/Inputs/PasswordField";
 import '@/styles/containers.css'
@@ -11,8 +12,14 @@ import { useForm } from "@/hooks/useForm";
 import endpoints from '../infraestructure/config/configAPI';
 import { useToast } from '@/components/Ui/ToastContext';
 import { useState } from 'react';
+import { generateUsername, isValidUsername } from '@/utils/usernameGenerator';
+import { VALIDATION_PATTERNS, VALIDATION_MESSAGES } from '@/constants/validation';
+import { extractErrorMessage } from '@/types/api';
 
 export default function Register() {
+
+    const router = useRouter();
+    const toast = useToast();
 
     const [formData, handleChange] = useForm({
         first_name: '',
@@ -31,13 +38,11 @@ export default function Register() {
     // Estado de loading para prevenir múltiples envíos
     const [isLoading, setIsLoading] = useState(false);
 
-    const toast = useToast();
-
     // NOTA: /register es público, no redirigir usuarios autenticados
     // Permitir que los usuarios autenticados puedan registrar nuevas cuentas si es necesario
 
     // Manejo del registro
-    const handleRegister = async (e: any) => {
+    const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault(); // Evitar que el formulario se envíe por defecto
         
         // Prevenir múltiples envíos si ya está procesando
@@ -47,27 +52,36 @@ export default function Register() {
         
         // Validación de contraseñas
         if (formData.password !== formData.confirmPassword) {
-            toast.addToast('error', "Las contraseñas no coinciden");
+            toast.addToast('error', VALIDATION_MESSAGES.passwordMismatch);
             return;
         }
 
         // Validaciones básicas del lado del cliente
         if (!formData.email || !formData.first_name || !formData.last_name || !formData.password) {
-            toast.addToast('error', "Todos los campos son obligatorios");
+            toast.addToast('error', VALIDATION_MESSAGES.required);
             return;
         }
 
-        // Validación de email
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(formData.email)) {
-            toast.addToast('error', "Email inválido");
+        // Validación de email usando constante centralizada
+        if (!VALIDATION_PATTERNS.email.test(formData.email)) {
+            toast.addToast('error', VALIDATION_MESSAGES.email);
             return;
         }
 
-        // Validación de password (mínimo 8 caracteres, al menos una mayúscula, minúscula, número y carácter especial)
-        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&_\-#.,:;])[A-Za-z\d@$!%*?&_\-#.,:;]{8,}$/;
-        if (!passwordRegex.test(formData.password)) {
-            toast.addToast('error', "La contraseña debe tener mínimo 8 caracteres, incluir mayúsculas, minúsculas, números y caracteres especiales");
+        // Validación de nombre usando constante centralizada
+        if (!VALIDATION_PATTERNS.name.test(formData.first_name)) {
+            toast.addToast('error', VALIDATION_MESSAGES.name);
+            return;
+        }
+
+        if (!VALIDATION_PATTERNS.name.test(formData.last_name)) {
+            toast.addToast('error', VALIDATION_MESSAGES.name);
+            return;
+        }
+
+        // Validación de password usando constante centralizada
+        if (!VALIDATION_PATTERNS.password.test(formData.password)) {
+            toast.addToast('error', VALIDATION_MESSAGES.password);
             return;
         }
 
@@ -81,8 +95,14 @@ export default function Register() {
         setIsLoading(true);
 
         try {
-            const requestBody: any = {
-                user_name: formData.email.split('@')[0].replace(/[^a-zA-Z0-9_-]/g, ''),
+            // Generar username robusto
+            const generatedUsername = generateUsername(formData.email);
+            if (!isValidUsername(generatedUsername)) {
+                throw new Error('No se pudo generar un nombre de usuario válido');
+            }
+
+            const requestBody: Record<string, unknown> = {
+                user_name: generatedUsername,
                 first_name: formData.first_name.trim(),
                 last_name: formData.last_name.trim(),
                 email: formData.email.trim().toLowerCase(),
@@ -97,9 +117,10 @@ export default function Register() {
                 requestBody.gender = gender;
             }
 
-            const response = await fetch(endpoints.signUp, {
+            // 🔑 CONSUMIR ENDPOINT DEL BACKEND
+            const response = await fetch(endpoints.auth.signUp, {
                 method: 'POST',
-                body: JSON.stringify(requestBody),
+                body: JSON.stringify(requestBody), // ← ENVÍA EL OBJETO DIRECTAMENTE
                 headers: { 'Content-Type': 'application/json' },
             });
 
@@ -108,8 +129,12 @@ export default function Register() {
                 throw new Error(errorData.message || `Error: ${response.status}`);
             }
 
-            const data = await response.json();
             toast.addToast('success', 'Registro exitoso. Por favor verifica tu email.');
+            
+            // Redirigir al home
+            // El usuario recibirá un email con un link que contiene el token de verificación
+            // Cuando haga clic en ese link, irá a /verify?token=xxx
+            router.push('/');
             
             // Limpiar formulario
             formData.first_name = '';
@@ -123,7 +148,7 @@ export default function Register() {
             setGender('');
             
         } catch (error) {
-            const message = error instanceof Error ? error.message : String(error);
+            const message = extractErrorMessage(error);
             toast.addToast('error', message || 'Error desconocido');
         } finally {
             // Desactivar estado de loading siempre (éxito o error)

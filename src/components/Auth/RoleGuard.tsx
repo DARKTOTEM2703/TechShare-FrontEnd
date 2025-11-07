@@ -1,8 +1,8 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
-import { useRoleCheck } from '@/hooks/useRoleCheck';
+import { useEffect, useRef, useCallback } from 'react';
+import { useRoleCheck } from '@/providers/RoleCheckProvider';
 
 interface RoleGuardProps {
   children: React.ReactNode;
@@ -18,39 +18,58 @@ interface RoleGuardProps {
  */
 export default function RoleGuard({ children, requiredRole = 'ADMIN' }: RoleGuardProps) {
   const router = useRouter();
-  const { isLoading, isAdmin, isAuthenticated, userData } = useRoleCheck();
+  const { isLoading, isAdmin, isAuthenticated } = useRoleCheck();
+  const hasRedirected = useRef(false);
+
+  const performRedirect = useCallback((destination: string, reason: string) => {
+    if (hasRedirected.current) return;
+    hasRedirected.current = true;
+    console.log(`${reason}, redirigiendo a ${destination}`);
+    router.replace(destination);
+  }, [router]);
 
   useEffect(() => {
-    if (isLoading) return; // Esperar a que termine de cargar
+    if (isLoading) return;
+    if (hasRedirected.current) return;
+
+    console.log(`🔐 RoleGuard: Verificando - isAuthenticated: ${isAuthenticated}, isAdmin: ${isAdmin}, requiredRole: ${requiredRole}`);
 
     // Si no está autenticado, redirigir a login
     if (!isAuthenticated) {
-      router.push('/login');
+      performRedirect('/login', '🔒 RoleGuard: Usuario no autenticado');
       return;
     }
 
     // Si requiere rol ADMIN pero no lo tiene, redirigir a acceso denegado
     if (requiredRole === 'ADMIN' && !isAdmin) {
-      router.push('/access-denied');
+      performRedirect('/access-denied', '⛔ RoleGuard: Usuario sin permisos de ADMIN');
       return;
     }
-  }, [isLoading, isAuthenticated, isAdmin, requiredRole, router]);
+
+    console.log('✅ RoleGuard: Permisos verificados correctamente, mostrando contenido');
+  }, [isLoading, isAuthenticated, isAdmin, requiredRole, performRedirect]);
 
   // Mostrar un loading mientras verifica permisos
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
-          <p className="mt-4 text-gray-600">Verificando permisos...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600 dark:text-gray-400">Verificando permisos...</p>
         </div>
       </div>
     );
   }
 
-  // Si no está autenticado o no tiene permiso, no mostrar nada (ya se redirigió)
+  // Si está verificado pero no tiene permisos, mostrar un loading durante la redirección
   if (!isAuthenticated || (requiredRole === 'ADMIN' && !isAdmin)) {
-    return null;
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900">
+        <div className="text-center">
+          <p className="text-gray-600 dark:text-gray-400">Redirigiendo...</p>
+        </div>
+      </div>
+    );
   }
 
   // Si todo está bien, mostrar el contenido

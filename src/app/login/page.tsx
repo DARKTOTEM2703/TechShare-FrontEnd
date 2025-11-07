@@ -10,6 +10,7 @@ import { useForm } from "@/hooks/useForm";
 import { loginUser } from "@/services/Auth/AuthService";
 import { useToast } from "@/components/Ui/ToastContext";
 import { getToken } from "@/services/storageService";
+import endpoints from "@/app/infraestructure/config/configAPI";
 
 const Page = () => {
   const [formData, handleChange] = useForm({
@@ -37,16 +38,48 @@ const Page = () => {
 
     try {
       const token = await loginUser(formData.email, formData.password);
-      if (token) {
-        toast.addToast("success", "Inicio de sesión exitoso");
-        // guarda token si loginUser no lo hace internamente
-        // storageService.setToken(token);
+      if (!token) {
+        toast.addToast("error", "No se recibió token de autenticación");
+        setLoading(false);
+        return;
+      }
+
+      // ✅ VERIFICAR ROL ANTES DE REDIRIGIR
+      // Llamar a /user/me para obtener roles del usuario
+      const response = await fetch(endpoints.users.getUserDetails, {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        toast.addToast("error", "No se pudo verificar el rol del usuario");
+        setLoading(false);
+        return;
+      }
+
+      const userData = await response.json();
+      console.log("👤 Usuario autenticado:", userData);
+
+      // Verificar si tiene rol ADMIN
+      const isAdmin = userData.roles?.some((role: string) => 
+        role.toUpperCase().includes("ADMIN")
+      );
+
+      toast.addToast("success", "Inicio de sesión exitoso");
+
+      // Redirigir según el rol
+      if (isAdmin) {
+        console.log("✅ Usuario es ADMIN → redirigiendo a /admin");
         router.push("/admin");
       } else {
-        toast.addToast("error", "No se recibió token de autenticación");
+        console.log("❌ Usuario NO es ADMIN → redirigiendo a /access-denied");
+        router.push("/access-denied");
       }
-    } catch (err: any) {
-      const msg = err?.message || "Error durante el inicio de sesión";
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "Error durante el inicio de sesión";
       toast.addToast("error", msg);
     } finally {
       setLoading(false);

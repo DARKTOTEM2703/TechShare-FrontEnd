@@ -4,6 +4,7 @@ import NavBar from "@/components/NavBar/NavBar";
 import { inter } from "@/services/fonts";
 import React from "react";
 import { ToastProvider } from "@/components/Ui/ToastContext";
+import { RoleCheckProvider } from "@/providers/RoleCheckProvider";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -20,7 +21,9 @@ export default function RootLayout(
   return (
     <html lang="es">
       <body className={`${inter.className}`}>
-        <ToastProvider>{children}</ToastProvider>
+        <RoleCheckProvider>
+          <ToastProvider>{children}</ToastProvider>
+        </RoleCheckProvider>
       </body>
     </html>
   );

@@ -21,7 +21,7 @@ const TextField: React.FC<TextFieldProps> = ({
 }) => {
     return (
         <textarea
-            className={`text-sm p-3 mb-4 border border-primary rounded-md w-full min-h-[80px] resize-none focus:outline-none focus:ring-2 focus:ring-primary ${readOnly ? 'bg-gray-50' : ''} ${className || ''}`}
+            className={`text-sm p-3 mb-4 border border-primary dark:border-gray-600 rounded-md w-full min-h-[80px] resize-none focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-blue-400 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 ${readOnly ? 'bg-gray-50 dark:bg-gray-800' : ''} ${className || ''}`}
             placeholder={placeholder}
             id={name}
             name={name}

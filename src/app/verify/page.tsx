@@ -13,6 +13,7 @@ function VerifyContent() {
 
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
   const [message, setMessage] = useState('');
+  const [redirectCountdown, setRedirectCountdown] = useState(5);
 
   useEffect(() => {
     if (!token) {
@@ -33,14 +34,33 @@ function VerifyContent() {
           }
         );
 
-        const text = await response.text();
+        // Intentar parsear JSON si el backend lo devuelve, sino usar texto plano
+        let bodyText = '';
+        const contentType = response.headers.get('content-type') || '';
+        if (contentType.includes('application/json')) {
+          try {
+            const json = await response.json();
+            // Extraer un mensaje útil si existe
+            bodyText = json.message || json.error || JSON.stringify(json);
+          } catch {
+            bodyText = await response.text();
+          }
+        } else {
+          bodyText = await response.text();
+        }
 
         if (response.ok) {
           setStatus('success');
-          setMessage(text || 'Cuenta verificada exitosamente');
+          setMessage(bodyText || 'Cuenta verificada exitosamente');
         } else {
+          // No mostrar JSON crudo al usuario; ofrecer mensaje más amigable
+          console.error('Verify error response:', { status: response.status, body: bodyText });
+          if (response.status >= 500) {
+            setMessage('Error interno del servidor al verificar la cuenta. Por favor, contacta con soporte.');
+          } else {
+            setMessage(bodyText || 'Error al verificar la cuenta. El token puede haber expirado.');
+          }
           setStatus('error');
-          setMessage(text || 'Error al verificar la cuenta. El token puede haber expirado.');
         }
       } catch {
         setStatus('error');
@@ -50,6 +70,24 @@ function VerifyContent() {
 
     verifyAccount();
   }, [token, router]);
+
+  // Redirigir automáticamente a /login después de 5 segundos si la verificación fue exitosa
+  useEffect(() => {
+    if (status === 'success') {
+      const countdownInterval = setInterval(() => {
+        setRedirectCountdown(prev => {
+          if (prev <= 1) {
+            clearInterval(countdownInterval);
+            router.push('/login');
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+
+      return () => clearInterval(countdownInterval);
+    }
+  }, [status, router]);
 
   return (
     <div className="flex items-center justify-center min-h-screen">
@@ -99,9 +137,12 @@ function VerifyContent() {
         {/* Botones de Acción */}
         {status === 'success' && (
           <div className="space-y-3">
+            <p className="text-sm text-gray-500 mb-4">
+              Redirigiendo al login en <span className="font-bold text-primary">{redirectCountdown}</span> segundos...
+            </p>
             <Link href="/login">
               <button className="primary-button font-bold w-full">
-                INICIAR SESIÓN
+                INICIAR SESIÓN AHORA
               </button>
             </Link>
           </div>

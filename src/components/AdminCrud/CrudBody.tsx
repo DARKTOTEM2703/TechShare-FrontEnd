@@ -45,21 +45,24 @@ export default function CrudBody({ data, headers, headerLabels, searchTerm, onDe
 
     return (
         <div>
-            <div className='white-container'>
-                <table className='crud-table'>
-                    <thead>
-                        <TableHeaders headers={headers} headerLabels={headerLabels} />
-                    </thead>
-                    <tbody>
-                        <TableRows
-                            headers={headers}
-                            currentRecords={currentRecords}
-                            onDelete={onDelete}
-                            onEdit={onEdit}
-                            isLoading={isLoading}
-                        />
-                    </tbody>
-                </table>
+            {/* Wrapper responsive para tabla con scroll horizontal */}
+            <div className='white-container overflow-x-auto -mx-4 sm:mx-0'>
+                <div className='inline-block min-w-full align-middle'>
+                    <table className='crud-table min-w-full'>
+                        <thead>
+                            <TableHeaders headers={headers} headerLabels={headerLabels} />
+                        </thead>
+                        <tbody>
+                            <TableRows
+                                headers={headers}
+                                currentRecords={currentRecords}
+                                onDelete={onDelete}
+                                onEdit={onEdit}
+                                isLoading={isLoading}
+                            />
+                        </tbody>
+                    </table>
+                </div>
             </div>
             {!isLoading && (
                 <Pagination

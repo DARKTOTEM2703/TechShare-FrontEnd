@@ -3,7 +3,7 @@ const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'
 
 const endpoints = {
     auth: {
-        signUp: `${BASE_URL}/register`,
+        signUp: `${BASE_URL}/api/auth/register`,
         login: `${BASE_URL}/login`,
         verify: `${BASE_URL}/auth/verify`
     },
@@ -35,6 +35,7 @@ const endpoints = {
         getAll: `${BASE_URL}/admin/user/all`,
         update: (id: number) => `${BASE_URL}/admin/user/${id}`,
         getUserDetails: `${BASE_URL}/user/me`,
+        changePassword: `${BASE_URL}/users/change-password`,
     },
     movements: {
         getAll: `${BASE_URL}/admin/movement/all`,
@@ -50,7 +51,7 @@ const endpoints = {
     },
 
     // Deprecated - use auth.signUp and auth.login instead
-    signUp: `${BASE_URL}/register`,
+    signUp: `${BASE_URL}/api/auth/register`,
     login: `${BASE_URL}/login`
 }
 

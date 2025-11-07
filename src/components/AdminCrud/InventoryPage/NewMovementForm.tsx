@@ -3,6 +3,7 @@ import '@/styles/form.css';
 import BorderRichTextBox from '@/components/Inputs/BorderRichTextBox';
 import Dropdown from '../../Dropdowns/Dropdown';
 import { useCrudOperations } from '@/hooks/useCrudOperations';
+import { useToast } from '@/components/Ui/ToastContext';
 import endpoints from '@/app/infraestructure/config/configAPI';
 
 interface NewMovementFormProps {
@@ -21,6 +22,7 @@ const NewMovementForm: React.FC<NewMovementFormProps> = ({
     const [quantity, setQuantity] = useState<number>();
     const [moveType, setMoveType] = useState<string>('');
     const [comment, setComment] = useState<string>('');
+    const toast = useToast();
 
     const { handleCreate } = useCrudOperations(token, refreshData);
 
@@ -34,12 +36,12 @@ const NewMovementForm: React.FC<NewMovementFormProps> = ({
         e.preventDefault();
 
         if (!quantity || quantity <= 0) {
-            alert('Por favor, ingrese una cantidad válida');
+            toast.addToast('error', 'Por favor, ingrese una cantidad válida');
             return;
         }
 
         if (!moveType) {
-            alert('Por favor, seleccione un tipo de movimiento');
+            toast.addToast('error', 'Por favor, seleccione un tipo de movimiento');
             return;
         }
 

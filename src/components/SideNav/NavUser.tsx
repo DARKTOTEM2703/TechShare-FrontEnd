@@ -1,46 +1,21 @@
-import Link from 'next/link';
-import links from './navlinks.json';
 import { FaUserCircle } from 'react-icons/fa';
-import fetchData from '@/services/fetchData';
-import endpoints from '@/app/infraestructure/config/configAPI';
 import { useEffect, useState } from 'react';
-import { useAuth } from '@/hooks/useAuth';
-import { getToken } from '@/services/storageService';
+import { useRoleCheck } from '@/providers/RoleCheckProvider';
 import { cleanRoleName } from '@/utils/roleFormatter';
 
-interface UserDetails {
-    firstName?: string;
-    lastName?: string;
-    roles?: string[];
-}
-
 export default function NavUser({ hamburgerButton }: { hamburgerButton: any }) {
-    useAuth();
-    const token = getToken();
+    const { userData } = useRoleCheck();
     const [userName, setUserName] = useState('User Name');
     const [userRole, setUserRole] = useState('Role');
 
-    const fetchUserDetails = () => {
-        fetchData(endpoints.users.getUserDetails, token)
-            .then((response) => {
-                // Manejar tanto objetos como arrays (defensive)
-                const user: UserDetails = Array.isArray(response) ? response[0] : response;
-                
-                if (user && typeof user === 'object' && user.firstName && user.lastName) {
-                    setUserName(`${user.firstName} ${user.lastName}`);
-                    if (user.roles && Array.isArray(user.roles) && user.roles.length > 0) {
-                        setUserRole(cleanRoleName(user.roles[0]));
-                    }
-                }
-            })
-            .catch((error) => {
-                console.error('Error fetching user details:', error);
-            });
-    };
-
     useEffect(() => {
-        fetchUserDetails();
-    }, []);
+        if (userData && userData.firstName && userData.lastName) {
+            setUserName(`${userData.firstName} ${userData.lastName}`);
+            if (userData.roles && Array.isArray(userData.roles) && userData.roles.length > 0) {
+                setUserRole(cleanRoleName(userData.roles[0]));
+            }
+        }
+    }, [userData]);
 
     return (
         <div>

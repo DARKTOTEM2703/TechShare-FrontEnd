@@ -12,6 +12,16 @@
   z-index: 999; /* Asegúrate de que el modal esté por encima de todo */
 }
 
+@media (prefers-color-scheme: dark) {
+  .modal-overlay {
+    background-color: rgba(0, 0, 0, 0.7);
+  }
+}
+
+.dark .modal-overlay {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
 .modal {
   width: none;
   padding: 30px;
@@ -20,11 +30,35 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
+@media (prefers-color-scheme: dark) {
+  .modal {
+    background-color: #2a2a2a;
+    border: 1px solid #3a3a3a;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+  }
+}
+
+.dark .modal {
+  background-color: #2a2a2a;
+  border: 1px solid #3a3a3a;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
 /* Título del modal */
 .modal h2 {
   text-align: left;
   color: #1e2a5e;
   font-weight: bold;
+}
+
+@media (prefers-color-scheme: dark) {
+  .modal h2 {
+    color: #e5e5e5;
+  }
+}
+
+.dark .modal h2 {
+  color: #e5e5e5;
 }
 
 /* Input del modal */
@@ -35,6 +69,22 @@
   border-radius: 8px;
   margin-bottom: 16px;
   font-size: 14px;
+  background-color: #fff;
+  color: #1a1a1a;
+}
+
+@media (prefers-color-scheme: dark) {
+  .modal-input {
+    background-color: #1a1a1a;
+    border-color: #3a3a3a;
+    color: #e5e5e5;
+  }
+}
+
+.dark .modal-input {
+  background-color: #1a1a1a;
+  border-color: #3a3a3a;
+  color: #e5e5e5;
 }
 
 /* Botones de acción en el modal */
