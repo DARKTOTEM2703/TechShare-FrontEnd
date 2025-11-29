@@ -28,11 +28,8 @@ export default function Page() {
         setIsLoading(true);
         try {
             const data = await fetchData(endpoints.borrowings.getAll, token);
-            const filteredData = data.filter(
-                (borrowing: Borrow) =>
-                    !borrowing.status.includes("PROCCES")
-            );
-            setData(filteredData);
+            // Mostrar todos los préstamos (PENDING, BORROWED, RETURNED, etc.)
+            setData(data);
             setIsLoading(false);
         } catch (error) {
             console.error("Error fetching borrowings:", error);
@@ -98,7 +95,7 @@ export default function Page() {
     }, []);
 
     const filteredData = data.filter((borrow) =>
-        borrow.usuarioName.toLowerCase().includes(searchTerm.toLowerCase())
+        (borrow.usuarioName || "").toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     return (
