@@ -6,7 +6,6 @@ import links from './navlinks.json';
 import * as FaIcons from 'react-icons/fa';
 import { removeToken } from '@/services/storageService';
 import { useToast } from '@/components/Ui/ToastContext';
-import ThemeToggle from '@/components/Ui/ThemeToggle';
 import '@/styles/side-nav.css';
 
 export default function NavLinks() {
@@ -57,11 +56,6 @@ export default function NavLinks() {
           );
         })}
         
-        {/* Theme Toggle - Pantallas pequeñas */}
-        <div className="flex justify-center w-full mt-2">
-          <ThemeToggle />
-        </div>
-
         {/* Botón de Cerrar Sesión - Pantallas pequeñas */}
         <div className="flex justify-center w-full mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
           <button
@@ -98,11 +92,6 @@ export default function NavLinks() {
           );
         })}
         
-        {/* Theme Toggle - Pantallas grandes */}
-        <div className="flex justify-center md:justify-start md:mr-4 mt-2">
-          <ThemeToggle />
-        </div>
-
         {/* Botón de Cerrar Sesión - Pantallas grandes */}
         <div className="flex justify-center md:justify-start md:mr-4 mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
           <button
