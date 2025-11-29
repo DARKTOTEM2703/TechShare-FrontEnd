@@ -113,13 +113,36 @@ export default function Materials({ token, subCategories = [], roles = [], mater
 
     const handleMaterialCreation = (e: any) => {
         e.preventDefault();
+        
+        // Validar campos requeridos
+        if (!formData.name?.trim()) {
+            alert('❌ El nombre del material es obligatorio');
+            return;
+        }
+        if (!formData.description?.trim()) {
+            alert('❌ La descripción del material es obligatoria');
+            return;
+        }
+        if (!formData.image) {
+            alert('❌ Debes seleccionar una imagen para el material');
+            return;
+        }
+        if (!formData.subCategoryId || formData.subCategoryId === 0) {
+            alert('❌ Debes seleccionar una subcategoría');
+            return;
+        }
+        if (!formData.roleIds || formData.roleIds.length === 0) {
+            alert('❌ Debes seleccionar al menos un rol');
+            return;
+        }
+        
         const formDataToSend = new FormData();
         formDataToSend.append('name', formData.name);
         formDataToSend.append('description', formData.description);
-        formDataToSend.append('price', formData.price.toString());
-        formDataToSend.append('stock', formData.stock.toString());
-        formDataToSend.append('subCategoryId', formData.subCategoryId.toString());
-        formDataToSend.append('roleIds', formData.roleIds.toString());
+        formDataToSend.append('price', String(formData.price || 0));
+        formDataToSend.append('stock', String(formData.stock || 0));
+        formDataToSend.append('subCategoryId', String(formData.subCategoryId));
+        formDataToSend.append('roleIds', String(formData.roleIds || []));
 
         if (formData.image) {
             formDataToSend.append('image', formData.image);
@@ -130,13 +153,32 @@ export default function Materials({ token, subCategories = [], roles = [], mater
 
     const handleMaterialUpdate = (e: any) => {
         e.preventDefault();
+        
+        // Validar campos requeridos
+        if (!formData.name?.trim()) {
+            alert('❌ El nombre del material es obligatorio');
+            return;
+        }
+        if (!formData.description?.trim()) {
+            alert('❌ La descripción del material es obligatoria');
+            return;
+        }
+        if (!formData.subCategoryId || formData.subCategoryId === 0) {
+            alert('❌ Debes seleccionar una subcategoría');
+            return;
+        }
+        if (!formData.roleIds || formData.roleIds.length === 0) {
+            alert('❌ Debes seleccionar al menos un rol');
+            return;
+        }
+        
         const formDataToSend = new FormData();
         formDataToSend.append('name', formData.name);
         formDataToSend.append('description', formData.description);
-        formDataToSend.append('price', formData.price.toString());
-        formDataToSend.append('stock', formData.stock.toString());
-        formDataToSend.append('subCategoryId', formData.subCategoryId.toString());
-        formDataToSend.append('roleIds', formData.roleIds.toString());
+        formDataToSend.append('price', String(formData.price || 0));
+        formDataToSend.append('stock', String(formData.stock || 0));
+        formDataToSend.append('subCategoryId', String(formData.subCategoryId));
+        formDataToSend.append('roleIds', String(formData.roleIds || []));
 
         if (formData.image) {
             formDataToSend.append('image', formData.image);

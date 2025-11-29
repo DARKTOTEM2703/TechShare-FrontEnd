@@ -1,4 +1,4 @@
-"use client"; // This directive marks the file as a Client Component
+"use client";
 
 import React, { useState, useEffect } from 'react';
 import '@/styles/side-nav.css';
@@ -6,70 +6,64 @@ import NavLinks from '@/components/SideNav/NavLinks';
 import NavUser from '@/components/SideNav/NavUser';
 
 const SideBar = () => {
-    // Estado para controlar la visibilidad de los enlaces
     const [isNavVisible, setNavVisible] = useState(false);
     const [isSmallScreen, setIsSmallScreen] = useState(false);
-    const [isCollapsed, setIsCollapsed] = useState(false);
 
-    // Efecto para detectar cambios en el tamaño de la pantalla
     useEffect(() => {
         const handleResize = () => {
-            setIsSmallScreen(window.innerWidth < 768); // Considera 768px como el límite para pantallas pequeñas
+            const smallScreen = window.innerWidth < 768;
+            setIsSmallScreen(smallScreen);
+            
+            // Cerrar el menú si cambiamos a pantalla grande
+            if (!smallScreen) {
+                setNavVisible(false);
+            }
         };
 
-        // Llamar a handleResize al montar el componente
         handleResize();
-
-        // Agregar un listener para el redimensionamiento de la ventana
         window.addEventListener('resize', handleResize);
 
-        // Limpiar el listener cuando el componente se desmonte
         return () => {
             window.removeEventListener('resize', handleResize);
         };
     }, []);
 
-    // Función para alternar la visibilidad del menú
     const toggleNav = () => {
         setNavVisible(!isNavVisible);
     };
 
+    // Cerrar sidebar al hacer clic en el overlay (solo móvil)
+    const closeSidebar = () => {
+        if (isSmallScreen) {
+            setNavVisible(false);
+        }
+    };
+
     return (
-        <div className="side-bar">
-            <div>
-                <div className='border-b-primary md:border-b-[1px] md:mb-4 md:pb-6 border-b-0 mb-0 pb-3'>
-                    <NavUser hamburgerButton={toggleNav} />
+        <>
+            {/* Overlay oscuro en móvil cuando el sidebar está abierto */}
+            {isSmallScreen && isNavVisible && (
+                <div 
+                    className="sidebar-overlay"
+                    onClick={closeSidebar}
+                    aria-label="Cerrar menú"
+                />
+            )}
+
+            {/* Sidebar principal */}
+            <div className={`side-bar ${isSmallScreen && isNavVisible ? 'side-bar-open' : ''} ${isSmallScreen && !isNavVisible ? 'side-bar-closed' : ''}`}>
+                <div>
+                    <div className='border-b-primary md:border-b-[1px] md:mb-4 md:pb-6 border-b-0 mb-0 pb-3'>
+                        <NavUser hamburgerButton={toggleNav} />
+                    </div>
+
+                    {/* NavLinks siempre renderizados pero con animación en móvil */}
+                    <div className={`nav-links-container ${isSmallScreen && !isNavVisible ? 'nav-hidden' : ''}`}>
+                        <NavLinks />
+                    </div>
                 </div>
-
-                {/* Botón para colapsar/expandir el sidebar en pantallas pequeñas */}
-                {isSmallScreen && (
-                    <button className="toggle-sidebar" onClick={() => setIsCollapsed(!isCollapsed)}>
-                        {isCollapsed ? 'Expandir' : 'Colapsar'}
-                    </button>
-                )}
-
-                {/* Mostrar siempre los NavLinks en pantallas grandes */}
-                {!isSmallScreen && (
-                    <div>
-                        <NavLinks />
-                    </div>
-                )}
-
-                {/* Solo mostrar los NavLinks togglables en pantallas pequeñas */}
-                {isSmallScreen && isNavVisible && (
-                    <div>
-                        <NavLinks />
-                    </div>
-                )}
-
-                {/* Navegación lateral colapsable */}
-                {isSmallScreen && isCollapsed && (
-                    <nav className={`side-nav ${isCollapsed ? 'collapsed' : ''}`}>
-                        <NavLinks />
-                    </nav>
-                )}
             </div>
-        </div>
+        </>
     );
 };
 

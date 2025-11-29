@@ -16,7 +16,7 @@ export default function AccessDenied() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex items-center justify-center min-h-screen bg-[#7C93C3]">
       <div className="bg-white p-8 rounded-lg shadow-lg max-w-md text-center">
         <FaExclamationTriangle className="text-red-500 text-7xl mx-auto mb-4 animate-pulse" />
         
