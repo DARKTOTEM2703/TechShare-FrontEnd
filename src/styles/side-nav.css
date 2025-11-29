@@ -89,19 +89,17 @@
     display: block;
   }
 
-  .side-bar {
-    width: 80vw;
+  .side-bar,
+  .side-nav {
+    width: 85vw;
     max-width: 320px;
-    transform: translateX(-100%);
+    transform: translateX(-100%) !important;
     box-shadow: 4px 0px 12px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
   }
 
   .side-bar-open {
-    transform: translateX(0);
-  }
-
-  .side-bar-closed {
-    transform: translateX(-100%);
+    transform: translateX(0) !important;
   }
 
   .nav-links-container {
@@ -114,7 +112,7 @@
   }
 
   .content {
-    margin-left: 0;
+    margin-left: 0 !important;
     padding: 2vh;
     padding-top: 80px;
   }
@@ -122,9 +120,15 @@
 
 /* Mejoras para pantallas muy pequeñas (móviles) */
 @media (max-width: 480px) {
-  .side-bar {
-    width: 85vw;
+  .side-bar,
+  .side-nav {
+    width: 90vw;
     max-width: none;
+    transform: translateX(-100%) !important;
+  }
+
+  .side-bar-open {
+    transform: translateX(0) !important;
   }
   
   .content {
