@@ -114,8 +114,11 @@
 
   .content {
     margin-left: 0 !important;
-    padding: 2vh;
+    padding: 1rem;
     padding-top: 80px;
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
   }
 }
 
@@ -123,8 +126,8 @@
 @media (max-width: 480px) {
   .side-bar,
   .side-nav {
-    width: 90vw;
-    max-width: none;
+    width: 75vw;
+    max-width: 300px;
     transform: translateX(-100%) !important;
   }
 
@@ -133,7 +136,8 @@
   }
 
   .content {
-    padding: 1.5vh;
-    padding-top: 75px;
+    padding: 0.75rem;
+    padding-top: 70px;
+    width: 100%;
   }
 }

@@ -10,6 +10,7 @@ import fetchData from '@/services/fetchData';
 import { Material } from '@/app/admin/catalog/interfaces/Material';
 import { Category } from '@/app/admin/catalog/interfaces/Category';
 import { SubCategory } from '@/app/admin/catalog/interfaces/SubCategory';
+import { AnimatedSection } from '@/components/Ui/AnimatedComponents';
 
 export default function Catalog() {
 
@@ -75,8 +76,8 @@ export default function Catalog() {
   const MIN_WIDTH = 200
 
   return (
-    <div>
-      <div className='mb-6'>
+    <div className="container-responsive spacing-y-responsive">
+      <AnimatedSection animation="slide-up" delay={100}>
         <Materials
           token={token}
           subCategories={subCategories}
@@ -88,8 +89,8 @@ export default function Catalog() {
           MIN_WIDTH={MIN_WIDTH}
           isLoading={isLoading}
         />
-      </div>
-      <div className='mb-6'>
+      </AnimatedSection>
+      <AnimatedSection animation="slide-up" delay={200}>
         <SubCategories
           token={token}
           categories={categories}
@@ -100,8 +101,8 @@ export default function Catalog() {
           MIN_WIDTH={MIN_WIDTH}
           isLoading={isLoading}
         />
-      </div>
-      <div>
+      </AnimatedSection>
+      <AnimatedSection animation="slide-up" delay={300}>
         <Categories
           token={token}
           categories={categories}
@@ -111,7 +112,7 @@ export default function Catalog() {
           MIN_WIDTH={MIN_WIDTH}
           isLoading={isLoading}
         />
-      </div>
+      </AnimatedSection>
     </div>
   );
 }
