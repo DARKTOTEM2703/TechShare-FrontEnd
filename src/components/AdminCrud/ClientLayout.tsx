@@ -42,10 +42,10 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
     return (
         <>
             {/* Botón hamburguesa fijo - solo visible en móvil */}
-            {isSmallScreen && (
+            {isSmallScreen && !isNavVisible && (
                 <button
                     onClick={toggleNav}
-                    className="fixed top-4 left-4 z-[1001] bg-primary text-white p-3 rounded-lg shadow-lg hover:bg-primary/90 transition-all md:hidden"
+                    className="fixed top-4 left-4 z-[998] bg-primary text-white p-3 rounded-lg shadow-lg hover:bg-primary/90 transition-all md:hidden"
                     aria-label="Abrir menú de navegación"
                     title="Menú"
                 >
@@ -62,13 +62,11 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
             )}
 
             <div className="horizontal-flex">
-                <div className="side-nav">
-                    <SideNav 
-                        isNavVisible={isNavVisible} 
-                        toggleNav={toggleNav}
-                        closeSidebar={closeSidebar}
-                    />
-                </div>
+                <SideNav 
+                    isNavVisible={isNavVisible} 
+                    toggleNav={toggleNav}
+                    closeSidebar={closeSidebar}
+                />
                 <div className="content">
                     {loading ? (
                         <div className="loading-spinner">Loading...</div>

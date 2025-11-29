@@ -38,10 +38,10 @@ export default function AdminLayout(
     <ToastProvider>
       <RoleGuard requiredRole="ADMIN">
         {/* Botón hamburguesa fijo - solo visible en móvil */}
-        {isSmallScreen && (
+        {isSmallScreen && !isNavVisible && (
           <button
             onClick={toggleNav}
-            className="fixed top-4 left-4 z-[1001] bg-primary text-white p-3 rounded-lg shadow-lg hover:bg-primary/90 transition-all md:hidden"
+            className="fixed top-4 left-4 z-[998] bg-primary text-white p-3 rounded-lg shadow-lg hover:bg-primary/90 transition-all md:hidden"
             aria-label="Abrir menú de navegación"
             title="Menú"
           >
@@ -58,13 +58,11 @@ export default function AdminLayout(
         )}
 
         <div className={`horizontal-flex`}>
-          <div className="side-nav">
-            <SideNav 
-              isNavVisible={isNavVisible} 
-              toggleNav={toggleNav}
-              closeSidebar={closeSidebar}
-            />
-          </div>
+          <SideNav 
+            isNavVisible={isNavVisible} 
+            toggleNav={toggleNav}
+            closeSidebar={closeSidebar}
+          />
           <div className="content">
             {children}
           </div>

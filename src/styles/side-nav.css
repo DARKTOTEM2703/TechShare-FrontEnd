@@ -91,11 +91,12 @@
 
   .side-bar,
   .side-nav {
-    width: 85vw;
-    max-width: 320px;
+    width: 60vw;
+    max-width: 260px;
     transform: translateX(-100%) !important;
     box-shadow: 4px 0px 12px rgba(0, 0, 0, 0.3);
     z-index: 1000;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .side-bar-open {
