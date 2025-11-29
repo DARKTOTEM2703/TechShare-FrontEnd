@@ -8,7 +8,11 @@ import { removeToken } from '@/services/storageService';
 import { useToast } from '@/components/Ui/ToastContext';
 import '@/styles/side-nav.css';
 
-export default function NavLinks() {
+interface NavLinksProps {
+  onLinkClick?: () => void;
+}
+
+export default function NavLinks({ onLinkClick }: NavLinksProps) {
   const [selectedLink, setSelectedLink] = useState<string | null>(null);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const router = useRouter();
@@ -16,6 +20,7 @@ export default function NavLinks() {
 
   const handleLinkClick = (name: string) => {
     setSelectedLink(name);
+    onLinkClick?.(); // Cerrar sidebar en móvil
   };
 
   const handleLogout = () => {

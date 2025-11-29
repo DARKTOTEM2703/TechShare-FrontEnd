@@ -22,7 +22,7 @@ const SideBar = ({ isNavVisible, toggleNav, closeSidebar }: SideBarProps) => {
 
                 {/* NavLinks siempre renderizados */}
                 <div className="nav-links-container">
-                    <NavLinks />
+                    <NavLinks onLinkClick={closeSidebar} />
                 </div>
             </div>
         </div>

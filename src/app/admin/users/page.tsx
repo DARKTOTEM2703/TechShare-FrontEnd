@@ -7,6 +7,7 @@ import fetchData from '@/services/fetchData';
 import endpoints from '@/app/infraestructure/config/configAPI';
 import UserInformation from '@/components/AdminCrud/InfoModals/UserInformation';
 import { useState, useEffect } from 'react';
+import { AnimatedSection } from '@/components/Ui/AnimatedComponents';
 import "@/styles/modal.css";
 import { useCrudOperations } from '@/hooks/useCrudOperations';
 
@@ -102,15 +103,17 @@ export default function Users() {
   }
 
   return (
-    <div>
-      <CrudHeader
-        title="Usuarios"
-        dropdownOptions={[]}
-        buttonLabel=""
-        buttonFunction={() => alert('Adding stuff')}
-        onSearchChange={handleSearchChange}
-        buttonDisabled={true}
-      />
+    <div className="container-responsive spacing-y-responsive">
+      <AnimatedSection animation="fade-in">
+        <CrudHeader
+          title="Usuarios"
+          dropdownOptions={[]}
+          buttonLabel=""
+          buttonFunction={() => alert('Adding stuff')}
+          onSearchChange={handleSearchChange}
+          buttonDisabled={true}
+        />
+      </AnimatedSection>
       <CrudBody
         data={users}
         headerLabels={headerLabels}

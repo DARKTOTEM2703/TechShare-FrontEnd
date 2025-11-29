@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import '@/styles/crud-table.css';
 import '@/styles/pagination.css';
+import '@/styles/animations.css';
 import { isDataEmpty } from '@/utils/utils';
 import { TableHeaders, TableRows } from '@/components/AdminCrud/TableRendererBorrowings';
 import Pagination from '@/components/AdminCrud/Pagination';
+import { AnimatedSection, ResponsiveTable } from '@/components/Ui/AnimatedComponents';
 
 interface CrudBodyProps {
     data: any;
@@ -41,22 +43,24 @@ export default function CrudBody({ data, headers, searchTerm, onConfirmReturn, o
 
     return (
         <div>
-            <div className='white-container'>
-                <table className='crud-table'>
-                    <thead>
-                        <TableHeaders headers={headers} />
-                    </thead>
-                    <tbody>
-                        <TableRows
-                            onConfirmReturn={onConfirmReturn}
-                            onMoreInfo={onMoreInfo}
-                            headers={headers}
-                            currentRecords={currentRecords}
-                            isLoading={isLoading}
-                        />
-                    </tbody>
-                </table>
-            </div>
+            <AnimatedSection animation="slide-up" delay={100}>
+                <ResponsiveTable className="white-container">
+                    <table className='crud-table'>
+                        <thead>
+                            <TableHeaders headers={headers} />
+                        </thead>
+                        <tbody>
+                            <TableRows
+                                onConfirmReturn={onConfirmReturn}
+                                onMoreInfo={onMoreInfo}
+                                headers={headers}
+                                currentRecords={currentRecords}
+                                isLoading={isLoading}
+                            />
+                        </tbody>
+                    </table>
+                </ResponsiveTable>
+            </AnimatedSection>
             {!isLoading && (
                 <Pagination
                     currentPage={currentPage}

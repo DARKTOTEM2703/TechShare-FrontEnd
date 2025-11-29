@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import '@/styles/crud-table.css';
 import '@/styles/pagination.css';
-import { isDataEmpty } from '@/utils/utils'; // Eliminamos filterHeadersWithId
+import '@/styles/animations.css';
+import { isDataEmpty } from '@/utils/utils';
 import { TableHeaders, TableRows } from '@/components/AdminCrud/TableRenderer';
 import Pagination from '@/components/AdminCrud/Pagination';
+import { AnimatedSection, ResponsiveTable } from '@/components/Ui/AnimatedComponents';
 
 interface CrudBodyProps {
     data: any;
@@ -46,8 +48,8 @@ export default function CrudBody({ data, headers, headerLabels, searchTerm, onDe
     return (
         <div>
             {/* Wrapper responsive para tabla con scroll horizontal */}
-            <div className='white-container overflow-x-auto -mx-4 sm:mx-0'>
-                <div className='inline-block min-w-full align-middle'>
+            <AnimatedSection animation="slide-up" delay={100}>
+                <ResponsiveTable className="white-container -mx-4 sm:mx-0">
                     <table className='crud-table min-w-full'>
                         <thead>
                             <TableHeaders headers={headers} headerLabels={headerLabels} />
@@ -62,8 +64,8 @@ export default function CrudBody({ data, headers, headerLabels, searchTerm, onDe
                             />
                         </tbody>
                     </table>
-                </div>
-            </div>
+                </ResponsiveTable>
+            </AnimatedSection>
             {!isLoading && (
                 <Pagination
                     currentPage={currentPage}

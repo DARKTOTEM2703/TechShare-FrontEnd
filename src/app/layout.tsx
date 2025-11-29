@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import "@/styles/globals.css";
+import "@/styles/animations.css";
+import "@/styles/responsive.css";
 import NavBar from "@/components/NavBar/NavBar";
 import { inter } from "@/services/fonts";
 import React from "react";
