@@ -18,7 +18,6 @@ export default function Users() {
     firstName: string;
     lastName: string;
     email: string;
-    phoneNumber: string;
     roles: string[];
   }
 

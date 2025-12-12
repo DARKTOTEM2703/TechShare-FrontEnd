@@ -16,25 +16,27 @@ interface ModalProps {
 
 export default function Modal({ onClose, header, children, onSubmit }: ModalProps) {
     return (
-        <form onSubmit={onSubmit}>
-            <div className='modal'>
-                <div className='border-b-[1px]'>
-                    <h2 className='text-lg'>{header}</h2>
+        <div className='modal-overlay' onClick={onClose}>
+            <form onSubmit={onSubmit} onClick={(e) => e.stopPropagation()}>
+                <div className='modal'>
+                    <div className='border-b-[1px]'>
+                        <h2 className='text-lg'>{header}</h2>
+                    </div>
+                    <div>
+                        {children}
+                    </div>
+                    <div className='justify-end flex space-x-3 mt-2'>
+                        <SecondaryButton
+                            buttonLabel='Cancelar'
+                            buttonFunction={onClose}
+                        />
+                        <PrimaryButton
+                            buttonLabel='Aceptar'
+                            buttonFunction={() => { }}
+                        />
+                    </div>
                 </div>
-                <div>
-                    {children}
-                </div>
-                <div className='justify-end flex space-x-3 mt-2'>
-                    <SecondaryButton
-                        buttonLabel='Cancelar'
-                        buttonFunction={onClose}
-                    />
-                    <PrimaryButton
-                        buttonLabel='Aceptar'
-                        buttonFunction={() => { }}
-                    />
-                </div>
-            </div>
-        </form>
+            </form>
+        </div>
     )
 }

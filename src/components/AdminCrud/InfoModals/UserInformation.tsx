@@ -10,7 +10,6 @@ interface UserInformationProps {
         firstName: string;
         lastName: string;
         email: string;
-        phoneNumber: string;
         roles: string[];
     };
     onClose: () => void;
@@ -51,9 +50,6 @@ const UserInformation: React.FC<UserInformationProps> = ({
                         </div>
                         <div className="flex flex-col gap-2">
                             <label>Correo electrónico: {user.email}</label>
-                        </div>
-                        <div className="flex flex-col gap-2">
-                            <label>Teléfono: {user.phoneNumber}</label>
                         </div>
                         <div className="flex flex-col gap-2">
                             <label htmlFor="roles">Roles</label>

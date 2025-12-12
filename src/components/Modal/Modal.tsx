@@ -12,8 +12,8 @@ interface ModalProps {
 
 export default function Modal({ onClose }: ModalProps) {
     return (
-        <div>
-            <div className='modal'>
+        <div className='modal-overlay' onClick={onClose}>
+            <div className='modal' onClick={(e) => e.stopPropagation()}>
                 <div className='border-b-[1px]'>
                     <h2 className='text-lg'>Crear nuevo Rol</h2>
                 </div>

@@ -17,27 +17,29 @@ interface ModalProps {
 
 export default function Modal({ onClose, header, children, onSubmit, showButtons = true }: ModalProps) {
     return (
-        <form onSubmit={onSubmit}>
-            <div className='modal'>
-                <div className='border-b-[1px] mb-6'>
-                    <h2 className='text-lg mb-2'>{header}</h2>
-                </div>
-                <div className='flex flex-col'>
-                    {children}
-                </div>
-                {showButtons && (
-                    <div className='justify-end flex space-x-3 mt-2'>
-                        <SecondaryButton
-                            buttonLabel='Cancelar'
-                            buttonFunction={onClose}
-                        />
-                        <PrimaryButton
-                            buttonLabel='Guardar'
-                            buttonFunction={() => { }}
-                        />
+        <div className='modal-overlay' onClick={onClose}>
+            <form onSubmit={onSubmit} onClick={(e) => e.stopPropagation()}>
+                <div className='modal'>
+                    <div className='border-b-[1px] mb-6'>
+                        <h2 className='text-lg mb-2'>{header}</h2>
                     </div>
-                )}
-            </div>
-        </form>
+                    <div className='flex flex-col'>
+                        {children}
+                    </div>
+                    {showButtons && (
+                        <div className='justify-end flex space-x-3 mt-2'>
+                            <SecondaryButton
+                                buttonLabel='Cancelar'
+                                buttonFunction={onClose}
+                            />
+                            <PrimaryButton
+                                buttonLabel='Guardar'
+                                buttonFunction={() => { }}
+                            />
+                        </div>
+                    )}
+                </div>
+            </form>
+        </div>
     )
 }
