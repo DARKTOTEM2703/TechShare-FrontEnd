@@ -18,6 +18,12 @@ export default function Users() {
     firstName: string;
     lastName: string;
     email: string;
+    profileImageUrl?: string;
+    isEnabled: boolean;
+    birthDate?: string;
+    gender?: string;
+    createdAt?: string;
+    updatedAt?: string;
     roles: string[];
   }
 

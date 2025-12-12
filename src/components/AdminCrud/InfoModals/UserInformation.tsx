@@ -10,6 +10,12 @@ interface UserInformationProps {
         firstName: string;
         lastName: string;
         email: string;
+        profileImageUrl?: string;
+        isEnabled: boolean;
+        birthDate?: string;
+        gender?: string;
+        createdAt?: string;
+        updatedAt?: string;
         roles: string[];
     };
     onClose: () => void;
@@ -51,6 +57,29 @@ const UserInformation: React.FC<UserInformationProps> = ({
                         <div className="flex flex-col gap-2">
                             <label>Correo electrónico: {user.email}</label>
                         </div>
+                        {user.birthDate && (
+                            <div className="flex flex-col gap-2">
+                                <label>Fecha de nacimiento: {new Date(user.birthDate).toLocaleDateString()}</label>
+                            </div>
+                        )}
+                        {user.gender && (
+                            <div className="flex flex-col gap-2">
+                                <label>Género: {user.gender}</label>
+                            </div>
+                        )}
+                        <div className="flex flex-col gap-2">
+                            <label>Estado: {user.isEnabled ? 'Habilitado' : 'Deshabilitado'}</label>
+                        </div>
+                        {user.createdAt && (
+                            <div className="flex flex-col gap-2">
+                                <label className="text-sm text-gray-500">Creado: {new Date(user.createdAt).toLocaleString()}</label>
+                            </div>
+                        )}
+                        {user.updatedAt && (
+                            <div className="flex flex-col gap-2">
+                                <label className="text-sm text-gray-500">Actualizado: {new Date(user.updatedAt).toLocaleString()}</label>
+                            </div>
+                        )}
                         <div className="flex flex-col gap-2">
                             <label htmlFor="roles">Roles</label>
                             <AsyncSelect
