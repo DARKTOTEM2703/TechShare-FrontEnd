@@ -46,8 +46,11 @@ const UserInformation: React.FC<UserInformationProps> = ({
                 >
                     <div className="flex flex-col gap-4">
                         <div className="flex flex-col gap-2">
-                            <label>Nombre de usuario: {user.userName ?? (user as any).user_name}</label>
-                        </div>
+                                <label>ID: {user.id ?? (user as any).id}</label>
+                            </div>
+                            <div className="flex flex-col gap-2">
+                                <label>Nombre de usuario: {user.userName ?? (user as any).user_name}</label>
+                            </div>
                         <div className="flex flex-col gap-2">
                             <label>Nombre: {user.firstName ?? (user as any).first_name}</label>
                         </div>
@@ -68,7 +71,7 @@ const UserInformation: React.FC<UserInformationProps> = ({
                             </div>
                         )}
                         <div className="flex flex-col gap-2">
-                            <label>Estado: {(user.isEnabled ?? (user as any).is_enabled) ? 'Habilitado' : 'Deshabilitado'}</label>
+                            <label>Estado: {(user.isEnabled ?? (user as any).is_enabled ?? (user as any).enabled) ? 'Habilitado' : 'Deshabilitado'}</label>
                         </div>
                         {(user.createdAt ?? (user as any).created_at) && (
                             <div className="flex flex-col gap-2">
