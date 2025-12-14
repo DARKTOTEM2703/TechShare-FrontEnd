@@ -46,38 +46,38 @@ const UserInformation: React.FC<UserInformationProps> = ({
                 >
                     <div className="flex flex-col gap-4">
                         <div className="flex flex-col gap-2">
-                            <label>Nombre de usuario: {user.userName}</label>
+                            <label>Nombre de usuario: {user.userName ?? (user as any).user_name}</label>
                         </div>
                         <div className="flex flex-col gap-2">
-                            <label>Nombre: {user.firstName}</label>
+                            <label>Nombre: {user.firstName ?? (user as any).first_name}</label>
                         </div>
                         <div className="flex flex-col gap-2">
-                            <label>Apellido: {user.lastName}</label>
+                            <label>Apellido: {user.lastName ?? (user as any).last_name}</label>
                         </div>
                         <div className="flex flex-col gap-2">
-                            <label>Correo electrónico: {user.email}</label>
+                            <label>Correo electrónico: {user.email ?? (user as any).email}</label>
                         </div>
-                        {user.birthDate && (
+                        {(user.birthDate ?? (user as any).birth_date) && (
                             <div className="flex flex-col gap-2">
-                                <label>Fecha de nacimiento: {new Date(user.birthDate).toLocaleDateString()}</label>
+                                <label>Fecha de nacimiento: {new Date(user.birthDate ?? (user as any).birth_date).toLocaleDateString()}</label>
                             </div>
                         )}
-                        {user.gender && (
+                        {(user.gender ?? (user as any).gender) && (
                             <div className="flex flex-col gap-2">
-                                <label>Género: {user.gender}</label>
+                                <label>Género: {user.gender ?? (user as any).gender}</label>
                             </div>
                         )}
                         <div className="flex flex-col gap-2">
-                            <label>Estado: {user.isEnabled ? 'Habilitado' : 'Deshabilitado'}</label>
+                            <label>Estado: {(user.isEnabled ?? (user as any).is_enabled) ? 'Habilitado' : 'Deshabilitado'}</label>
                         </div>
-                        {user.createdAt && (
+                        {(user.createdAt ?? (user as any).created_at) && (
                             <div className="flex flex-col gap-2">
-                                <label className="text-sm text-gray-500">Creado: {new Date(user.createdAt).toLocaleString()}</label>
+                                <label className="text-sm text-gray-500">Creado: {new Date(user.createdAt ?? (user as any).created_at).toLocaleString()}</label>
                             </div>
                         )}
-                        {user.updatedAt && (
+                        {(user.updatedAt ?? (user as any).updated_at) && (
                             <div className="flex flex-col gap-2">
-                                <label className="text-sm text-gray-500">Actualizado: {new Date(user.updatedAt).toLocaleString()}</label>
+                                <label className="text-sm text-gray-500">Actualizado: {new Date(user.updatedAt ?? (user as any).updated_at).toLocaleString()}</label>
                             </div>
                         )}
                         <div className="flex flex-col gap-2">

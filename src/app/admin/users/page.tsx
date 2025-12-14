@@ -102,8 +102,8 @@ export default function Users() {
   }, []);
 
   const headerLabels = {
-    'firstName': 'Nombre',
-    'lastName': 'Apellido'
+    'first_name': 'Nombre',
+    'last_name': 'Apellido'
   }
 
   return (
@@ -121,7 +121,7 @@ export default function Users() {
       <CrudBody
         data={users}
         headerLabels={headerLabels}
-        headers={['firstName', 'lastName']}
+        headers={['first_name', 'last_name']}
         searchTerm={searchTerm}
         onSelected={(id: number) => alert(`Selected ${id}`)}
         onMoreInfo={handleMoreInfo}
