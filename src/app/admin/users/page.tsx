@@ -113,7 +113,7 @@ export default function Users() {
           title="Usuarios"
           dropdownOptions={[]}
           buttonLabel=""
-          buttonFunction={() => alert('Adding stuff')}
+          buttonFunction={() => {}}
           onSearchChange={handleSearchChange}
           buttonDisabled={true}
         />
@@ -123,7 +123,7 @@ export default function Users() {
         headerLabels={headerLabels}
         headers={['first_name', 'last_name']}
         searchTerm={searchTerm}
-        onSelected={(id: number) => alert(`Selected ${id}`)}
+        onSelected={handleMoreInfo}
         onMoreInfo={handleMoreInfo}
         isLoading={isLoading}
       />

@@ -5,25 +5,27 @@ import { useRouter } from 'next/navigation';
 import SearchBar from '@/components/AdminCrud/SearchBar';
 import ProductCard from '@/app/home/components/ProductCard';
 import endpoints from '../infraestructure/config/configAPI';
-import fetchData from '@/services/fetchData';
-import { getToken } from "@/services/storageService";
 
 
 export default function Home() {
   const router = useRouter();
 
-  const token = getToken() || '';
-
   const [materials, setMaterials] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (token) {
-      fetchData(endpoints.materials.getAll, token)
-        .then((data) => {
-          setMaterials(data || []);
-        });
-    }
-  }, [token]);
+    // Fetch sin token requerido
+    fetch(endpoints.materials.getAll)
+      .then((res) => res.json())
+      .then((data) => {
+        setMaterials(data.content || data || []);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Error loading materials:", err);
+        setLoading(false);
+      });
+  }, []);
 
   return (
     <div className="min-h-screen rounded-lg bg-gray-100 flex flex-col items-center">
@@ -42,14 +44,20 @@ export default function Home() {
         <div
           className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 py-4 px-12 mx-auto"
         >
-          {Array.isArray(materials) && materials.map((material: any) => (
-            <div
-              key={material.materialsId}
-              className=" mx-auto"
-            >
-              <ProductCard material={material} />
-            </div>
-          ))}
+          {loading ? (
+            <p className="text-center col-span-full">Cargando materiales...</p>
+          ) : Array.isArray(materials) && materials.length > 0 ? (
+            materials.map((material: any) => (
+              <div
+                key={material.materialsId}
+                className=" mx-auto"
+              >
+                <ProductCard material={material} />
+              </div>
+            ))
+          ) : (
+            <p className="text-center col-span-full">No hay materiales disponibles</p>
+          )}
         </div>
       </div>
     </div>

@@ -15,16 +15,12 @@ export default function DeleteMaterialModal({
     if (!isVisible) return null;
 
     return (
-        <div className="modal-overlay">
-            <div className="modal-content">
-                <ModalBase
-                    onClose={onClose}
-                    header="Confirmar eliminación de material"
-                    onSubmit={onSubmit}
-                >
-                    <p>¿Estás seguro de querer eliminar este material?</p>
-                </ModalBase>
-            </div>
-        </div>
+        <ModalBase
+            onClose={onClose}
+            header="Confirmar eliminación de material"
+            onSubmit={onSubmit}
+        >
+            <p>¿Estás seguro de querer eliminar este material?</p>
+        </ModalBase>
     );
 }

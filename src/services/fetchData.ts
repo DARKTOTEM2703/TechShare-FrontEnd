@@ -21,12 +21,6 @@ const fetchData = async (url:any, token:any) => {
             return [];
         }
 
-        // Manejar autorización: para endpoints que esperan listas, devolver array vacío y loggear
-        if (response.status === 401 || response.status === 403) {
-            console.warn('Unauthorized response from', url, response.status);
-            return [];
-        }
-
         // Verifica si hay contenido antes de intentar parsearlo
         const contentType = response.headers.get("Content-Type") || "";
         let data: any = null;
@@ -37,6 +31,19 @@ const fetchData = async (url:any, token:any) => {
             const text = await response.text();
             console.warn('Non-JSON response body for', url, ':', text);
             data = text;
+        }
+
+        // ✅ ARREGLO 1: Lanzar error en lugar de ocultar
+        if (!response.ok) {
+            const errorResponse = {
+                status: response.status,
+                message: data?.message || `Error ${response.status}`,
+                error: data?.error,
+                errors: data?.validation_errors || data?.errors || [],
+                details: data?.details
+            };
+            console.error('Fetch error:', errorResponse);
+            throw new Error(JSON.stringify(errorResponse));
         }
 
         // Normalizar respuestas: si el endpoint devuelve un array, devolverlo.
@@ -55,12 +62,13 @@ const fetchData = async (url:any, token:any) => {
             }
         }
 
-    // Si no hay array, devolvemos un array vacío para evitar errores en componentes que esperan listas
-    console.warn('fetchData: expected array but got', typeof data, data, 'from', url);
-    return [];
+        // Si no hay array, devolvemos un array vacío para evitar errores en componentes que esperan listas
+        console.warn('fetchData: expected array but got', typeof data, data, 'from', url);
+        return [];
     } catch (error) {
-        console.error("Error:", error);
-        throw error; // Repropaga el error si necesitas manejarlo más arriba.
+        // ✅ ARREGLO 2: Propagar error en lugar de silenciar
+        console.error('fetchData exception:', error);
+        throw error;
     }
 };
 

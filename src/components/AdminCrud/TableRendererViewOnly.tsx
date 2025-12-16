@@ -3,7 +3,7 @@ import RollingSpinner from '@/assets/animations/rolling-spinner.svg';
 interface TableRowsProps {
     headers: string[];
     currentRecords: any[];
-    onSelected: (id: number) => void;
+    onSelected?: (id: number) => void;
     onMoreInfo: (id: number) => void;
     isLoading: boolean;
 }
@@ -45,7 +45,7 @@ const TableRows: React.FC<TableRowsProps> = ({ headers, currentRecords, onSelect
                 return (
                     <tr key={`row-${idValue}-${rowIndex}`}>
                         {headers.map((header: string, headerIndex: number) => (
-                            <td key={`${header}-${idValue}-${headerIndex}`} onClick={() => onSelected(idValue)} className="truncate max-w-[200px]">
+                            <td key={`${header}-${idValue}-${headerIndex}`} onClick={() => onMoreInfo(idValue)} className="truncate max-w-[200px]">
                                 {row[header]}
                             </td>
                         ))}

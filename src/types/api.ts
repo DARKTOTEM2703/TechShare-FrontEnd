@@ -14,6 +14,7 @@
  * Estructura de error estándar del backend.
  * 
  * Basado en: ApiErrorResponse.java y GlobalExceptionHandler.java
+ * ✅ Actualizado para soportar tanto field errors (validation_errors) como errores generales
  */
 export interface BackendErrorResponse {
   /** Timestamp del error en formato ISO 8601 */
@@ -31,12 +32,44 @@ export interface BackendErrorResponse {
   /** Ruta del endpoint que generó el error */
   path?: string;
   
-  /** Lista de errores de validación (para @Valid BindingResult) */
+  /** Lista de errores de validación (camelCase - compatibilidad) */
   errors?: string[];
+  
+  /** Errores de validación por campo (snake_case - backend response) */
+  validation_errors?: Record<string, string[]>;
   
   /** Detalles adicionales del error */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   details?: Record<string, any>;
+}
+
+/**
+ * Función para extraer mensajes de error de una respuesta del backend.
+ * Soporta tanto validation_errors (snake_case) como errors (camelCase).
+ */
+export function extractErrorMessages(error: BackendErrorResponse): string[] {
+  const messages: string[] = [];
+  
+  // Agregar mensaje principal si existe
+  if (error.message) {
+    messages.push(error.message);
+  }
+  
+  // Agregar errores de validación por campo
+  if (error.validation_errors) {
+    Object.entries(error.validation_errors).forEach(([field, fieldErrors]) => {
+      if (Array.isArray(fieldErrors)) {
+        fieldErrors.forEach(msg => messages.push(`${field}: ${msg}`));
+      }
+    });
+  }
+  
+  // Agregar errores genéricos
+  if (error.errors && Array.isArray(error.errors)) {
+    messages.push(...error.errors);
+  }
+  
+  return messages.length > 0 ? messages : ['Error desconocido'];
 }
 
 /**

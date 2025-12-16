@@ -1,10 +1,12 @@
+"use client"
 import React from 'react';
-import ModalBase from '@/components/Modal/ModalBase';
+import { createPortal } from 'react-dom';
 import BorderTextField from '@/components/Inputs/BorderTextField';
 import RichTextBox from '@/components/Inputs/BorderRichTextBox';
 import DropzoneWithPreview from '@/components/DropZone';
 import ReactCrop from 'react-image-crop';
 import AsyncSelect from 'react-select/async';
+import '@/styles/modal.css';
 
 interface CreateMaterialModalProps {
     isVisible: boolean;
@@ -51,17 +53,16 @@ export default function CreateMaterialModal({
 }: CreateMaterialModalProps) {
     if (!isVisible) return null;
 
-    return (
-        <div className="modal-overlay">
-            <div className="modal-content">
-                <ModalBase
-                    onClose={onClose}
-                    header="Nuevo material"
-                    onSubmit={onSubmit}
-                    showButtons={!isImageCropping}
-                >
+    return createPortal(
+        <div className="modal-overlay" onClick={onClose}>
+            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                {/* HEADER */}
+                <h2 style={{ marginBottom: '1.5rem', margin: '0 0 1.5rem 0' }}>Nuevo material</h2>
+
+                {/* CONTENT - Scrolleable */}
+                <form onSubmit={onSubmit} style={{ flex: 1, overflowY: 'auto', marginBottom: '1.5rem' }}>
                     {isImageCropping ? (
-                        <>
+                        <div style={{ textAlign: 'center' }}>
                             <ReactCrop
                                 crop={crop}
                                 onChange={(_, percentCrop) => setCrop(percentCrop)}
@@ -73,7 +74,7 @@ export default function CreateMaterialModal({
                                     ref={imageRef}
                                     src={imageUrl}
                                     alt="Upload"
-                                    style={{ maxHeight: '70vh' }}
+                                    style={{ maxHeight: '50vh', width: '100%', objectFit: 'contain' }}
                                     onLoad={onImageLoad}
                                 />
                             </ReactCrop>
@@ -88,115 +89,177 @@ export default function CreateMaterialModal({
                                     height: 150
                                 }}
                             />
-                            <button
-                                className="primary-button"
-                                type="button"
-                                onClick={() => {
-                                    applyCrop((croppedFile, previewUrl) => {
-                                        setFormData((prev: any) => ({
-                                            ...prev,
-                                            image: croppedFile,
-                                            imagePreview: previewUrl
-                                        }));
-                                    });
-                                }}
-                            >
-                                Apply
-                            </button>
-                        </>
+                        </div>
                     ) : (
                         <>
-                            <div className="flex gap-2">
-                                <div className="flex items-center aspect-[3/2] h-[176px] mr-5">
+                            <div className="flex gap-4" style={{ marginBottom: '20px' }}>
+                                <div className="flex items-center aspect-[3/2] h-[176px]">
                                     <DropzoneWithPreview
                                         onFileChange={(file: File | null) => {
                                             if (file) onSelectFile(file);
                                         }}
-                                        initialPreview={formData.imagePreview || imageUrl}
+                                        initialPreview={formData.imagePreview || ''}
                                     />
                                 </div>
-                                <div className="flex flex-col gap-2">
-                                    <h2>Nombre</h2>
-                                    <BorderTextField
-                                        name="name"
-                                        placeholder="Nombre del material"
-                                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                        value={formData.name}
-                                    />
-                                    <div className="flex gap-4">
+
+                                <div className="flex flex-col gap-4" style={{ flex: 1 }}>
+                                    <div>
+                                        <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600' }}>Nombre</label>
+                                        <BorderTextField
+                                            name="name"
+                                            placeholder="Nombre del material"
+                                            onChange={(e) =>
+                                                setFormData({ ...formData, name: e.target.value })
+                                            }
+                                            value={formData.name}
+                                        />
+                                    </div>
+
+                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                                         <div>
-                                            <h2>Precio</h2>
+                                            <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600' }}>Precio</label>
                                             <BorderTextField
                                                 name="price"
-                                                placeholder="Precio del material"
-                                                onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                                                placeholder="$ 0"
+                                                onChange={(e) =>
+                                                    setFormData({ ...formData, price: e.target.value })
+                                                }
                                                 value={formData.price}
                                                 isCurrency={true}
                                             />
                                         </div>
                                         <div>
-                                            <h2>Stock Inicial</h2>
+                                            <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600' }}>Stock Inicial</label>
                                             <BorderTextField
-                                                name="stock"
-                                                placeholder="Cantidad disponible"
-                                                onChange={(e) => {
-                                                    const value = Math.max(0, Math.floor(Number(e.target.value)));
-                                                    setFormData({ ...formData, stock: value });
-                                                }}
-                                                value={formData.stock}
+                                                name="initialStock"
+                                                placeholder="0"
+                                                onChange={(e) =>
+                                                    setFormData({ ...formData, initialStock: e.target.value })
+                                                }
+                                                value={formData.initialStock}
                                             />
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <h2>Descripción</h2>
-                            <RichTextBox
-                                name="description"
-                                placeholder="Añade una descripción para el material"
-                                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                                value={formData.description}
-                                required={true}
-                            />
-                            <h2>Subcategoría</h2>
-                            <AsyncSelect
-                                className='border rounded-md border-primary mb-4'
-                                cacheOptions
-                                defaultOptions={(Array.isArray(subCategories) ? subCategories : []).map(subCategory => ({
-                                    value: subCategory.subCategoriesId,
-                                    label: subCategory.name
-                                }))}
-                                value={(Array.isArray(subCategories) ? subCategories : [])
-                                    .filter(subCategory => subCategory.subCategoriesId === formData.subCategoryId)
-                                    .map(subCategory => ({
-                                        value: subCategory.subCategoriesId,
-                                        label: subCategory.name
-                                    }))[0]}
-                                onChange={(selectedOption: any) =>
-                                    setFormData({ ...formData, subCategoryId: selectedOption.value })
-                                }
-                                placeholder="Selecciona una subcategoría"
-                                required={true}
-                            />
-                            <h2>Roles</h2>
-                            <AsyncSelect
-                                className='border rounded-md border-primary mb-4'
-                                cacheOptions
-                                defaultOptions={roleOptions}
-                                loadOptions={loadRoleOptions}
-                                isMulti
-                                placeholder="Selecciona los roles"
-                                value={roleOptions.filter((role: any) => formData.roleIds.includes(role.value))}
-                                onChange={(selectedOptions) =>
-                                    setFormData({
-                                        ...formData,
-                                        roleIds: selectedOptions.map((option: any) => option.value),
-                                    })
-                                }
-                            />
+
+                            <div style={{ marginBottom: '20px' }}>
+                                <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600' }}>Descripción</label>
+                                <RichTextBox
+                                    name="description"
+                                    placeholder="Añade una descripción para el material"
+                                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                                    value={formData.description}
+                                />
+                            </div>
+
+                            <div style={{ marginBottom: '20px' }}>
+                                <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600' }}>Subcategoría</label>
+                                <AsyncSelect
+                                    className='border rounded-md border-primary'
+                                    cacheOptions
+                                    defaultOptions={(Array.isArray(subCategories) ? subCategories : []).map(sub => ({
+                                        value: sub.subCategoriesId,
+                                        label: sub.name
+                                    }))}
+                                    value={(Array.isArray(subCategories) ? subCategories : [])
+                                        .filter(sub => sub.subCategoriesId === formData.subCategoryId)
+                                        .map(sub => ({
+                                            value: sub.subCategoriesId,
+                                            label: sub.name
+                                        }))[0]}
+                                    onChange={(selectedOption: any) =>
+                                        setFormData({ ...formData, subCategoryId: selectedOption.value })
+                                    }
+                                    placeholder="Selecciona una subcategoría"
+                                />
+                            </div>
+
+                            <div style={{ marginBottom: '20px' }}>
+                                <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600' }}>Roles</label>
+                                <AsyncSelect
+                                    className='border rounded-md border-primary'
+                                    cacheOptions
+                                    defaultOptions={roleOptions}
+                                    loadOptions={loadRoleOptions}
+                                    isMulti
+                                    placeholder="Selecciona los roles"
+                                    value={roleOptions.filter((role: any) => formData.roleIds.includes(role.value))}
+                                    onChange={(selectedOptions) =>
+                                        setFormData({
+                                            ...formData,
+                                            roleIds: selectedOptions.map((option: any) => option.value),
+                                        })
+                                    }
+                                />
+                            </div>
                         </>
                     )}
-                </ModalBase>
+                </form>
+
+                {/* FOOTER - Botones */}
+                <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px' }}>
+                    {isImageCropping ? (
+                        <button
+                            type="button"
+                            onClick={() => {
+                                applyCrop((croppedFile, previewUrl) => {
+                                    setFormData((prev: any) => ({
+                                        ...prev,
+                                        image: croppedFile,
+                                        imagePreview: previewUrl
+                                    }));
+                                });
+                            }}
+                            style={{
+                                padding: '10px 20px',
+                                backgroundColor: '#1e40af',
+                                color: 'white',
+                                borderRadius: '6px',
+                                border: 'none',
+                                cursor: 'pointer',
+                                fontWeight: '500'
+                            }}
+                        >
+                            Aplicar
+                        </button>
+                    ) : (
+                        <>
+                            <button
+                                type="button"
+                                onClick={onClose}
+                                style={{
+                                    padding: '10px 20px',
+                                    backgroundColor: '#e5e7eb',
+                                    color: '#374151',
+                                    borderRadius: '6px',
+                                    border: 'none',
+                                    cursor: 'pointer',
+                                    fontWeight: '500'
+                                }}
+                            >
+                                Cancelar
+                            </button>
+                            <button
+                                type="submit"
+                                onClick={onSubmit}
+                                style={{
+                                    padding: '10px 20px',
+                                    backgroundColor: '#1e40af',
+                                    color: 'white',
+                                    borderRadius: '6px',
+                                    border: 'none',
+                                    cursor: 'pointer',
+                                    fontWeight: '500'
+                                }}
+                            >
+                                Guardar
+                            </button>
+                        </>
+                    )}
+                </div>
             </div>
-        </div>
+        </div>,
+        document.body
     );
 }

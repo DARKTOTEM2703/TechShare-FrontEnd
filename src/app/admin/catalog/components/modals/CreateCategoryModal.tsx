@@ -1,8 +1,10 @@
+"use client"
 import React from 'react';
-import ModalBase from '@/components/Modal/ModalBase';
+import { createPortal } from 'react-dom';
 import BorderTextField from '@/components/Inputs/BorderTextField';
 import DropzoneWithPreview from '@/components/DropZone';
 import ReactCrop from 'react-image-crop';
+import '@/styles/modal.css';
 
 interface CreateCategoryModalProps {
     isVisible: boolean;
@@ -51,15 +53,14 @@ export default function CreateCategoryModal({
 }: CreateCategoryModalProps) {
     if (!isVisible) return null;
 
-    return (
-        <div className="modal-overlay">
-            <div className="modal-content">
-                <ModalBase
-                    onClose={onClose}
-                    header="Crear nueva categoría"
-                    onSubmit={onSubmit}
-                    showButtons={!isImageCropping}
-                >
+    return createPortal(
+        <div className="modal-overlay" onClick={onClose}>
+            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                {/* HEADER */}
+                <h2 style={{ marginBottom: '1.5rem', margin: '0 0 1.5rem 0' }}>Crear nueva categoría</h2>
+
+                {/* CONTENT - Scrolleable */}
+                <form onSubmit={onSubmit} style={{ flex: 1, overflowY: 'auto', marginBottom: '1.5rem' }}>
                     {isImageCropping ? (
                         <>
                             <ReactCrop
@@ -75,7 +76,7 @@ export default function CreateCategoryModal({
                                     ref={imageRef}
                                     src={imageUrl}
                                     alt="Upload"
-                                    style={{ maxHeight: '70vh' }}
+                                    style={{ maxHeight: '50vh', width: '100%', objectFit: 'contain' }}
                                     onLoad={onImageLoad}
                                 />
                             </ReactCrop>
@@ -95,6 +96,7 @@ export default function CreateCategoryModal({
                             <button
                                 className="primary-button"
                                 type="button"
+                                style={{ marginTop: '16px', width: '100%' }}
                                 onClick={() => {
                                     applyCrop((croppedFile: any, previewUrl: any) => {
                                         setFormData((prev) => ({
@@ -105,22 +107,24 @@ export default function CreateCategoryModal({
                                     });
                                 }}
                             >
-                                Aplicar
+                                Aplicar Recorte
                             </button>
                         </>
                     ) : (
                         <>
-                            <div className="flex gap-2">
-                                <div className="flex items-center aspect-[3/2] h-[176px] mr-5">
+                            <div className="flex gap-4" style={{ marginBottom: '20px', flexWrap: 'wrap' }}>
+                                <div className="flex items-center aspect-[3/2] h-[176px]">
                                     <DropzoneWithPreview
-                                        onFileChange={(file) => onSelectFile(file)}
+                                        onFileChange={(file: File | null) => {
+                                            if (file) onSelectFile(file);
+                                        }}
                                         initialPreview={formData.imagePreview || imageUrl}
                                     />
                                 </div>
-                                <div className="flex flex-col gap-2 justify-center h-full">
-                                    <h2>Nombre</h2>
-                                    <BorderTextField
 
+                                <div className="flex flex-col gap-2 justify-center h-full" style={{ flex: 1, minWidth: '200px' }}>
+                                    <h2 style={{ marginBottom: '8px', fontWeight: '600' }}>Nombre</h2>
+                                    <BorderTextField
                                         name="name"
                                         placeholder="Nombre de la categoría"
                                         onChange={(e) =>
@@ -132,8 +136,45 @@ export default function CreateCategoryModal({
                             </div>
                         </>
                     )}
-                </ModalBase>
+                </form>
+
+                {/* FOOTER - Botones */}
+                <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px' }}>
+                    <button
+                        type="button"
+                        onClick={onClose}
+                        style={{
+                            padding: '10px 20px',
+                            backgroundColor: '#e5e7eb',
+                            color: '#374151',
+                            borderRadius: '6px',
+                            border: 'none',
+                            cursor: 'pointer',
+                            fontWeight: '500'
+                        }}
+                    >
+                        Cancelar
+                    </button>
+                    {!isImageCropping && (
+                        <button
+                            type="submit"
+                            onClick={onSubmit}
+                            style={{
+                                padding: '10px 20px',
+                                backgroundColor: '#1e40af',
+                                color: 'white',
+                                borderRadius: '6px',
+                                border: 'none',
+                                cursor: 'pointer',
+                                fontWeight: '500'
+                            }}
+                        >
+                            Guardar
+                        </button>
+                    )}
+                </div>
             </div>
-        </div>
+        </div>,
+        document.body
     );
 }

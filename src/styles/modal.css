@@ -1,17 +1,25 @@
 /* Estilos generales para el modal */
 .modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5); /* Fondo oscuro semi-transparente */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1100; /* Por encima del sidebar (z-1000) */
-  overflow-y: auto;
-  padding: 1rem;
+  position: fixed !important;
+  inset: 0 !important;
+  background-color: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(4px);
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  z-index: 999999 !important;
+  overflow-y: auto !important;
+  padding: 1.25rem;
+  will-change: opacity;
+  margin: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 100vh !important;
+  min-width: 100vw !important;
+  left: 0 !important;
+  top: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -24,67 +32,100 @@
   background-color: rgba(0, 0, 0, 0.7);
 }
 
-.modal {
+.modal,
+.modal-content {
   width: 90%;
-  max-width: 600px;
-  min-width: 320px;
-  padding: 30px;
+  max-width: 900px;
+  min-width: 280px;
+  padding: 28px;
   background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
   max-height: 90vh;
+  height: auto;
   overflow-y: auto;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  margin: auto;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+/* If modal content is taller than viewport, allow scrolling but keep it centered horizontally */
+.modal-overlay:has(.modal:out-of-range) {
+  align-items: flex-start;
 }
 
 @media (min-width: 640px) {
-  .modal {
-    width: 80%;
-    max-width: 700px;
+  .modal,
+  .modal-content {
+    width: 85%;
+    max-width: 750px;
+    padding: 32px;
   }
 }
 
 @media (min-width: 768px) {
-  .modal {
-    width: 70%;
-    max-width: 800px;
+  .modal,
+  .modal-content {
+    width: 75%;
+    max-width: 850px;
   }
 }
 
 @media (min-width: 1024px) {
-  .modal {
-    width: 60%;
-    max-width: 900px;
+  .modal,
+  .modal-content {
+    width: 65%;
+    max-width: 950px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .modal,
+  .modal-content {
+    width: 55%;
+    max-width: 1100px;
   }
 }
 
 @media (prefers-color-scheme: dark) {
-  .modal {
-    background-color: #2a2a2a;
-    border: 1px solid #3a3a3a;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-  }
-}
-
-.dark .modal {
-  background-color: #2a2a2a;
-  border: 1px solid #3a3a3a;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-}
-
-/* Título del modal */
-.modal h2 {
-  text-align: left;
-  color: #1e2a5e;
-  font-weight: bold;
-}
-
-@media (prefers-color-scheme: dark) {
-  .modal h2 {
+  .modal,
+  .modal-content {
+    background-color: #242834;
+    border: 1px solid rgba(255,255,255,0.04);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
     color: #e5e5e5;
   }
 }
 
-.dark .modal h2 {
+.dark .modal,
+.dark .modal-content {
+  background-color: #242834;
+  border: 1px solid rgba(255,255,255,0.04);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  color: #e5e5e5;
+}
+
+/* Título del modal */
+.modal h2,
+.modal-content h2 {
+  text-align: left;
+  color: #1e2a5e;
+  font-weight: 700;
+  margin: 0 0 12px 0;
+}
+
+@media (prefers-color-scheme: dark) {
+  .modal h2,
+  .modal-content h2 {
+    color: #e5e5e5;
+  }
+}
+
+.dark .modal h2,
+.dark .modal-content h2 {
   color: #e5e5e5;
 }
 
@@ -132,7 +173,8 @@
 }
 
 /* Contenedor de botones alineados a la derecha */
-.modal .flex {
+.modal .flex,
+.modal-content .flex {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
@@ -165,4 +207,20 @@
 
 .primary-button.isSecondary:hover {
   background-color: #e0e0e0;
+}
+
+/* Small helper to improve modal content spacing */
+.modal-content .modal-body {
+  margin-bottom: 16px;
+}
+
+/* Ensure modal positions well on small screens */
+@media (max-width: 420px) {
+  .modal-content, .modal {
+    padding: 20px;
+    border-radius: 10px;
+    width: 95%;
+    max-height: calc(100vh - 40px);
+    min-width: 260px;
+  }
 }

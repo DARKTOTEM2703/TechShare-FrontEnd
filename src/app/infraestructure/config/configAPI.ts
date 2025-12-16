@@ -1,5 +1,23 @@
-// Usar variable de entorno o fallback a localhost
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'
+// Resolve backend base URL with safe fallbacks for browser/dev/container contexts
+const resolveBaseUrl = () => {
+    const envUrl = process.env.NEXT_PUBLIC_API_URL?.trim();
+    if (envUrl) {
+        return envUrl.replace(/\/$/, "");
+    }
+
+    // If running in browser, try to infer host (mainly for localhost dev)
+    if (typeof window !== "undefined") {
+        const { protocol, hostname } = window.location;
+        const isLocal = hostname === "localhost" || hostname === "127.0.0.1";
+        const hostForApi = isLocal ? "localhost" : hostname;
+        return `${protocol}//${hostForApi}:8080`;
+    }
+
+    // SSR / build fallback
+    return "http://localhost:8080";
+};
+
+const BASE_URL = resolveBaseUrl();
 
 const endpoints = {
     auth: {
@@ -20,7 +38,8 @@ const endpoints = {
         delete: (id: number) => `${BASE_URL}/admin/subcategories/delete/${id}`
     },
     materials: {
-        getAll: `${BASE_URL}/admin/materials/all`,
+        getAll: `${BASE_URL}/api/materials/all`,
+        getAllPublic: `${BASE_URL}/api/materials/all`,
         create: `${BASE_URL}/admin/materials/create`,
         update: (id: number) => `${BASE_URL}/admin/materials/update/${id}`,
         delete: (id: number) => `${BASE_URL}/admin/materials/delete/${id}`
@@ -49,10 +68,9 @@ const endpoints = {
         create: `${BASE_URL}/admin/borrow/create`,
         update: (id: number) => `${BASE_URL}/admin/borrow/update/${id}`
     },
-
-    // Deprecated - use auth.signUp and auth.login instead
-    signUp: `${BASE_URL}/api/auth/register`,
-    login: `${BASE_URL}/login`
+    solicitudes: {
+        getAll: `${BASE_URL}/admin/borrow/all`,
+    }
 }
 
 export default endpoints

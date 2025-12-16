@@ -15,16 +15,12 @@ export default function DeleteCategoryModal({
     if (!isVisible) return null;
 
     return (
-        <div className="modal-overlay">
-            <div className="modal-content">
-                <ModalBase
-                    onClose={onClose}
-                    header="Confirmar eliminación de categoría"
-                    onSubmit={onSubmit}
-                >
-                    <p>¿Estás seguro de que quieres eliminar esta categoría?</p>
-                </ModalBase>
-            </div>
-        </div>
+        <ModalBase
+            onClose={onClose}
+            header="Confirmar eliminación de categoría"
+            onSubmit={onSubmit}
+        >
+            <p>¿Estás seguro de que quieres eliminar esta categoría?</p>
+        </ModalBase>
     );
 }

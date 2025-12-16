@@ -36,14 +36,12 @@ const UserInformation: React.FC<UserInformationProps> = ({
     setFormData
 }) => {
     return (
-        <div className="modal-overlay">
-            <div className="modal-content">
-                <ModalBase
-                    onClose={onClose}
-                    header="Información del usuario"
-                    onSubmit={onSave}
-                    showButtons={true}
-                >
+        <ModalBase
+            onClose={onClose}
+            header="Información del usuario"
+            onSubmit={onSave}
+            showButtons={true}
+        >
                     <div className="flex flex-col gap-4">
                         <div className="flex flex-col gap-2">
                                 <label>ID: {user.id ?? (user as any).id}</label>
@@ -103,8 +101,6 @@ const UserInformation: React.FC<UserInformationProps> = ({
                         </div>
                     </div>
                 </ModalBase>
-            </div>
-        </div>
     );
 };
 

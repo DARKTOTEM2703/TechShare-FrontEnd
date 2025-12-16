@@ -1,6 +1,7 @@
 "use client"
 
 import React from 'react'
+import { createPortal } from 'react-dom'
 import { ReactNode } from 'react'
 import '@/styles/containers.css'
 import '@/styles/modal.css'
@@ -16,9 +17,15 @@ interface ModalProps {
 }
 
 export default function Modal({ onClose, header, children, onSubmit, showButtons = true }: ModalProps) {
-    return (
+    return createPortal(
         <div className='modal-overlay' onClick={onClose}>
-            <form onSubmit={onSubmit} onClick={(e) => e.stopPropagation()}>
+            <form 
+                onSubmit={onSubmit} 
+                onClick={(e) => e.stopPropagation()} 
+                style={{
+                    display: 'contents'
+                }}
+            >
                 <div className='modal'>
                     <div className='border-b-[1px] mb-6'>
                         <h2 className='text-lg mb-2'>{header}</h2>
@@ -40,6 +47,7 @@ export default function Modal({ onClose, header, children, onSubmit, showButtons
                     )}
                 </div>
             </form>
-        </div>
+        </div>,
+        document.body
     )
 }

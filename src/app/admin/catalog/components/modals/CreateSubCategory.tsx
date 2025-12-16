@@ -1,10 +1,12 @@
+"use client"
 import React from 'react';
-import ModalBase from '@/components/Modal/ModalBase';
+import { createPortal } from 'react-dom';
 import BorderTextField from '@/components/Inputs/BorderTextField';
 import DropzoneWithPreview from '@/components/DropZone';
 import ReactCrop from 'react-image-crop';
 import DynamicDropdown from '@/components/Dropdowns/DynamicDropdown';
 import { Category } from '../../interfaces/Category';
+import '@/styles/modal.css';
 
 interface CreateSubCategoryModalProps {
     isVisible: boolean;
@@ -57,15 +59,21 @@ export default function CreateSubCategoryModal({
 }: CreateSubCategoryModalProps) {
     if (!isVisible) return null;
 
-    return (
-        <div className="modal-overlay">
-            <div className="modal-content">
-                <ModalBase
-                    onClose={onClose}
-                    header="Añadir subcategoría"
-                    onSubmit={onSubmit}
-                    showButtons={!isImageCropping}
-                >
+    return createPortal(
+        <div className="modal-overlay" onClick={onClose}>
+            <form 
+                onSubmit={onSubmit} 
+                onClick={(e) => e.stopPropagation()}
+                className="modal"
+                style={{ display: 'flex', flexDirection: 'column' }}
+            >
+                {/* Header */}
+                <div className='border-b-[1px] mb-6'>
+                    <h2 className='text-lg mb-2'>Añadir subcategoría</h2>
+                </div>
+
+                {/* Body - Scrolleable */}
+                <div style={{ flexGrow: 1, overflowY: 'auto', marginBottom: '16px' }}>
                     {isImageCropping ? (
                         <>
                             <ReactCrop
@@ -148,8 +156,44 @@ export default function CreateSubCategoryModal({
                             </div>
                         </>
                     )}
-                </ModalBase>
-            </div>
-        </div>
+                </div>
+
+                {/* Footer - Botones */}
+                <div className='flex justify-end space-x-3 mt-4'>
+                    <button
+                        type="button"
+                        onClick={onClose}
+                        style={{
+                            padding: '10px 20px',
+                            backgroundColor: '#f0f0f0',
+                            color: '#1e2a5e',
+                            border: 'none',
+                            borderRadius: '8px',
+                            cursor: 'pointer',
+                            fontWeight: '500'
+                        }}
+                    >
+                        Cancelar
+                    </button>
+                    {!isImageCropping && (
+                        <button
+                            type="submit"
+                            style={{
+                                padding: '10px 20px',
+                                backgroundColor: '#1e2a5e',
+                                color: '#fff',
+                                border: 'none',
+                                borderRadius: '8px',
+                                cursor: 'pointer',
+                                fontWeight: '500'
+                            }}
+                        >
+                            Guardar
+                        </button>
+                    )}
+                </div>
+            </form>
+        </div>,
+        document.body
     );
 }

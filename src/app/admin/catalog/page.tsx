@@ -43,8 +43,6 @@ export default function Catalog() {
       .then((data) => setMaterials(Array.isArray(data) ? data : []))
   }
 
-  // Roles are fetched as part of fetchAllData on mount; individual fetchRoles not required.
-
   useEffect(() => {
     const fetchAllData = async () => {
       setIsLoading(true);
@@ -116,3 +114,4 @@ export default function Catalog() {
     </div>
   );
 }
+ 

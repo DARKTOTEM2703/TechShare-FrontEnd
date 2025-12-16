@@ -1,0 +1,10 @@
+# robots.txt - controls crawler access
+# Disallow indexing of admin and API endpoints
+User-agent: *
+Disallow: /admin/
+Disallow: /api/
+Disallow: /_next/
+Disallow: /swagger-ui.html
+
+# Allow everything else
+Allow: /

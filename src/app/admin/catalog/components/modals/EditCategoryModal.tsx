@@ -1,5 +1,7 @@
+"use client"
 import React from 'react';
-import ModalBase from '@/components/Modal/ModalBase';
+import { createPortal } from 'react-dom';
+import '@/styles/modal.css';
 import BorderTextField from '@/components/Inputs/BorderTextField';
 import DropzoneWithPreview from '@/components/DropZone';
 import ReactCrop from 'react-image-crop';
@@ -54,17 +56,19 @@ export default function EditCategoryModal({
 }: EditCategoryModalProps) {
     if (!isVisible) return null;
 
-    return (
-        <div className="modal-overlay">
-            <div className="modal-content">
-                <ModalBase
-                    onClose={onClose}
-                    header="Editar categoría"
-                    onSubmit={onSubmit}
-                    showButtons={!isImageCropping}
-                >
+    return createPortal(
+        <div className="modal-overlay" onClick={onClose}>
+            <form className="modal" onSubmit={onSubmit} onClick={(e) => e.stopPropagation()} style={{display: 'flex', flexDirection: 'column', maxHeight: '90vh'}}>
+                {/* HEADER */}
+                <div className="modal-header" style={{flexShrink: 0}}>
+                    <h2>Editar categoría</h2>
+                    <button type="button" className="close-button" onClick={onClose}>×</button>
+                </div>
+
+                {/* BODY - Scrolleable */}
+                <div className="modal-body" style={{flexGrow: 1, overflowY: 'auto', padding: '1.5rem'}}>
                     {isImageCropping ? (
-                        <>
+                        <div style={{textAlign: 'center'}}>
                             <ReactCrop
                                 crop={crop}
                                 onChange={(_, percentCrop) => {
@@ -78,7 +82,7 @@ export default function EditCategoryModal({
                                     ref={imageRef}
                                     src={imageUrl}
                                     alt="Upload"
-                                    style={{ maxHeight: '70vh' }}
+                                    style={{ maxHeight: '50vh', width: '100%', objectFit: 'contain' }}
                                     onLoad={onImageLoad}
                                 />
                             </ReactCrop>
@@ -94,23 +98,7 @@ export default function EditCategoryModal({
                                     height: 150
                                 }}
                             />
-
-                            <button
-                                className="primary-button"
-                                type="button"
-                                onClick={() => {
-                                    applyCrop((croppedFile: any, previewUrl: any) => {
-                                        setFormData((prev) => ({
-                                            ...prev,
-                                            image: croppedFile,
-                                            imagePreview: previewUrl
-                                        }));
-                                    });
-                                }}
-                            >
-                                Aplicar
-                            </button>
-                        </>
+                        </div>
                     ) : (
                         <>
                             <div className="flex gap-2">
@@ -138,8 +126,73 @@ export default function EditCategoryModal({
                             </div>
                         </>
                     )}
-                </ModalBase>
-            </div>
-        </div>
+                </div>
+
+                {/* FOOTER - Fixed */}
+                <div className="modal-footer" style={{flexShrink: 0, padding: '1rem 1.5rem', display: 'flex', justifyContent: 'flex-end', gap: '0.75rem'}}>
+                    {isImageCropping ? (
+                        <button
+                            type="button"
+                            onClick={() => {
+                                applyCrop((croppedFile: any, previewUrl: any) => {
+                                    setFormData((prev) => ({
+                                        ...prev,
+                                        image: croppedFile,
+                                        imagePreview: previewUrl
+                                    }));
+                                });
+                            }}
+                            style={{
+                                padding: '0.625rem 1.25rem',
+                                backgroundColor: '#1e40af',
+                                color: 'white',
+                                borderRadius: '0.5rem',
+                                border: 'none',
+                                cursor: 'pointer',
+                                fontSize: '0.875rem',
+                                fontWeight: '500'
+                            }}
+                        >
+                            Aplicar
+                        </button>
+                    ) : (
+                        <>
+                            <button 
+                                type="button" 
+                                onClick={onClose}
+                                style={{
+                                    padding: '0.625rem 1.25rem',
+                                    backgroundColor: '#e5e7eb',
+                                    color: '#374151',
+                                    borderRadius: '0.5rem',
+                                    border: 'none',
+                                    cursor: 'pointer',
+                                    fontSize: '0.875rem',
+                                    fontWeight: '500'
+                                }}
+                            >
+                                Cancelar
+                            </button>
+                            <button 
+                                type="submit"
+                                style={{
+                                    padding: '0.625rem 1.25rem',
+                                    backgroundColor: '#1e40af',
+                                    color: 'white',
+                                    borderRadius: '0.5rem',
+                                    border: 'none',
+                                    cursor: 'pointer',
+                                    fontSize: '0.875rem',
+                                    fontWeight: '500'
+                                }}
+                            >
+                                Guardar
+                            </button>
+                        </>
+                    )}
+                </div>
+            </form>
+        </div>,
+        document.body
     );
 }
