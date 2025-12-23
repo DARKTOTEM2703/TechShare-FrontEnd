@@ -22,8 +22,8 @@ export default function Register() {
     const toast = useToast();
 
     const [formData, handleChange] = useForm({
-        first_name: '',
-        last_name: '',
+        firstName: '',
+        lastName: '',
         email: '',
         password: '',
         confirmPassword: ''
@@ -57,7 +57,7 @@ export default function Register() {
         }
 
         // Validaciones básicas del lado del cliente
-        if (!formData.email || !formData.first_name || !formData.last_name || !formData.password) {
+        if (!formData.email || !formData.firstName || !formData.lastName || !formData.password) {
             toast.addToast('error', VALIDATION_MESSAGES.required);
             return;
         }
@@ -69,12 +69,12 @@ export default function Register() {
         }
 
         // Validación de nombre usando constante centralizada
-        if (!VALIDATION_PATTERNS.name.test(formData.first_name)) {
+        if (!VALIDATION_PATTERNS.name.test(formData.firstName)) {
             toast.addToast('error', VALIDATION_MESSAGES.name);
             return;
         }
 
-        if (!VALIDATION_PATTERNS.name.test(formData.last_name)) {
+        if (!VALIDATION_PATTERNS.name.test(formData.lastName)) {
             toast.addToast('error', VALIDATION_MESSAGES.name);
             return;
         }
@@ -103,8 +103,8 @@ export default function Register() {
 
             const requestBody: Record<string, unknown> = {
                 user_name: generatedUsername,
-                first_name: formData.first_name.trim(),
-                last_name: formData.last_name.trim(),
+                first_name: formData.firstName.trim(),
+                last_name: formData.lastName.trim(),
                 email: formData.email.trim().toLowerCase(),
                 password: formData.password
             };
@@ -137,8 +137,8 @@ export default function Register() {
             router.push('/');
             
             // Limpiar formulario
-            formData.first_name = '';
-            formData.last_name = '';
+            formData.firstName = '';
+            formData.lastName = '';
             formData.email = '';
             formData.password = '';
             formData.confirmPassword = '';

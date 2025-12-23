@@ -32,11 +32,11 @@ export interface BackendErrorResponse {
   /** Ruta del endpoint que generó el error */
   path?: string;
   
-  /** Lista de errores de validación (camelCase - compatibilidad) */
+  /** Lista de errores de validación */
   errors?: string[];
   
-  /** Errores de validación por campo (snake_case - backend response) */
-  validation_errors?: Record<string, string[]>;
+  /** Errores de validación por campo (camelCase en frontend) */
+  validationErrors?: Record<string, string[]>;
   
   /** Detalles adicionales del error */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -55,11 +55,12 @@ export function extractErrorMessages(error: BackendErrorResponse): string[] {
     messages.push(error.message);
   }
   
-  // Agregar errores de validación por campo
-  if (error.validation_errors) {
-    Object.entries(error.validation_errors).forEach(([field, fieldErrors]) => {
+  // Agregar errores de validación por campo (soporta camelCase y snake_case)
+  const validationMap = (error as any).validationErrors || (error as any).validation_errors;
+  if (validationMap) {
+    Object.entries(validationMap).forEach(([field, fieldErrors]) => {
       if (Array.isArray(fieldErrors)) {
-        fieldErrors.forEach(msg => messages.push(`${field}: ${msg}`));
+        fieldErrors.forEach((msg: string) => messages.push(`${field}: ${msg}`));
       }
     });
   }
@@ -100,10 +101,10 @@ export interface AuthResponse {
   /** Usuario autenticado */
   user?: {
     id: number;
-    user_name: string;
+    userName: string;
     email: string;
-    first_name: string;
-    last_name: string;
+    firstName?: string;
+    lastName?: string;
     roles: string[];
   };
   
@@ -215,6 +216,7 @@ export function isValidationError(error: unknown): boolean {
     const backendError = error as Partial<BackendErrorResponse>;
     return backendError.status === 400 || 
            (backendError.errors && backendError.errors.length > 0) ||
+           (backendError.validationErrors && Object.keys(backendError.validationErrors).length > 0) ||
            false;
   }
   return false;
@@ -259,6 +261,17 @@ export function extractValidationErrors(error: unknown): string[] {
     const backendError = error as Partial<BackendErrorResponse>;
     if (backendError.errors && Array.isArray(backendError.errors)) {
       return backendError.errors;
+    }
+
+    if (backendError.validationErrors && typeof backendError.validationErrors === 'object') {
+      // Flatten validationErrors map into array of messages
+      const msgs: string[] = [];
+      Object.entries(backendError.validationErrors).forEach(([field, arr]) => {
+        if (Array.isArray(arr)) {
+          arr.forEach(m => msgs.push(`${field}: ${m}`));
+        }
+      });
+      return msgs;
     }
   }
   return [];

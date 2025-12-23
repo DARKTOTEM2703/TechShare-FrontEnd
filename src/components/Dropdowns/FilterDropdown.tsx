@@ -2,6 +2,7 @@ import React from 'react'
 import Image from 'next/image'
 import '@/styles/dropdown.css'
 import '@/styles/containers.css'
+// @ts-ignore - asset import handled by Next; declare file types in src/types/custom.d.ts
 import filterIcon from '/src/assets/icons/filter.svg'
 import { FaFilter } from 'react-icons/fa';
 

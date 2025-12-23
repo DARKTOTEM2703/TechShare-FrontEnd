@@ -1,4 +1,5 @@
 import { FaEdit, FaTrash } from 'react-icons/fa';
+// @ts-ignore - asset import handled by Next; declare file types in src/types/custom.d.ts
 import RollingSpinner from '@/assets/animations/rolling-spinner.svg';
 
 interface TableRowsProps {

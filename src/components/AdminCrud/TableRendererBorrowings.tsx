@@ -1,4 +1,5 @@
 import { FaCircleInfo } from 'react-icons/fa6';
+// @ts-ignore - asset import handled by Next; declare file types in src/types/custom.d.ts
 import RollingSpinner from '@/assets/animations/rolling-spinner.svg';
 import { RiArrowTurnBackLine } from "react-icons/ri";
 

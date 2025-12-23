@@ -84,6 +84,40 @@ export const getUserEmail = () => {
   return null;
 };
 
+// Devuelve un objeto `User` mapeando claims snake_case a camelCase
+export const getUser = (): any | null => {
+  if (typeof window === 'undefined') return null;
+  const token = getToken();
+  if (!token) return null;
+  try {
+    const parts = token.split('.');
+    if (parts.length < 2) return null;
+    let payload = parts[1];
+    const pad = (4 - (payload.length % 4)) % 4;
+    payload += '='.repeat(pad);
+    payload = payload.replace(/-/g, '+').replace(/_/g, '/');
+    const bytes = atob(payload);
+    const arr = Array.prototype.map.call(bytes, function(c: string) {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join('');
+    const json = decodeURIComponent(arr);
+    const claims: any = JSON.parse(json);
+
+    return {
+      id: claims.id || claims.userId || null,
+      userName: claims.user_name || claims.userName || claims.sub || null,
+      email: claims.sub || claims.email || null,
+      role: claims.role || (claims.authorities ? claims.authorities[0] : null),
+      firstName: claims.first_name || claims.firstName || '' ,
+      lastName: claims.last_name || claims.lastName || '' ,
+      isEnabled: typeof claims.is_enabled !== 'undefined' ? claims.is_enabled : (claims.isEnabled ?? true),
+      profileImageUrl: claims.profile_image_url || claims.profileImageUrl || null
+    };
+  } catch {
+    return null;
+  }
+};
+
 export const setUserName = (name: string) => {
   if (typeof window !== "undefined") {
     localStorage.setItem(USER_NAME_KEY, name);

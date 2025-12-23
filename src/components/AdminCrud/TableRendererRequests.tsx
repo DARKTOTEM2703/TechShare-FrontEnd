@@ -1,4 +1,5 @@
 import { FaCheck, FaTimes, FaQuestion } from 'react-icons/fa';  // Usando FaQuestion para el símbolo de interrogación
+// @ts-ignore - asset import handled by Next; declare file types in src/types/custom.d.ts
 import RollingSpinner from '@/assets/animations/rolling-spinner.svg';
 
 interface TableRowsProps {

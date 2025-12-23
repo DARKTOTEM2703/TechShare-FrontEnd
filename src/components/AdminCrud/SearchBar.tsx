@@ -2,6 +2,7 @@ import React from 'react'
 import Image from 'next/image'
 import '@/styles/search-bar.css'
 import '@/styles/containers.css'
+// @ts-ignore - asset import handled by Next; declare file types in src/types/custom.d.ts
 import lupaIcon from '/src/assets/icons/lupa.svg'
 import { FaSearch } from 'react-icons/fa';
 

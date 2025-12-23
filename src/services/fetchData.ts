@@ -1,4 +1,6 @@
 // Función genérica para realizar una solicitud fetch
+import { toCamelCase } from './caseConverter';
+
 const fetchData = async (url:any, token:any) => {
     try {
         // Normalize token header: ensure it includes 'Bearer ' prefix when needed
@@ -25,7 +27,8 @@ const fetchData = async (url:any, token:any) => {
         const contentType = response.headers.get("Content-Type") || "";
         let data: any = null;
         if (contentType.includes("application/json")) {
-            data = await response.json();
+            const raw = await response.json();
+            data = toCamelCase(raw);
         } else if (contentType.includes("text/")) {
             // Log textual responses for debugging (HTML error pages, etc.)
             const text = await response.text();
@@ -39,7 +42,7 @@ const fetchData = async (url:any, token:any) => {
                 status: response.status,
                 message: data?.message || `Error ${response.status}`,
                 error: data?.error,
-                errors: data?.validation_errors || data?.errors || [],
+                errors: data?.validationErrors || data?.validation_errors || data?.errors || [],
                 details: data?.details
             };
             console.error('Fetch error:', errorResponse);

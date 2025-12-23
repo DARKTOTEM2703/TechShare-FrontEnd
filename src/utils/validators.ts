@@ -136,20 +136,20 @@ export function validateField(
  * ```
  */
 export function validateRegistrationForm(formData: {
-  first_name: string;
-  last_name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
   confirmPassword: string;
 }): ValidationResult {
   // Validar nombre
-  const firstNameValidation = validateField(formData.first_name, VALIDATORS.name, 'Nombre');
+  const firstNameValidation = validateField(formData.firstName, VALIDATORS.name, 'Nombre');
   if (!firstNameValidation.valid) {
     return firstNameValidation;
   }
   
   // Validar apellido
-  const lastNameValidation = validateField(formData.last_name, VALIDATORS.name, 'Apellido');
+  const lastNameValidation = validateField(formData.lastName, VALIDATORS.name, 'Apellido');
   if (!lastNameValidation.valid) {
     return lastNameValidation;
   }
