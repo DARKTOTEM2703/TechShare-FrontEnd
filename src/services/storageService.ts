@@ -9,7 +9,7 @@ export const setToken = (token: string) => {
   }
 };
 
-// Store token and also extract common claims (id, user_name) and save them
+// Store token and also extract common claims (id, userName, firstName, lastName) and save them
 export const setTokenWithClaims = (token: string) => {
   if (typeof window === "undefined") return;
 
@@ -35,13 +35,13 @@ export const setTokenWithClaims = (token: string) => {
       const json = decodeURIComponent(arr);
       const claims = JSON.parse(json);
       if (claims.id) setUserId(String(claims.id));
-      if (claims.user_name) setUserName(String(claims.user_name));
+      if (claims.userName) setUserName(String(claims.userName));
   } catch {
       // fallback: try direct JSON parse
       try {
         const claims = JSON.parse(bytes as unknown as string);
         if (claims.id) setUserId(String(claims.id));
-        if (claims.user_name) setUserName(String(claims.user_name));
+        if (claims.userName) setUserName(String(claims.userName));
       } catch {
         // ignore
       }
@@ -84,7 +84,7 @@ export const getUserEmail = () => {
   return null;
 };
 
-// Devuelve un objeto `User` mapeando claims snake_case a camelCase
+// Devuelve un objeto `User` mapeando claims a tipos camelCase
 export const getUser = (): any | null => {
   if (typeof window === 'undefined') return null;
   const token = getToken();
@@ -104,14 +104,14 @@ export const getUser = (): any | null => {
     const claims: any = JSON.parse(json);
 
     return {
-      id: claims.id || claims.userId || null,
-      userName: claims.user_name || claims.userName || claims.sub || null,
-      email: claims.sub || claims.email || null,
-      role: claims.role || (claims.authorities ? claims.authorities[0] : null),
-      firstName: claims.first_name || claims.firstName || '' ,
-      lastName: claims.last_name || claims.lastName || '' ,
-      isEnabled: typeof claims.is_enabled !== 'undefined' ? claims.is_enabled : (claims.isEnabled ?? true),
-      profileImageUrl: claims.profile_image_url || claims.profileImageUrl || null
+      id: claims.id ?? null,
+      userName: claims.userName ?? claims.sub ?? null,
+      email: claims.email ?? claims.sub ?? null,
+      role: claims.role ?? (claims.authorities ? claims.authorities[0] : null),
+      firstName: claims.firstName ?? '',
+      lastName: claims.lastName ?? '',
+      isEnabled: claims.isEnabled ?? true,
+      profileImageUrl: claims.profileImageUrl ?? null
     };
   } catch {
     return null;

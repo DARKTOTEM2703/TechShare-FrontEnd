@@ -127,8 +127,8 @@ export function validateField(
  * @example
  * ```typescript
  * const result = validateRegistrationForm({
- *   first_name: 'Juan',
- *   last_name: 'Pérez',
+ *   firstName: 'Juan',
+ *   lastName: 'Pérez',
  *   email: 'juan@example.com',
  *   password: 'Secure123!',
  *   confirmPassword: 'Secure123!'

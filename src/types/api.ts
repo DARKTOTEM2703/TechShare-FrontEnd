@@ -14,7 +14,7 @@
  * Estructura de error estándar del backend.
  * 
  * Basado en: ApiErrorResponse.java y GlobalExceptionHandler.java
- * ✅ Actualizado para soportar tanto field errors (validation_errors) como errores generales
+ * ✅ Errores de validación en camelCase: validationErrors
  */
 export interface BackendErrorResponse {
   /** Timestamp del error en formato ISO 8601 */
@@ -45,7 +45,7 @@ export interface BackendErrorResponse {
 
 /**
  * Función para extraer mensajes de error de una respuesta del backend.
- * Soporta tanto validation_errors (snake_case) como errors (camelCase).
+ * Espera validationErrors en camelCase.
  */
 export function extractErrorMessages(error: BackendErrorResponse): string[] {
   const messages: string[] = [];
@@ -55,10 +55,9 @@ export function extractErrorMessages(error: BackendErrorResponse): string[] {
     messages.push(error.message);
   }
   
-  // Agregar errores de validación por campo (soporta camelCase y snake_case)
-  const validationMap = (error as any).validationErrors || (error as any).validation_errors;
-  if (validationMap) {
-    Object.entries(validationMap).forEach(([field, fieldErrors]) => {
+  // Agregar errores de validación por campo
+  if (error.validationErrors) {
+    Object.entries(error.validationErrors).forEach(([field, fieldErrors]) => {
       if (Array.isArray(fieldErrors)) {
         fieldErrors.forEach((msg: string) => messages.push(`${field}: ${msg}`));
       }
