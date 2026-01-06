@@ -105,9 +105,11 @@ export function RoleCheckProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
+  // Solo ejecutar checkRole al montar el componente (una sola vez)
   useEffect(() => {
     checkRole();
-  }, [checkRole]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const contextValue = {
     ...state,

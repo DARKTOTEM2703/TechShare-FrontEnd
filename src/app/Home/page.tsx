@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import NavBar from '@/components/NavBar/NavBar';
 import { useRouter } from 'next/navigation';
 import SearchBar from '@/components/AdminCrud/SearchBar';
-import ProductCard from '@/app/Home/components/ProductCard';
+import ProductCard from '@/app/home/components/ProductCard';
 import endpoints from '../infraestructure/config/configAPI';
 
 
