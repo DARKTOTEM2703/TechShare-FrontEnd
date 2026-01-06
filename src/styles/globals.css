@@ -114,9 +114,7 @@ body {
 
   .horizontal-flex
   {
-    flex-direction: row;
-    display: flex;
-    justify-content: 0;
+    @apply flex flex-row justify-start items-center;
   }
 }
 
@@ -132,31 +130,6 @@ body {
   /* Chrome, Safari y navegadores basados en WebKit */
 }
 
-/* ===========================
-   DARK MODE SUPPORT
-   =========================== */
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    /* Colors */
-    --background: #1a1a1a;
-    --foreground: #e5e5e5;
-    --card: #2a2a2a;
-    --card-foreground: #e5e5e5;
-    --border: #3a3a3a;
-    --input: #2a2a2a;
-    --primary: #3b82f6;
-    --primary-foreground: #ffffff;
-    --secondary: #6b7280;
-    --secondary-foreground: #ffffff;
-    --accent: #3b82f6;
-    --accent-foreground: #ffffff;
-    --destructive: #ef4444;
-    --destructive-foreground: #ffffff;
-  }
-}
-
-/* Dark mode cuando se usa class strategy */
 .dark {
   --background: #1a1a1a;
   --foreground: #e5e5e5;
@@ -166,6 +139,11 @@ body {
   --input: #2a2a2a;
 }
 
+/* Nota: se ha eliminado la media query automática `prefers-color-scheme: dark`
+   para forzar el color de fondo definido en `--background` (modo claro por defecto).
+   La clase `.dark` queda disponible para activar el modo oscuro manualmente. */
+
+/* Dark mode cuando se usa class strategy */
 /* Scroll bars en dark mode */
 .dark ::-webkit-scrollbar {
   width: 12px;
@@ -179,14 +157,6 @@ body {
 
 .dark ::-webkit-scrollbar-thumb:hover {
   background-color: #4a4a4a;
-}
-
-/* Body dark mode */
-@media (prefers-color-scheme: dark) {
-  body {
-    background-color: #1a1a1a;
-    color: #e5e5e5;
-  }
 }
 
 .dark body {
