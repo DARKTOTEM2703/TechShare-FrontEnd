@@ -70,6 +70,20 @@ Contributions are welcome. If you want to collaborate on the project, you can op
 
 This project is licensed under the [MIT License](./LICENSE).
 
+## Análisis de Arquitectura
+
+Para un análisis completo y detallado de la arquitectura del proyecto (tanto Frontend como Backend), consulta el documento:
+
+📖 **[ANALISIS_ARQUITECTURA.md](./ANALISIS_ARQUITECTURA.md)**
+
+Este documento incluye:
+- Estructura completa del Frontend (Next.js)
+- Arquitectura del Backend (Spring Boot)
+- Explicación detallada de CONFIG, DTO, ENTITY, Repository, Security, Service, impl, User, Validation
+- Flujos de autenticación y operaciones CRUD
+- Diagramas de arquitectura completos
+- Integración Frontend-Backend
+
 ---
 
 This README provides an initial guide to understand and contribute to **TechShare FrontEnd**. Thank you for your interest in improving inventory management for AAAIMX!
