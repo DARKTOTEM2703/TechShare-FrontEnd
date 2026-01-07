@@ -1,15 +1,17 @@
 "use client"
 import NavBar from '@/components/NavBar/NavBar';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 
 export default function Home() {
   const router = useRouter();
-  const handleButtonClick = () => {
-    router.push('/admin/roles');
-  };
+  const redirected = useRef(false);
+  
   useEffect(() => {
-    router.push('/home');
+    if (!redirected.current) {
+      redirected.current = true;
+      router.push('/home');
+    }
   }, [router]);
 
   return (

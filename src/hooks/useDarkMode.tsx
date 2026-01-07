@@ -43,16 +43,23 @@ export function useDarkMode() {
         return () => mediaQuery.removeEventListener('change', handler);
     }, []);
 
+    // Save theme preference to localStorage (async)
+    useEffect(() => {
+        if (isDark) {
+            localStorage.setItem('theme', 'dark');
+        } else {
+            localStorage.setItem('theme', 'light');
+        }
+    }, [isDark]);
+
     const toggleDarkMode = () => {
         const newValue = !isDark;
         setIsDark(newValue);
         
         if (newValue) {
             document.documentElement.classList.add('dark');
-            localStorage.setItem('theme', 'dark');
         } else {
             document.documentElement.classList.remove('dark');
-            localStorage.setItem('theme', 'light');
         }
     };
 

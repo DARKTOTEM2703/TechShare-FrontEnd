@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import '@/styles/crud-table.css';
 import '@/styles/pagination.css';
 import '@/styles/animations.css';
@@ -19,7 +19,18 @@ interface CrudBodyProps {
 
 export default function CrudBody({ data, headers, headerLabels, searchTerm, onDelete, onEdit, isLoading }: CrudBodyProps) {
     const [currentPage, setCurrentPage] = useState(1);
-    const [filteredData, setFilteredData] = useState(data);
+
+    // Optimize filtering with useMemo instead of useEffect
+    const filteredData = useMemo(() => {
+        const lowercasedFilter = searchTerm.toLowerCase();
+        return Array.isArray(data)
+            ? data.filter((item: any) =>
+                Object.values(item).some((val: any) =>
+                    String(val).toLowerCase().includes(lowercasedFilter)
+                )
+            )
+            : [];
+    }, [searchTerm, data]);
 
     const recordsPerPage = 6;
     const totalPages = Math.ceil(filteredData.length / recordsPerPage);
@@ -30,19 +41,6 @@ export default function CrudBody({ data, headers, headerLabels, searchTerm, onDe
 
     //USE THIS ONLY IF: you want to show all headers, including "id"
     //const headers = data && data.length > 0 && !isDataEmpty(data) ? Object.keys(data[0]) : [];
-
-    // Filtrar los datos cuando el término de búsqueda cambia
-    useEffect(() => {
-        const lowercasedFilter = searchTerm.toLowerCase();
-        const filtered = Array.isArray(data)
-            ? data.filter((item: any) =>
-                Object.values(item).some((val: any) =>
-                    String(val).toLowerCase().includes(lowercasedFilter)
-                )
-            )
-            : [];
-        setFilteredData(filtered);
-    }, [searchTerm, data]);
 
 
     return (

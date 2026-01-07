@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import '@/styles/search-bar.css'
 import '@/styles/containers.css'
@@ -11,9 +11,15 @@ interface SearchBarProps {
 }
 
 export default function SearchBar({ onSearchChange }: SearchBarProps) {
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onSearchChange(e.target.value); // Notificar al componente superior
-  };
+  const [searchValue, setSearchValue] = useState('');
+
+  // Debounce search to avoid filtering on every keystroke
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      onSearchChange(searchValue);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [searchValue, onSearchChange]);
 
   return (
     <div className='my-8 relative'>
@@ -21,7 +27,8 @@ export default function SearchBar({ onSearchChange }: SearchBarProps) {
       type="text"
       className="search-bar text-sm" 
       placeholder="Buscar"
-      onChange={handleInputChange} // Manejar el cambio del input
+      value={searchValue}
+      onChange={(e) => setSearchValue(e.target.value)}
       />
       <FaSearch className='search-bar-icon text-secondary' />
     </div>

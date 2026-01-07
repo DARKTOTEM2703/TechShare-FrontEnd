@@ -1,6 +1,9 @@
 import { getToken, clearStorage } from "./storageService";
 import { toCamelCase, toSnakeCase } from "./caseConverter";
 
+// Flag to prevent multiple simultaneous 401 redirects
+let redirectingTo401 = false;
+
 export async function fetchWithAuth(input: RequestInfo, init?: RequestInit) {
   const token = getToken();
   const headers = new Headers(init?.headers as HeadersInit || {});
@@ -35,10 +38,13 @@ export async function fetchWithAuth(input: RequestInfo, init?: RequestInit) {
   // Si token expirado o inválido (401), limpiar storage y redirigir a login
   if (res.status === 401) {
     try {
-      clearStorage();
-      if (typeof window !== 'undefined') {
-        // Forzar navegación a login
-        window.location.assign('/login');
+      if (!redirectingTo401) {
+        redirectingTo401 = true;
+        clearStorage();
+        if (typeof window !== 'undefined') {
+          // Forzar navegación a login
+          window.location.assign('/login');
+        }
       }
     } catch {
       // ignorar

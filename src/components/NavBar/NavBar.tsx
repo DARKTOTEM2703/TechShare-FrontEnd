@@ -1,12 +1,14 @@
 "use client";
-import React from "react";
+import React, { useState, useCallback } from "react";
 import Link from "next/link";
-import { useState } from "react";
 import links from "./navlinks.json";
 import Image from "next/image";
 
 export default function NavBar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  
+  const toggleMenu = useCallback(() => setIsMenuOpen(prev => !prev), []);
+  const closeMenu = useCallback(() => setIsMenuOpen(false), []);
 
   return (
     <div className="bg-white shadow-md shadow-black/20 rounded-lg">
@@ -64,7 +66,7 @@ export default function NavBar() {
           {/* Menu Toggle Button - Visible on mobile only */}
           <button
             className="md:hidden text-primary"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            onClick={toggleMenu}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -92,7 +94,7 @@ export default function NavBar() {
               <Link
                 key={index}
                 href={link.href}
-                onClick={() => setIsMenuOpen(false)}
+                onClick={closeMenu}
               >
                 <h2 className="text-primary text-lg font-semibold hover:text-secondary transition">
                   {link.name.toUpperCase()}
@@ -103,7 +105,7 @@ export default function NavBar() {
               href="/login"
               target="_blank"
               rel="noopener noreferrer"
-              onClick={() => setIsMenuOpen(false)}
+              onClick={closeMenu}
             >
               <h2 className="bg-primary text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-600 transition text-center">
                 Iniciar Sesión

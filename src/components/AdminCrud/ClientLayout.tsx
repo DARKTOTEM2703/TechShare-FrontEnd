@@ -1,6 +1,6 @@
 'use client'; // Marca este archivo como un Client Component
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { usePathname } from "next/navigation";
 import SideNav from "@/components/SideNav/SideNav";
 import { FaBars } from 'react-icons/fa';
@@ -22,19 +22,19 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
         };
     }, [pathname]);
 
-    useEffect(() => {
-        const handleResize = () => {
-            const smallScreen = window.innerWidth < 768;
-            setIsSmallScreen(smallScreen);
-            if (!smallScreen) {
-                setNavVisible(false);
-            }
-        };
+    const handleResize = useCallback(() => {
+        const smallScreen = window.innerWidth < 768;
+        setIsSmallScreen(smallScreen);
+        if (!smallScreen) {
+            setNavVisible(false);
+        }
+    }, []);
 
+    useEffect(() => {
         handleResize();
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
-    }, []);
+    }, [handleResize]);
 
     const toggleNav = () => setNavVisible(!isNavVisible);
     const closeSidebar = () => setNavVisible(false);
